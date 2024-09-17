@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('sites', function (Blueprint $table) {
             $table->id();
-            $table->string("name")->nullable();
-            $table->string("link")->nullable();
+            $table->unsignedBigInteger('file_id'); // Unsigned big integer, same as the files.id column
+            $table->foreign('file_id')->references('id')->on('files')->onDelete('cascade');
+            $table->string('name')->nullable();
+            $table->string('link')->nullable();
             $table->boolean('is_deleted')->default(false);
-
             $table->timestamps();
         });
+        
     }
 
     /**

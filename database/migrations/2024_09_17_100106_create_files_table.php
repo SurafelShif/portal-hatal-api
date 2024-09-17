@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('personal_id')->nullable();
-            $table->string('personal_number')->nullable();
-            $table->string('full_name')->nullable();
-            $table->boolean('is_deleted')->default(false);
+            $table->unsignedBigInteger('site_id')->unique();
+            $table->string("file_name");
+            $table->string("file_path");
+            $table->string("file_type");
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('files');
     }
 };

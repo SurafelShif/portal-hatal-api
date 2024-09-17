@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('sites', function (Blueprint $table) {
             $table->id();
-            $table->string('personal_id')->nullable();
-            $table->string('personal_number')->nullable();
-            $table->string('full_name')->nullable();
+            $table->string("name")->nullable();
+            $table->string("link")->nullable();
             $table->boolean('is_deleted')->default(false);
+
             $table->timestamps();
         });
-
     }
 
     /**
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('sites');
     }
 };

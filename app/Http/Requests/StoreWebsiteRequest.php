@@ -31,15 +31,15 @@ class StoreWebsiteRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'The site name is required.',
-            'name.string' => 'The site name must be a string.',
-            'name.min' => 'The site name should have atleast two characters',
-            'link.required' => 'The site link is required.',
-            'link.url' => 'The site link must be a valid URL.',
-            'image.required' => 'An image file is required.',
-            'image.file' => 'The image must be a file.',
-            'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
-            'image.max' => 'The image size cannot exceed 2MB.',
+            'name.required' => 'שם האתר דרוש.',
+            'name.string' => 'שם האתר חייב להיות מחרוזת.',
+            'name.min' => 'שם האתר צריך להכיל לפחות שני תווים.',
+            'link.required' => 'קישור האתר דרוש.',
+            'link.url' => 'קישור האתר חייב להיות כתובת URL חוקית.',
+            'image.required' => 'דרוש קובץ תמונה.',
+            'image.file' => 'התמונה חייבת להיות קובץ.',
+            'image.mimes' => 'התמונה חייבת להיות מסוג: jpeg, png, jpg, gif.',
+            'image.max' => 'גודל התמונה לא יכול לעלות על 2MB.',
         ];
     }
 }

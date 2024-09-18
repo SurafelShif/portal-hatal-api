@@ -31,12 +31,12 @@ class UpdateWebsiteRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.string' => 'The site name must be a string.',
-            'name.min' => 'The site name should have atleast two characters',
-            'link.url' => 'The site link must be a valid URL.',
-            'image.file' => 'The image must be a file.',
-            'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
-            'image.max' => 'The image size cannot exceed 2MB.',
+            'name.string' => 'שם האתר חייב להיות מחרוזת.',
+            'name.min' => 'שם האתר צריך להכיל לפחות שני תווים.',
+            'link.url' => 'קישור האתר חייב להיות כתובת URL חוקית.',
+            'image.file' => 'הקובץ חייב להיות תמונה.',
+            'image.mimes' => 'התמונה חייבת להיות מסוג: jpeg, png, jpg, gif.',
+            'image.max' => 'גודל התמונה לא יכול לעלות על 2MB.',
         ];
     }
 }

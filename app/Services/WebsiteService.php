@@ -4,80 +4,130 @@ namespace App\Services;
 
 use App\Models\image;
 use App\Models\Website;
+use Defuse\Crypto\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class WebsiteService
 {
 
+    public function getWebsites()
+    {
+        try {
+            $websites = Website::all()->where("is_deleted", false);
+            $websitesData = $websites->map(function ($website) {
+                $file = Image::find($website->image_id);
+
+                return [
+                    'id' => $website->id,
+                    'name' => $website->name,
+                    'link' => $website->link,
+                    'image' => $file->image_path
+                ];
+            });
+            return response()->json($websitesData, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
     public function uploadImage(Request $request)
     {
-        $image = $request->image('image');
 
-        $imagePath = $image->store('images', 'public');
-        return Image::create([
-            'image_name' => $image->getClientOriginalName(),
-            'image_path' => $imagePath,
-            'image_type' => $image->getMimeType(),
-        ]);
+        try {
+            $image = $request->file('image');
 
-        throw new \Exception('No image uploaded');
+            $imagePath = $image->store('images', 'public');
+            return Image::create([
+                'image_name' => $image->getClientOriginalName(),
+                'image_path' => $imagePath,
+                'image_type' => $image->getMimeType(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
     }
     public function createWebsite(Request $request, int $imageId)
     {
-        return Website::create([
-            'name' => $request->input('name'),
-            'link' => $request->input('link'),
-            'image_id' => $imageId,
-        ]);
+        try {
+            return Website::create([
+                'name' => $request->input('name'),
+                'link' => $request->input('link'),
+                'image_id' => $imageId,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
     }
     public function deleteWebsite($id)
     {
+        try {
+            $website = Website::where('id', $id)->where('is_deleted', false)->first();
+            if (!$website) {
+                return response()->json([
+                    'message' => 'אתר לא נמצא'
+                ], 404);
+            }
 
-        $website = Website::where('id', $id)->where('is_deleted', false)->first();
+            $website->is_deleted = true;
+            $website->save();
 
-
-        if (!$website) {
-
-            return false;
+            return   response()->json([
+                'message' => 'אתר נמחק בהצלחה'
+            ], 200);;
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
         }
-
-        $website->is_deleted = true;
-        $website->save();
-
-        return true;
     }
     public function updateWebsite(Request $request, $id)
     {
+        try {
+            if (!$request->hasAny(['name', 'link', 'image'])) {
+                return response()->json([
+                    'message' => 'הכנס לפחות שדה אחד לעדכון'
+                ], 400);
+            }
+            $website = Website::where('id', $id)->where('is_deleted', false)->first();
 
-        if (!$request->hasAny(['name', 'link', 'image'])) {
+            if (!$website) {
+                return response()->json([
+                    'message' => 'אתר לא נמצא'
+                ], 404);
+            }
+            if ($request->has('name')) {
+                $website->name = $request->name;
+            }
+            if ($request->has('link')) {
+                $website->link = $request->link;
+            }
+            if ($request->has('image')) {
+                $associatedimageId = $website->image_id;
+                $oldImage = Image::find($associatedimageId);
+                $newimage = $request->file('image');
+                $imagePath = $newimage->store('images', 'public');
+                if (Storage::disk('public')->exists($oldImage->image_path)) {
+                    Storage::disk('public')->delete($oldImage->image_path);
+                }
+                $oldImage->image_path = $imagePath;
+                $oldImage->image_name = $request->image->getClientOriginalName();
+                $oldImage->image_type =  $request->image->getMimeType();
+                $oldImage->save();
+            }
+            $website->save();
             return response()->json([
-                'message' => 'No valid parameters provided for update.'
+                'message' => 'פרטי האתר עודכנו בהצלחה'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
             ], 400);
         }
-        $website = Website::where('id', $id)->where('is_deleted', false)->first();
-
-        if (!$website) {
-            return response()->json([
-                'message' => 'Website not found or already deleted.'
-            ], 404);
-        }
-        if ($request->has('name')) {
-            $website->name = $request->name;
-        }
-        if ($request->has('link')) {
-            $website->link = $request->link;
-        }
-        if ($request->has('image')) {
-            $associatedimageId = $website->image_id;
-            $oldimage = Image::find($associatedimageId);
-
-            $newimage = $request->image('image');
-            $imagePath = $newimage->store('images', 'public');
-            dd($oldimage);
-        }
-        $website->save();
-        return response()->json([
-            'message' => 'Website updated successfuly.'
-        ], 200);
     }
 }

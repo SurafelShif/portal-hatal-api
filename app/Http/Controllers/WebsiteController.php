@@ -16,39 +16,24 @@ class WebsiteController extends Controller
         $this->WebsiteService = $WebsiteService;
     }
     //
+    public function index()
+    {
+        $websites = $this->WebsiteService->getWebsites();
+        return $websites;
+    }
     public function store(StoreWebsiteRequest $request)
     {
-        try {
-            $image = $this->WebsiteService->uploadimage($request);
-            $Website = $this->WebsiteService->createWebsite($request, $image->id);
-
-            return response()->json([
-                'message' => 'Website created successfully!',
-                'Website' => $Website,
-            ], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 400);
-        }
+        $image = $this->WebsiteService->uploadimage($request);
+        $website = $this->WebsiteService->createWebsite($request, $image->id);
+        return response()->json([
+            'message' => 'Website created successfully!',
+            'Website' => $website,
+        ], 201);
     }
     public function delete($id)
     {
-        try {
-            $deleted = $this->WebsiteService->deleteWebsite($id);
-            if (!$deleted) {
-                return response()->json([
-                    'message' => 'Website not found or already deleted.',
-                ], 404);
-            }
-            return response()->json([
-                'message' => 'Website deleted successfully'
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 400);
-        }
+        $deleted = $this->WebsiteService->deleteWebsite($id);
+        return $deleted;
     }
     public function update(UpdateWebsiteRequest $request, $id)
     {

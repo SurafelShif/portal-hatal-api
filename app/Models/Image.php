@@ -9,14 +9,14 @@ class Image extends Model
 {
     use HasFactory;
 
-    public function site()
+    public function website()
     {
-        return $this->belongsTo(Site::class);
+        return $this->belongsTo(Website::class);
     }
     protected $fillable = [
-        'file_name',
-        'file_type',
-        'file_path',
+        'image_name',
+        'image_type',
+        'image_path',
 
     ];
     protected $hidden = [

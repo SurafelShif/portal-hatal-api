@@ -9,7 +9,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::controller(WebsiteController::class)
-    ->prefix("sites")->group(function () {
+    ->prefix("websites")->group(function () {
+        Route::get("/", "index");
         Route::post("/", "store");
         Route::delete("/{id}", "delete");
         Route::put("/{id}", "update");

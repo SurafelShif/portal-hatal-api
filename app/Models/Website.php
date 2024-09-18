@@ -5,16 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Site extends Model
+class Website extends Model
 {
     use HasFactory;
-    public function file()
+    public function image()
     {
-        return $this->hasOne(File::class);
+        return $this->hasOne(Image::class);
     }
     protected $fillable = [
         'name',
         'link',
+        "image_id"
 
     ];
     protected $hidden = [

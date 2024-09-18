@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sites', function (Blueprint $table) {
+        Schema::create('websites', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('file_id'); // Unsigned big integer, same as the files.id column
-            $table->foreign('file_id')->references('id')->on('files')->onDelete('cascade');
+            $table->unsignedBigInteger('image_id')->nullable();
+            $table->foreign('image_id')->references('id')->on('images')->onDelete('cascade');
             $table->string('name')->nullable();
             $table->string('link')->nullable();
             $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sites');
+        Schema::dropIfExists('websites');
     }
 };

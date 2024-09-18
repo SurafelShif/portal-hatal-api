@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class File extends Model
+class Image extends Model
 {
     use HasFactory;
 
@@ -13,6 +13,12 @@ class File extends Model
     {
         return $this->belongsTo(Site::class);
     }
+    protected $fillable = [
+        'file_name',
+        'file_type',
+        'file_path',
+
+    ];
     protected $hidden = [
         'created_at',
         'updated_at',

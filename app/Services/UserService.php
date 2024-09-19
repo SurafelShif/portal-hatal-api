@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserService
 {
@@ -18,7 +19,6 @@ class UserService
             return response()->json([
                 $admins,
             ], 200);
-            return $users;
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -62,6 +62,28 @@ class UserService
             $user->assignRole('user');
             $user->save();
             return response()->json(["message" => "מנהל מערכת הוסר בצהלחה"], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+    public function getLoggedUser()
+    {
+        $user = Auth::user();
+        dd($user);
+    }
+    public function getUsers()
+    {
+        try {
+            $users = User::where('is_deleted', false)
+                ->whereHas('roles', function ($query) {
+                    $query->where('name', 'user');
+                })
+                ->get();
+            return response()->json([
+                $users,
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),

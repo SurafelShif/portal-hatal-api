@@ -30,6 +30,17 @@ class UserController extends Controller
         $deleted_user = $this->UserService->deleteUser($id);
         return $deleted_user;
     }
+    public function user()
+    {
+        $logged_user = $this->UserService->getLoggedUser();
+        return $logged_user;
+    }
+    public function getUsers()
+    {
+
+        $users = $this->UserService->getUsers();
+        return $users;
+    }
 
     //
 }

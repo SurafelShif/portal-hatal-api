@@ -7,12 +7,16 @@ use Illuminate\Http\Request;
 
 class UserService
 {
-    public function getUsers()
+    public function getAdmins()
     {
         try {
-            $users = User::all()->where("is_deleted", false);
+            $admins = User::where('is_deleted', false)
+                ->whereHas('roles', function ($query) {
+                    $query->where('name', 'admin');
+                })
+                ->get();
             return response()->json([
-                $users
+                $admins,
             ], 200);
             return $users;
         } catch (\Exception $e) {
@@ -29,6 +33,7 @@ class UserService
                 'personal_number' => $request['personal_number'],
                 'personal_id' => $request['personal_id'],
             ]);
+            $user->assignRole('admin');
             return response()->json([
                 'message' => 'מנהל מערכת נוצר בהצלחה',
             ], 201);
@@ -41,12 +46,15 @@ class UserService
     public function deleteUser($id)
     {
         try {
-            $user = User::where("id", $id)->where("is_deleted", 0)->first();
+            $user = User::where("id", $id)->where("is_deleted", 0)->whereHas('roles', function ($query) {
+                $query->where('name', 'admin');
+            })->first();
             if (!$user) {
                 return response()->json([
                     'message' => 'מנהל מערכת לא נמצא'
                 ], 404);
             }
+
             $user->is_deleted = true;
             $user->save();
             return response()->json(["message" => "מנהל מערכת הוסר בצהלחה"], 200);

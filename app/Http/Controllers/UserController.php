@@ -17,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
 
-        $users = $this->UserService->getUsers();
+        $users = $this->UserService->getAdmins();
         return $users;
     }
     public function store(StoreUserRequest $request)
@@ -27,8 +27,8 @@ class UserController extends Controller
     }
     public function delete($id)
     {
-        $deleted_user_response = $this->UserService->deleteUser($id);
-        return $deleted_user_response;
+        $deleted_user = $this->UserService->deleteUser($id);
+        return $deleted_user;
     }
 
     //

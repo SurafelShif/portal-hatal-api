@@ -25,14 +25,18 @@ class UserService
             ], 400);
         }
     }
-    public function addUser(Request $request)
+    public function addAdmin($id)
     {
         try {
-            $user = User::create([
-                'full_name' => $request['full_name'],
-                'personal_number' => $request['personal_number'],
-                'personal_id' => $request['personal_id'],
-            ]);
+            $user = User::where('is_deleted', false)->where('id', $id)->whereHas('roles', function ($query) {
+                $query->where('name', 'user');
+            })->first();
+            if (!$user) {
+                return response()->json([
+                    'message' => 'משתמש לא נמצא'
+                ], 404);
+            }
+            $user->removeRole('admin');
             $user->assignRole('admin');
             return response()->json([
                 'message' => 'מנהל מערכת נוצר בהצלחה',
@@ -54,8 +58,8 @@ class UserService
                     'message' => 'מנהל מערכת לא נמצא'
                 ], 404);
             }
-
-            $user->is_deleted = true;
+            $user->removeRole('admin');
+            $user->assignRole('user');
             $user->save();
             return response()->json(["message" => "מנהל מערכת הוסר בצהלחה"], 200);
         } catch (\Exception $e) {

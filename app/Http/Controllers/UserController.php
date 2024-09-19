@@ -20,9 +20,9 @@ class UserController extends Controller
         $users = $this->UserService->getAdmins();
         return $users;
     }
-    public function store(StoreUserRequest $request)
+    public function store($id)
     {
-        $user = $this->UserService->addUser($request);
+        $user = $this->UserService->addAdmin($id);
         return $user;
     }
     public function delete($id)

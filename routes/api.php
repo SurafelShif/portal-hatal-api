@@ -18,6 +18,6 @@ Route::controller(WebsiteController::class)
 Route::controller(UserController::class)
     ->prefix("users")->group(function () {
         Route::get("/", "index");
-        Route::post("/", "store");
+        Route::post("/{id}", "store");
         Route::delete("/{id}", "delete");
     });

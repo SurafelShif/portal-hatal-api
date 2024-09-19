@@ -14,6 +14,7 @@ class Website extends Model
     }
     protected $fillable = [
         'name',
+        'description',
         'link',
         "image_id"
 

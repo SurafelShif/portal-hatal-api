@@ -25,10 +25,7 @@ class WebsiteController extends Controller
     {
         $image = $this->WebsiteService->uploadimage($request);
         $website = $this->WebsiteService->createWebsite($request, $image->id);
-        return response()->json([
-            'message' => 'Website created successfully!',
-            'Website' => $website,
-        ], 201);
+        return $website;
     }
     public function delete($id)
     {

@@ -21,6 +21,7 @@ class WebsiteService
                 return [
                     'id' => $website->id,
                     'name' => $website->name,
+                    'description' => $website->description,
                     'link' => $website->link,
                     'image' => $file->image_path
                 ];
@@ -53,11 +54,16 @@ class WebsiteService
     public function createWebsite(Request $request, int $imageId)
     {
         try {
-            return Website::create([
+            $website = Website::create([
                 'name' => $request->input('name'),
+                'description' => $request->input('description'),
                 'link' => $request->input('link'),
                 'image_id' => $imageId,
             ]);
+            return response()->json([
+                'message' => 'קישור נוצר בהצלחה',
+                'Website' => $website,
+            ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -89,7 +95,7 @@ class WebsiteService
     public function updateWebsite(Request $request, $id)
     {
         try {
-            if (!$request->hasAny(['name', 'link', 'image'])) {
+            if (!$request->hasAny(['name', 'link', 'image', 'description'])) {
                 return response()->json([
                     'message' => 'הכנס לפחות שדה אחד לעדכון'
                 ], 400);
@@ -103,6 +109,9 @@ class WebsiteService
             }
             if ($request->has('name')) {
                 $website->name = $request->name;
+            }
+            if ($request->has('description')) {
+                $website->description = $request->description;
             }
             if ($request->has('link')) {
                 $website->link = $request->link;

@@ -23,6 +23,7 @@ class UpdateWebsiteRequest extends FormRequest
     {
         return [
             'name' => 'nullable|string|min:2',
+            'description' => 'nullable|string|min:2',
             'link' => 'nullable|url',
             'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
             //
@@ -32,7 +33,9 @@ class UpdateWebsiteRequest extends FormRequest
     {
         return [
             'name.string' => 'שם האתר חייב להיות מחרוזת.',
-            'name.min' => 'שם האתר צריך להכיל לפחות שני תווים.',
+            'name.min' => 'תיאור האתר צריך להכיל לפחות שני תווים.',
+            'description.string' => 'תיאור האתר חייב להיות מחרוזת.',
+            'description.min' => 'שם האתר צריך להכיל לפחות שני תווים.',
             'link.url' => 'קישור האתר חייב להיות כתובת URL חוקית.',
             'image.file' => 'הקובץ חייב להיות תמונה.',
             'image.mimes' => 'התמונה חייבת להיות מסוג: jpeg, png, jpg, gif.',

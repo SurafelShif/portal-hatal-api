@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Http\Request;
@@ -14,4 +15,9 @@ Route::controller(WebsiteController::class)
         Route::post("/", "store");
         Route::delete("/{id}", "delete");
         Route::put("/{id}", "update");
+    });
+Route::controller(AdminController::class)
+    ->prefix("admins")->group(function () {
+        Route::get("/", "index");
+        Route::post("/", "store");
     });

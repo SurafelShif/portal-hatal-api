@@ -21,6 +21,6 @@ Route::controller(UserController::class)
     ->prefix("users")->middleware(['auth:api', 'role:admin'])->group(function () {
         Route::get("/admins", "index"); //getAdmins
         Route::get("/users", "getUsers");
-        Route::post("/{id}", "store");
-        Route::delete("/{id}", "delete");
+        Route::post("/{uuid}", "store");
+        Route::delete("/{uuid}", "delete");
     });

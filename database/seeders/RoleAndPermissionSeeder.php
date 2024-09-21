@@ -10,16 +10,29 @@ class RoleAndPermissionSeeder extends Seeder
 {
     public function run()
     {
-        // Create roles
-        $adminRole = Role::create(['name' => 'admin']);
-        $useRole = Role::create(['name' => 'user']);
+        // Define guard names
+        $apiGuard = 'api';
+        $webGuard = 'web';
 
-        // Create permissions
-        Permission::create(['name' => 'מנהל מערכת']);
-        Permission::create(['name' => 'משתמש']);
+        // Create roles for both 'api' and 'web' guards
+        $adminRoleApi = Role::create(['name' => 'admin', 'guard_name' => $apiGuard]);
+        $userRoleApi = Role::create(['name' => 'user', 'guard_name' => $apiGuard]);
 
-        $adminRole->givePermissionTo('מנהל מערכת');
+        $adminRoleWeb = Role::create(['name' => 'admin', 'guard_name' => $webGuard]);
+        $userRoleWeb = Role::create(['name' => 'user', 'guard_name' => $webGuard]);
 
-        $useRole->givePermissionTo('משתמש');
+        // Create permissions for both guards
+        $adminPermissionApi = Permission::create(['name' => 'מנהל מערכת', 'guard_name' => $apiGuard]);
+        $userPermissionApi = Permission::create(['name' => 'משתמש', 'guard_name' => $apiGuard]);
+
+        $adminPermissionWeb = Permission::create(['name' => 'מנהל מערכת', 'guard_name' => $webGuard]);
+        $userPermissionWeb = Permission::create(['name' => 'משתמש', 'guard_name' => $webGuard]);
+
+        // Assign permissions to roles for both guards
+        $adminRoleApi->givePermissionTo($adminPermissionApi);
+        $userRoleApi->givePermissionTo($userPermissionApi);
+
+        $adminRoleWeb->givePermissionTo($adminPermissionWeb);
+        $userRoleWeb->givePermissionTo($userPermissionWeb);
     }
 }

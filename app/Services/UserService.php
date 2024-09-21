@@ -25,10 +25,10 @@ class UserService
             ], 400);
         }
     }
-    public function addAdmin($id)
+    public function addAdmin($uuid)
     {
         try {
-            $user = User::where('is_deleted', false)->where('id', $id)->whereHas('roles', function ($query) {
+            $user = User::where('is_deleted', false)->where('uuid', $uuid)->whereHas('roles', function ($query) {
                 $query->where('name', 'user');
             })->first();
             if (!$user) {
@@ -47,10 +47,10 @@ class UserService
             ], 400);
         }
     }
-    public function deleteUser($id)
+    public function deleteUser($uuid)
     {
         try {
-            $user = User::where("id", $id)->where("is_deleted", 0)->whereHas('roles', function ($query) {
+            $user = User::where("uuid", $uuid)->where("is_deleted", 0)->whereHas('roles', function ($query) {
                 $query->where('name', 'admin');
             })->first();
             if (!$user) {

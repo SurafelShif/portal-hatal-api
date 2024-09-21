@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Ramsey\Uuid\Uuid;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -15,7 +16,16 @@ class User extends Authenticatable
         HasFactory,
         Notifiable,
         HasRoles;
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::creating(function ($model) {
+            if (empty($model->uuid)) {
+                $model->uuid = (string) Uuid::uuid4();
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.

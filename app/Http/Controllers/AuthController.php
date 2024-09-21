@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -18,7 +17,6 @@ class AuthController extends Controller
             if (!$user) {
                 return response()->json(["message" => "משתמש לא נמצא"], 404);
             }
-            Auth::login($user);
             $token = $user->createToken('PortalHatalToken')->accessToken;
             $cookie = cookie('PortalHatalToken', $token, 60);
             return response()->json([

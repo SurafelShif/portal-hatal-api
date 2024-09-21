@@ -71,7 +71,10 @@ class UserService
     public function getLoggedUser()
     {
         $user = Auth::user();
-        dd($user);
+
+        return response()->json([
+            $user,
+        ], 200);;
     }
     public function getUsers()
     {

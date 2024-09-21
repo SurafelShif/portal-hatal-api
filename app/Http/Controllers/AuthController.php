@@ -7,6 +7,42 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+
+    /**
+     * @OA\Post(
+     *      path="/api/login",
+     *      operationId="login",
+     *      tags={"Authentication"},
+     *      summary="Login user",
+     *      description="Authenticate and login user based on personal id",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"personal_id"},
+     *              @OA\Property(property="personal_id", type="string", example="123456789")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="המשתמש התחבר בהצלחה",
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="משתמש אינו קיים",
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="אירעה שגיאה בהתחברות",
+     *      ),
+     *      @OA\Response(
+     *          response=204,
+     *          description="אין תוכן",
+     *      ),
+     * )
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request)
     {
         try {

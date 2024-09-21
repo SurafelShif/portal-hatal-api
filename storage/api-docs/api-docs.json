@@ -1,0 +1,197 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Portal-Hatal API",
+        "version": "2"
+    },
+    "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login user",
+                "description": "Authenticate and login user based on personal id",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "personal_id"
+                                ],
+                                "properties": {
+                                    "personal_id": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "המשתמש התחבר בהצלחה"
+                    },
+                    "404": {
+                        "description": "משתמש אינו קיים"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה בהתחברות"
+                    },
+                    "204": {
+                        "description": "אין תוכן"
+                    }
+                }
+            }
+        },
+        "/api/users/admins": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Retrieve all users",
+                "description": "Retrieve all users",
+                "operationId": "index user",
+                "responses": {
+                    "200": {
+                        "description": "הפעולה התבצעה בהצלחה"
+                    }
+                }
+            }
+        },
+        "/api/users/{uuid}": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "add admin",
+                "description": "add admin",
+                "operationId": "store",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "הרשאה נוספה בהצלחה"
+                    },
+                    "404": {
+                        "description": "משתמש אינו נמצא"
+                    },
+                    "409": {
+                        "description": "משתמש זה הינו מנהל מערכת"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "delete admin",
+                "description": "delete admin role",
+                "operationId": "delete",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID of the admin",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "הרשאה נמחקה בהצלחה"
+                    },
+                    "404": {
+                        "description": "משתמש אינו נמצא"
+                    },
+                    "409": {
+                        "description": "למשתמש זה אין הרשאת מנהל מערכת"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            }
+        },
+        "/api/users/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Retrieve all users but admins",
+                "description": "Retrieve all users but admins",
+                "operationId": "getUsers",
+                "responses": {
+                    "200": {
+                        "description": "פעולה נמחקה בהצלחה"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get authenticated user",
+                "description": "Returns the authenticated user's details",
+                "operationId": "user",
+                "responses": {
+                    "200": {
+                        "description": "הפעולה התבצעה בהצלחה"
+                    },
+                    "404": {
+                        "description": "משתמש אינו נמצא"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearerAuth",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        }
+    ]
+}

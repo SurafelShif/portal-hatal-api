@@ -27,14 +27,14 @@ class WebsiteController extends Controller
         $website = $this->WebsiteService->createWebsite($request, $image->id);
         return $website;
     }
-    public function delete($id)
+    public function delete($uuid)
     {
-        $deleted = $this->WebsiteService->deleteWebsite($id);
+        $deleted = $this->WebsiteService->deleteWebsite($uuid);
         return $deleted;
     }
-    public function update(UpdateWebsiteRequest $request, $id)
+    public function update(UpdateWebsiteRequest $request, $uuid)
     {
-        $updatedWebsite = $this->WebsiteService->updateWebsite($request, $id);
+        $updatedWebsite = $this->WebsiteService->updateWebsite($request, $uuid);
         return $updatedWebsite;
     }
 }

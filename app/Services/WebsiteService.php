@@ -18,7 +18,6 @@ class WebsiteService
                 $file = Image::find($website->image_id);
 
                 return [
-                    'id' => $website->id,
                     'name' => $website->name,
                     'description' => $website->description,
                     'link' => $website->link,
@@ -69,10 +68,10 @@ class WebsiteService
             ], 400);
         }
     }
-    public function deleteWebsite($id)
+    public function deleteWebsite($uuid)
     {
         try {
-            $website = Website::where('id', $id)->where('is_deleted', false)->first();
+            $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
             if (!$website) {
                 return response()->json([
                     'message' => 'אתר לא נמצא'
@@ -91,7 +90,7 @@ class WebsiteService
             ], 400);
         }
     }
-    public function updateWebsite(Request $request, $id)
+    public function updateWebsite(Request $request, $uuid)
     {
         try {
             if (!$request->hasAny(['name', 'link', 'image', 'description'])) {
@@ -99,7 +98,7 @@ class WebsiteService
                     'message' => 'הכנס לפחות שדה אחד לעדכון'
                 ], 400);
             }
-            $website = Website::where('id', $id)->where('is_deleted', false)->first();
+            $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
 
             if (!$website) {
                 return response()->json([

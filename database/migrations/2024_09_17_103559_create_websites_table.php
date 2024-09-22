@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('image_id')->references('id')->on('images')->onDelete('cascade');
             $table->string('name')->nullable();
             $table->string('description')->nullable();
-            $table->string('link')->nullable();
+            $table->string('link')->unique();
             $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });

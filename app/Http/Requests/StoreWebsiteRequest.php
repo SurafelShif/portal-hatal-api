@@ -24,7 +24,7 @@ class StoreWebsiteRequest extends FormRequest
         return [
             'name' => 'required|string|min:2',
             'description' => 'required|string|min:2',
-            'link' => 'required|url',
+            'link' => 'required|unique:websites|url',
             'image' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
             //
         ];
@@ -35,7 +35,9 @@ class StoreWebsiteRequest extends FormRequest
             'name.required' => 'שם האתר דרוש.',
             'name.string' => 'שם האתר חייב להיות מחרוזת.',
             'name.min' => 'שם האתר צריך להכיל לפחות שני תווים.',
+            'link.url' => 'קישור האתר חייב להיות כתובת URL חוקית.',
             'link.required' => 'קישור האתר דרוש.',
+            'link.unique' => 'קישור האתר  קיים במערכת',
             'description.required' => 'תיאור האתר דרוש.',
             'description.string' => 'תיאור האתר חייב להיות מחרוזת.',
             'description.min' => 'תיאור האתר צריך להכיל לפחות שני תווים.',

@@ -99,11 +99,6 @@ class WebsiteService
     public function updateWebsite(Request $request, $uuid)
     {
         try {
-            if (!$request->hasAny(['name', 'link', 'image', 'description'])) {
-                return response()->json([
-                    'message' => 'הכנס לפחות שדה אחד לעדכון'
-                ], 400);
-            }
             $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
 
             if (!$website) {
@@ -111,6 +106,13 @@ class WebsiteService
                     'message' => 'אתר לא נמצא'
                 ], 404);
             }
+
+            if (!$request->hasAny(['name', 'link', 'image', 'description'])) {
+                return response()->json([
+                    'message' => 'הכנס לפחות שדה אחד לעדכון'
+                ], 400);
+            }
+
             if ($request->filled('name')) {
                 $website->name = $request->name;
             }

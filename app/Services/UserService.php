@@ -93,17 +93,30 @@ class UserService
     {
         try {
             $user = Auth::user();
+            $role = $user->roles->first();
+
+            if (!$role) {
+                return response()->json([
+                    'message' => "המשתמש לא מוקצה לתפקיד.",
+                ], 404);
+            }
+            //to make the format user->role->display_name
+            $userData = json_decode(json_encode($user), true);
+            $userData['role'] = [
+                'name' => $role->name,
+                'display_name' => $role->display_name
+            ];
+
+            return response()->json([
+                'message' => "הפעולה התבצעה בהצלחה",
+                'user' => $userData
+            ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
         }
-
-        return response()->json([
-            'message' => "הפעולה התבצעה בהצלחה",
-            'user' => $user
-        ], 200);
     }
     public function getUsers()
     {
@@ -115,7 +128,8 @@ class UserService
                 ->get();
             return response()->json([
                 'message' => "הפעולה התבצעה בהצלחה",
-                'users' => $users
+                'users' => $users,
+
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

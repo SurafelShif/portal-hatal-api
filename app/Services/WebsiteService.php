@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\image;
 use App\Models\Website;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class WebsiteService
@@ -18,6 +19,7 @@ class WebsiteService
                 $file = Image::find($website->image_id);
 
                 return [
+                    'uuid' => $website->uuid,
                     'name' => $website->name,
                     'description' => $website->description,
                     'link' => $website->link,
@@ -26,6 +28,7 @@ class WebsiteService
             });
             return response()->json($websitesData, 200);
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
@@ -44,6 +47,7 @@ class WebsiteService
                 'image_type' => $image->getMimeType(),
             ]);
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
@@ -59,10 +63,11 @@ class WebsiteService
                 'image_id' => $imageId,
             ]);
             return response()->json([
-                'message' => 'קישור נוצר בהצלחה',
+                'message' => 'אתר נוצר בהצלחה',
                 'Website' => $website,
             ], 201);
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
@@ -85,6 +90,7 @@ class WebsiteService
                 'message' => 'אתר נמחק בהצלחה'
             ], 200);;
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
@@ -105,16 +111,16 @@ class WebsiteService
                     'message' => 'אתר לא נמצא'
                 ], 404);
             }
-            if ($request->has('name')) {
+            if ($request->filled('name')) {
                 $website->name = $request->name;
             }
-            if ($request->has('description')) {
+            if ($request->filled('description')) {
                 $website->description = $request->description;
             }
-            if ($request->has('link')) {
+            if ($request->filled('link')) {
                 $website->link = $request->link;
             }
-            if ($request->has('image')) {
+            if ($request->filled('image')) {
                 $associatedimageId = $website->image_id;
                 $oldImage = Image::find($associatedimageId);
                 $newimage = $request->file('image');
@@ -132,6 +138,7 @@ class WebsiteService
                 'message' => 'פרטי האתר עודכנו בהצלחה'
             ], 200);
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);

@@ -171,6 +171,170 @@
                     }
                 }
             }
+        },
+        "/api/websites": {
+            "get": {
+                "tags": [
+                    "Websites"
+                ],
+                "summary": "Retrieve all websites",
+                "description": "Retrieve all websites",
+                "operationId": "index websites",
+                "responses": {
+                    "200": {
+                        "description": "הפעולה התבצעה בהצלחה"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Websites"
+                ],
+                "summary": "Upload a website",
+                "description": "Upload a website",
+                "operationId": "storeWebsite",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "link",
+                                    "image",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "אתר 1"
+                                    },
+                                    "link": {
+                                        "type": "string",
+                                        "example": "https://www.google.com/"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "אתר טכנולוגיה"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "אתר נוצר בהצלחה"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            }
+        },
+        "/api/websites/{uuid}": {
+            "post": {
+                "tags": [
+                    "Websites"
+                ],
+                "summary": "Update a website",
+                "description": "Update a website",
+                "operationId": "updateWebsite",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID of the website",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "אתר 1"
+                                    },
+                                    "link": {
+                                        "type": "string",
+                                        "example": "https://www.google.com/"
+                                    },
+                                    "image": {
+                                        "description": "The image file to upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "אתר טכנולוגיה"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "אתר עודכן בהצלחה"
+                    },
+                    "400": {
+                        "description": "הכנס לפחות שדה אחד לעדכון"
+                    },
+                    "404": {
+                        "description": "האתר לא נמצא"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Websites"
+                ],
+                "summary": "delete website",
+                "description": "delete website",
+                "operationId": "delete website",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID of the website",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "אתר נמחק בהצלחה"
+                    },
+                    "404": {
+                        "description": "אתר לא נמצא"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -192,6 +356,10 @@
         {
             "name": "Users",
             "description": "Users"
+        },
+        {
+            "name": "Websites",
+            "description": "Websites"
         }
     ]
 }

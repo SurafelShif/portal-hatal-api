@@ -15,7 +15,7 @@ Route::controller(WebsiteController::class)
         Route::get("/", "index");
         Route::post("/", "store")->middleware(['auth:api', 'role:admin']);
         Route::delete("/{uuid}", "delete")->middleware(['auth:api', 'role:admin']);
-        Route::put("/{uuid}", "update")->middleware(['auth:api', 'role:admin']);
+        Route::post("/{uuid}", "update")->middleware(['auth:api', 'role:admin']);
     });
 Route::controller(UserController::class)
     ->prefix("users")->middleware(['auth:api', 'role:admin'])->group(function () {

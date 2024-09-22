@@ -26,20 +26,23 @@ class UpdateWebsiteRequest extends FormRequest
             'description' => 'nullable|string|min:2',
             'link' => 'nullable|url',
             'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
-            //
+            // Custom rule to ensure at least one field is provided
+            'required_without_all' => 'required_without_all:name,description,link,image',
         ];
     }
+
     public function messages()
     {
         return [
             'name.string' => 'שם האתר חייב להיות מחרוזת.',
-            'name.min' => 'תיאור האתר צריך להכיל לפחות שני תווים.',
+            'name.min' => 'שם האתר צריך להכיל לפחות שני תווים.',
             'description.string' => 'תיאור האתר חייב להיות מחרוזת.',
-            'description.min' => 'שם האתר צריך להכיל לפחות שני תווים.',
+            'description.min' => 'תיאור האתר צריך להכיל לפחות שני תווים.',
             'link.url' => 'קישור האתר חייב להיות כתובת URL חוקית.',
             'image.file' => 'הקובץ חייב להיות תמונה.',
             'image.mimes' => 'התמונה חייבת להיות מסוג: jpeg, png, jpg, gif.',
             'image.max' => 'גודל התמונה לא יכול לעלות על 2MB.',
+            'required_without_all' => 'עליך לספק לפחות אחד מהשדות: name, link, image, description.',
         ];
     }
 }

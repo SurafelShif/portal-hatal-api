@@ -42,7 +42,7 @@ class RahtalService
 
             if (!$rahtal) {
                 return response()->json([
-                    'message' => 'רחת"ל לא נמצא'
+                    'message' => 'רחט"ל לא נמצא'
                 ], 404);
             }
             DB::beginTransaction();

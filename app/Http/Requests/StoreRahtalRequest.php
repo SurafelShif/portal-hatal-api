@@ -24,7 +24,7 @@ class StoreRahtalRequest extends FormRequest
         return [
             'full_name' => 'nullable|string|min:2',
             'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
-            'required_without_all' => 'required_without_all:name,description,link,image',
+            'required_without_all' => 'required_without_all:full_name,image',
         ];
     }
     public function messages()

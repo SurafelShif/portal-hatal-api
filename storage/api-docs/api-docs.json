@@ -48,6 +48,84 @@
                 }
             }
         },
+        "/api/rahtal": {
+            "get": {
+                "tags": [
+                    "Rahtal"
+                ],
+                "summary": "Get Rahtal",
+                "description": "Returns the Rahtal details",
+                "operationId": "rahtal",
+                "responses": {
+                    "200": {
+                        "description": "הפעולה התבצעה בהצלחה"
+                    },
+                    "404": {
+                        "description": "משתמש אינו נמצא"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            }
+        },
+        "/api/rahtal/{uuid}": {
+            "post": {
+                "tags": [
+                    "Rahtal"
+                ],
+                "summary": "Update the rahtal",
+                "description": "Update a rahtal",
+                "operationId": "update rahtal",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID of the rahtal",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "full_name": {
+                                        "type": "string",
+                                        "example": "רחטל"
+                                    },
+                                    "image": {
+                                        "description": "The image file to upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "רחטל עודכן בהצלחה"
+                    },
+                    "400": {
+                        "description": "הכנס לפחות שדה אחד לעדכון"
+                    },
+                    "404": {
+                        "description": "רחטל לא נמצא"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            }
+        },
         "/api/users/admins": {
             "get": {
                 "tags": [
@@ -352,6 +430,10 @@
         {
             "name": "Authentication",
             "description": "Authentication"
+        },
+        {
+            "name": "Rahtal",
+            "description": "Rahtal"
         },
         {
             "name": "Users",

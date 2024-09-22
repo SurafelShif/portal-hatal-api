@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('full_name')->nullable();
-            $table->string('rank')->nullable();
             $table->unsignedBigInteger('image_id')->nullable();
             $table->foreign('image_id')->references('id')->on('images');
             $table->timestamps();

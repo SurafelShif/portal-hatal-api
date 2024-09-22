@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Image;
+use App\Models\Rahtal;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -58,5 +60,18 @@ class UsersSeeder extends Seeder
             'full_name' => 'מנהל מערכת 3',
         ]);
         $admin3->assignRole('admin');
+        // admin 3
+        $image = Image::create([
+            'image_name' => '30330b5e8e0f772f0edaa310294703a2.jpg',
+            'image_type' => 'jpg',
+            'image_path' => 'uploads/30330b5e8e0f772f0edaa310294703a2.jpg',
+        ]);
+
+        $rahtal = Rahtal::create([
+            'full_name' => 'משתמש רהט"ל',
+            'image_id' => $image->id,
+        ]);
+
+        $rahtal->assignRole('user');
     }
 }

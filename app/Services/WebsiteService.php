@@ -6,11 +6,15 @@ use App\Models\image;
 use App\Models\Website;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class WebsiteService
 {
+    protected $CommonService;
 
+    public function __construct(CommonService $CommonService)
+    {
+        $this->CommonService = $CommonService;
+    }
     public function getWebsites()
     {
         try {
@@ -104,18 +108,9 @@ class WebsiteService
             if ($request->filled('link')) {
                 $website->link = $request->link;
             }
-            if ($request->filled('image')) {
+            if ($request->hasFile('image')) {
                 $associatedimageId = $website->image_id;
-                $oldImage = Image::find($associatedimageId);
-                $newimage = $request->file('image');
-                $imagePath = $newimage->store('images', 'public');
-                if (Storage::disk('public')->exists($oldImage->image_path)) {
-                    Storage::disk('public')->delete($oldImage->image_path);
-                }
-                $oldImage->image_path = $imagePath;
-                $oldImage->image_name = $request->image->getClientOriginalName();
-                $oldImage->image_type =  $request->image->getMimeType();
-                $oldImage->save();
+                $this->CommonService->updateImage($associatedimageId, $request);
             }
             $website->save();
             return response()->json([

@@ -27,5 +27,5 @@ Route::controller(UserController::class)
     });
 Route::controller(RahtalController::class)->prefix("rahtal")->middleware(['auth:api', 'role:admin'])->group(function () {
     Route::get("/", "index");
-    Route::post("/", "update");
+    Route::post("/{uuid}", "update");
 });

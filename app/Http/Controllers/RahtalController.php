@@ -5,17 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRahtalRequest;
 use App\Services\CommonService;
 use App\Services\RahtalService;
-use Illuminate\Http\Request;
+
 
 class RahtalController extends Controller
 {
     protected $RahtalService;
-    protected $CommonService;
+    // protected $CommonService;
 
-    public function __construct(RahtalService $RahtalService, CommonService $CommonService)
+    public function __construct(RahtalService $RahtalService)
     {
         $this->RahtalService = $RahtalService;
-        $this->CommonService = $CommonService;
     }
     //
     public function index()

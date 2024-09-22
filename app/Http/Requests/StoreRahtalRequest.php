@@ -22,20 +22,20 @@ class StoreRahtalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'required|string|min:2',
-            'image' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
+            'full_name' => 'nullable|string|min:2',
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+            'required_without_all' => 'required_without_all:name,description,link,image',
         ];
     }
     public function messages()
     {
         return [
-            'full_name.required' => 'שם הרחת"ל דרוש.',
             'full_name.string' => 'שם הרחת"ל חייב להיות מחרוזת.',
             'full_name.min' => 'שם הרחת"ל צריך להכיל לפחות שני תווים.',
-            'image.required' => 'דרוש קובץ תמונה.',
             'image.file' => 'התמונה חייבת להיות קובץ.',
             'image.mimes' => 'התמונה חייבת להיות מסוג: jpeg, png, jpg, gif.',
             'image.max' => 'גודל התמונה לא יכול לעלות על 2MB.',
+            'required_without_all' => 'עליך לספק לפחות אחד מהשדות: full_name, image.',
         ];
     }
 }

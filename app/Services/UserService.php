@@ -46,7 +46,6 @@ class UserService
                 $user->removeRole('user');
                 $user->revokePermissionTo('משתמש');
             }
-
             $user->assignRole('admin');
             $user->givePermissionTo('מנהל מערכת');
             return response()->json([

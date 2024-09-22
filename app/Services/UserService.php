@@ -97,7 +97,7 @@ class UserService
 
             if (!$role) {
                 return response()->json([
-                    'message' => "המשתמש לא מוקצה לתפקיד.",
+                    'message' => "למשתמש אין תפקיד",
                 ], 404);
             }
             //to make the format user->role->display_name

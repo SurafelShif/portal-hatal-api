@@ -153,6 +153,10 @@ class UserController extends Controller
      *          description="משתמש אינו נמצא",
      *      ),
      *      @OA\Response(
+     *          response=404,
+     *          description="למשתמש אין תפקיד",
+     *      ),
+     *      @OA\Response(
      *          response=500,
      *          description="אירעה שגיאה",
      *      )

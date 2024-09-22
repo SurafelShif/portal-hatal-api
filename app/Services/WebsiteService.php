@@ -30,7 +30,7 @@ class WebsiteService
                     'image' => $file->image_path
                 ];
             });
-            return response()->json($websitesData, 200);
+            return response()->json(['message' => 'פעולה בוצעה בהצלחה', $websitesData], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([

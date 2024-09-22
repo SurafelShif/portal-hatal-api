@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -59,6 +60,7 @@ class AuthController extends Controller
                 'message' => 'התחבר בהצלחה',
             ])->withCookie($cookie);
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);

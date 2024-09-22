@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RahtalController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
@@ -24,3 +25,7 @@ Route::controller(UserController::class)
         Route::post("/{uuid}", "store");
         Route::delete("/{uuid}", "delete");
     });
+Route::controller(RahtalController::class)->prefix("rahtal")->middleware(['auth:api', 'role:admin'])->group(function () {
+    Route::get("/", "index");
+    Route::post("/", "update");
+});

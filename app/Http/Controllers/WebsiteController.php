@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreWebsiteRequest;
 use App\Http\Requests\UpdateWebsiteRequest;
+use App\Services\CommonService;
 use App\Services\WebsiteService;
 
 class WebsiteController extends Controller
 {
     protected $WebsiteService;
+    protected $CommonService;
 
     // Dependency Injection via Constructor
-    public function __construct(WebsiteService $WebsiteService)
+    public function __construct(WebsiteService $WebsiteService, CommonService $CommonService)
     {
         $this->WebsiteService = $WebsiteService;
+        $this->CommonService = $CommonService;
     }
     //
     /**
@@ -90,7 +93,7 @@ class WebsiteController extends Controller
      */
     public function store(StoreWebsiteRequest $request)
     {
-        $image = $this->WebsiteService->uploadimage($request);
+        $image = $this->CommonService->uploadimage($request);
         $website = $this->WebsiteService->createWebsite($request, $image->id);
         return $website;
     }

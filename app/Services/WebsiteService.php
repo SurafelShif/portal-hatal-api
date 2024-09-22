@@ -34,25 +34,7 @@ class WebsiteService
             ], 400);
         }
     }
-    public function uploadImage(Request $request)
-    {
 
-        try {
-            $image = $request->file('image');
-
-            $imagePath = $image->store('images', 'public');
-            return Image::create([
-                'image_name' => $image->getClientOriginalName(),
-                'image_path' => $imagePath,
-                'image_type' => $image->getMimeType(),
-            ]);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 400);
-        }
-    }
     public function createWebsite(Request $request, int $imageId)
     {
         try {

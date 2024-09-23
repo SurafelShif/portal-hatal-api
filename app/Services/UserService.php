@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
+use App\Messages\ResponseMessages;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -17,14 +17,21 @@ class UserService
                     $query->where('name', 'admin');
                 })
                 ->get();
+            if (!$admins) {
+
+                return response()->json([
+                    'message' => ResponseMessages::USER_NOT_FOUND,
+                ], 404);
+            }
             return response()->json([
-                'message' => "הפעולה התבצעה בהצלחה",
+                'message' => ResponseMessages::SUCCESS_ACTION,
                 'users' => $admins
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }
@@ -34,12 +41,12 @@ class UserService
             $user = User::where('is_deleted', false)->where('uuid', $uuid)->first();
             if (!$user) {
                 return response()->json([
-                    'message' => 'משתמש לא נמצא'
+                    'message' => ResponseMessages::USER_NOT_FOUND
                 ], 404);
             }
             if ($user->hasRole('admin')) {
                 return response()->json([
-                    'message' => 'משתמש הינו מנהל מערכת'
+                    'message' => ResponseMessages::NOT_USER
                 ], 409);
             }
             if ($user->hasRole('user')) {
@@ -49,12 +56,13 @@ class UserService
             $user->assignRole('admin');
             $user->givePermissionTo('מנהל מערכת');
             return response()->json([
-                'message' => 'מנהל מערכת נוצר בהצלחה',
+                'message' => ResponseMessages::SUCCESS_ACTION,
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }
@@ -65,13 +73,19 @@ class UserService
 
             if (!$user) {
                 return response()->json([
-                    'message' => 'מנהל מערכת לא נמצא'
+                    'message' => ResponseMessages::USER_NOT_FOUND
                 ], 404);
             }
             if ($user->hasRole('user')) {
                 return response()->json([
-                    'message' => 'משתמש הינו מנהל מערכת'
+                    'message' => ResponseMessages::NOT_ADMIN
                 ], 409);
+            }
+            $logged_user = Auth::user();
+            if ($logged_user->personal_id === $user->personal_id) {
+                return response()->json([
+                    'message' => ResponseMessages::SELF_REMOVAL
+                ], 403);
             }
             if ($user->hasRole('admin')) {
                 $user->removeRole('admin');
@@ -81,11 +95,12 @@ class UserService
             $user->assignRole('user');
             $user->givePermissionTo('משתמש');
             $user->save();
-            return response()->json(["message" => "מנהל מערכת הוסר בצהלחה"], 200);
+            return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }
@@ -93,13 +108,12 @@ class UserService
     {
         try {
             $user = Auth::user();
-            $role = $user->roles->first();
-
-            if (!$role) {
+            if (!$user) {
                 return response()->json([
-                    'message' => "למשתמש אין תפקיד",
-                ], 404);
+                    "message" => ResponseMessages::UNAUTHENTICATED,
+                ], 401);
             }
+            $role = $user->roles->first();
             //to make the format user->role->display_name
             $userData = json_decode(json_encode($user), true);
             $userData['role'] = [
@@ -108,13 +122,14 @@ class UserService
             ];
 
             return response()->json([
-                'message' => "הפעולה התבצעה בהצלחה",
+                "message" => ResponseMessages::SUCCESS_ACTION,
                 'user' => $userData
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }
@@ -126,15 +141,17 @@ class UserService
                     $query->where('name', 'user');
                 })
                 ->get();
+
             return response()->json([
-                'message' => "הפעולה התבצעה בהצלחה",
+                "message" => ResponseMessages::SUCCESS_ACTION,
                 'users' => $users,
 
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Messages\ResponseMessages;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -48,11 +49,13 @@ class AuthController extends Controller
     {
         try {
             if (!$request->has('personal_id')) {
-                return response()->json(["message" => "נא לספק תעודת זהות"], 400);
+                return response()->json(["message" => ResponseMessages::INVALID_REQUEST], 400);
             }
             $user = User::where('personal_id', $request->personal_id)->first();
             if (!$user) {
-                return response()->json(["message" => "משתמש לא נמצא"], 404);
+                return response()->json([
+                    'message' => ResponseMessages::USER_NOT_FOUND
+                ], 404);
             }
             $token = $user->createToken('PortalHatalToken')->accessToken;
             $cookie = cookie('PortalHatalToken', $token, 60);
@@ -62,7 +65,8 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }

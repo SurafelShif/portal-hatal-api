@@ -12,7 +12,6 @@ class CommonService
 
     public function uploadImage(Request $request)
     {
-
         try {
             $image = $request->file('image');
 

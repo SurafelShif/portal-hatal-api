@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Messages\ResponseMessages;
 use App\Models\image;
 use App\Models\Website;
 use Illuminate\Http\Request;
@@ -30,11 +31,12 @@ class WebsiteService
                     'image' => $file->image_path
                 ];
             });
-            return response()->json(['message' => 'פעולה בוצעה בהצלחה', $websitesData], 200);
+            return response()->json(['message' => ResponseMessages::SUCCESS_ACTION, $websitesData], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }
@@ -49,13 +51,14 @@ class WebsiteService
                 'image_id' => $imageId,
             ]);
             return response()->json([
-                'message' => 'אתר נוצר בהצלחה',
+                'message' => ResponseMessages::SUCCESS_ACTION,
                 'Website' => $website,
             ], 201);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }
@@ -65,7 +68,7 @@ class WebsiteService
             $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
             if (!$website) {
                 return response()->json([
-                    'message' => 'אתר לא נמצא'
+                    'message' => ResponseMessages::WEBSITE_NOT_FOUND
                 ], 404);
             }
 
@@ -73,12 +76,13 @@ class WebsiteService
             $website->save();
 
             return   response()->json([
-                'message' => 'אתר נמחק בהצלחה'
+                'message' => ResponseMessages::SUCCESS_ACTION
             ], 200);;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }
@@ -89,13 +93,13 @@ class WebsiteService
 
             if (!$website) {
                 return response()->json([
-                    'message' => 'אתר לא נמצא'
+                    'message' => ResponseMessages::WEBSITE_NOT_FOUND
                 ], 404);
             }
 
             if (!$request->hasAny(['name', 'link', 'image', 'description'])) {
                 return response()->json([
-                    'message' => 'הכנס לפחות שדה אחד לעדכון'
+                    'message' => ResponseMessages::INVALID_REQUEST
                 ], 400);
             }
 
@@ -114,12 +118,13 @@ class WebsiteService
             }
             $website->save();
             return response()->json([
-                'message' => 'פרטי האתר עודכנו בהצלחה'
+                'message' => ResponseMessages::SUCCESS_ACTION
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }

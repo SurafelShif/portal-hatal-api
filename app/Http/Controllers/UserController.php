@@ -14,6 +14,32 @@ class UserController extends Controller
     }
     /**
      * @OA\Get(
+     *      path="/api/user",
+     *      operationId="user",
+     *      tags={"Users"},
+     *      summary="Get authenticated user",
+     *      description="Returns the authenticated user's details",
+     *      @OA\Response(
+     *          response=200,
+     *          description="הפעולה התבצעה בהצלחה",
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="משתמש לא נמצא",
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="אירעה שגיאה",
+     *      )
+     * )
+     */
+    public function user()
+    {
+        $logged_user = $this->UserService->getLoggedUser();
+        return $logged_user;
+    }
+    /**
+     * @OA\Get(
      *      path="/api/users/admins",
      *      operationId="index user",
      *      tags={"Users"},
@@ -137,35 +163,6 @@ class UserController extends Controller
         $users = $this->UserService->getUsers();
         return $users;
     }
-    /**
-     * @OA\Get(
-     *      path="/api/user",
-     *      operationId="user",
-     *      tags={"Users"},
-     *      summary="Get authenticated user",
-     *      description="Returns the authenticated user's details",
-     *      @OA\Response(
-     *          response=200,
-     *          description="הפעולה התבצעה בהצלחה",
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="משתמש אינו נמצא",
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="למשתמש אין תפקיד",
-     *      ),
-     *      @OA\Response(
-     *          response=500,
-     *          description="אירעה שגיאה",
-     *      )
-     * )
-     */
-    public function user()
-    {
-        $logged_user = $this->UserService->getLoggedUser();
-        return $logged_user;
-    }
+
     //
 }

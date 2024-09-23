@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
+use App\Messages\ResponseMessages;
 use App\Models\Image;
 use App\Models\Rahtal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class RahtalService
 {
@@ -26,12 +26,14 @@ class RahtalService
             $rahtalData['image_path'] =
                 $file->image_path;
             return response()->json([
-                $rahtalData
+                "message" => ResponseMessages::SUCCESS_ACTION,
+                "rahtal" => $rahtalData
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }
@@ -42,7 +44,7 @@ class RahtalService
 
             if (!$rahtal) {
                 return response()->json([
-                    'message' => 'רחט"ל לא נמצא'
+                    'message' => ResponseMessages::USER_NOT_FOUND
                 ], 404);
             }
             DB::beginTransaction();
@@ -56,13 +58,14 @@ class RahtalService
             $rahtal->save();
             DB::commit();
             return response()->json([
-                'message' => 'רחטל עודכן בהצלחה',
+                'message' => ResponseMessages::SUCCESS_ACTION,
             ], 200);
             dd($request->all(), $id);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
             ], 400);
         }
     }

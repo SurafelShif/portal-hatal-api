@@ -9,6 +9,35 @@ use Illuminate\Support\Facades\Log;
 
 class UserService
 {
+    public function getLoggedUser()
+    {
+        try {
+            $user = Auth::user();
+            if (!$user) {
+                return response()->json([
+                    "message" => ResponseMessages::UNAUTHENTICATED,
+                ], 401);
+            }
+            $role = $user->roles->first();
+            //to make the format user->role->display_name
+            $userData = json_decode(json_encode($user), true);
+            $userData['role'] = [
+                'name' => $role->name,
+                'display_name' => $role->display_name
+            ];
+
+            return response()->json([
+                "message" => ResponseMessages::SUCCESS_ACTION,
+                'user' => $userData
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                "message" => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
     public function getAdmins()
     {
         try {
@@ -17,22 +46,16 @@ class UserService
                     $query->where('name', 'admin');
                 })
                 ->get();
-            if (!$admins) {
-
-                return response()->json([
-                    'message' => ResponseMessages::USER_NOT_FOUND,
-                ], 404);
-            }
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION,
-                'users' => $admins
+                'admins' => $admins
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 500);
         }
     }
     public function addAdmin($uuid)
@@ -63,7 +86,7 @@ class UserService
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 500);
         }
     }
     public function deleteAdmin($uuid)
@@ -101,38 +124,10 @@ class UserService
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 500);
         }
     }
-    public function getLoggedUser()
-    {
-        try {
-            $user = Auth::user();
-            if (!$user) {
-                return response()->json([
-                    "message" => ResponseMessages::UNAUTHENTICATED,
-                ], 401);
-            }
-            $role = $user->roles->first();
-            //to make the format user->role->display_name
-            $userData = json_decode(json_encode($user), true);
-            $userData['role'] = [
-                'name' => $role->name,
-                'display_name' => $role->display_name
-            ];
 
-            return response()->json([
-                "message" => ResponseMessages::SUCCESS_ACTION,
-                'user' => $userData
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], 400);
-        }
-    }
     public function getUsers()
     {
         try {
@@ -152,7 +147,7 @@ class UserService
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 500);
         }
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Rahtal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class RahtalService
 {
@@ -23,8 +24,9 @@ class RahtalService
             $rahtal = Rahtal::find(1);
             $file = Image::find($rahtal->image_id)->first();
             $rahtalData = json_decode(json_encode($rahtal), true);
-            $rahtalData['image_path'] =
-                $file->image_path;
+            $imageUrl = Storage::url($file->image_path);
+            $rahtalData['image_url'] =
+                $imageUrl;
             return response()->json([
                 "message" => ResponseMessages::SUCCESS_ACTION,
                 "rahtal" => $rahtalData
@@ -34,7 +36,7 @@ class RahtalService
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 500);
         }
     }
     public function updateRahtal(Request $request, $uuid)
@@ -66,7 +68,7 @@ class RahtalService
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 500);
         }
     }
 }

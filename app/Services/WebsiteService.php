@@ -7,6 +7,7 @@ use App\Models\image;
 use App\Models\Website;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class WebsiteService
 {
@@ -22,22 +23,22 @@ class WebsiteService
             $websites = Website::all()->where("is_deleted", false);
             $websitesData = $websites->map(function ($website) {
                 $file = Image::find($website->image_id);
-
+                $imageUrl = Storage::url($file->image_path);
                 return [
                     'uuid' => $website->uuid,
                     'name' => $website->name,
                     'description' => $website->description,
                     'link' => $website->link,
-                    'image' => $file->image_path
+                    'image_url' => $imageUrl
                 ];
             });
-            return response()->json(['message' => ResponseMessages::SUCCESS_ACTION, $websitesData], 200);
+            return response()->json(['message' => ResponseMessages::SUCCESS_ACTION, "websites" => $websitesData], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 500);
         }
     }
 
@@ -59,7 +60,7 @@ class WebsiteService
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 500);
         }
     }
     public function deleteWebsite($uuid)
@@ -83,7 +84,7 @@ class WebsiteService
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 500);
         }
     }
     public function updateWebsite(Request $request, $uuid)
@@ -125,7 +126,7 @@ class WebsiteService
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 500);
         }
     }
 }

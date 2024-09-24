@@ -24,8 +24,8 @@ class UserController extends Controller
      *          description="הפעולה התבצעה בהצלחה",
      *      ),
      *      @OA\Response(
-     *          response=404,
-     *          description="משתמש לא נמצא",
+     *          response=401,
+     *          description="המשתמש לא מחובר",
      *      ),
      *      @OA\Response(
      *          response=500,
@@ -43,11 +43,15 @@ class UserController extends Controller
      *      path="/api/users/admins",
      *      operationId="index user",
      *      tags={"Users"},
-     *      summary="Retrieve all users",
-     *      description="Retrieve all users",
+     *      summary="Retrieve all admins",
+     *      description="Retrieve all admins",
      *      @OA\Response(
      *          response=200,
      *          description="הפעולה התבצעה בהצלחה",
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="אירעה שגיאה",
      *      )
      * )
      *
@@ -77,7 +81,7 @@ class UserController extends Controller
      *     ),
      *      @OA\Response(
      *          response=200,
-     *          description="הרשאה נוספה בהצלחה",
+     *          description="הפעולה התבצעה בהצלחה",
      *      ),
      *      @OA\Response(
      *          response=404,
@@ -117,7 +121,7 @@ class UserController extends Controller
      *     ),
      *      @OA\Response(
      *          response=200,
-     *          description="הרשאה נמחקה בהצלחה",
+     *          description="הפעולה התבצעה בהצלחה",
      *      ),
      *      @OA\Response(
      *          response=404,
@@ -125,7 +129,7 @@ class UserController extends Controller
      *      ),
      *      @OA\Response(
      *          response=409,
-     *          description="למשתמש זה אין הרשאת מנהל מערכת",
+     *          description="המשתמש אינו מנהל מערכת",
      *      ),
      *      @OA\Response(
      *          response=500,
@@ -147,7 +151,7 @@ class UserController extends Controller
      *      description="Retrieve all users but admins",
      *      @OA\Response(
      *          response=200,
-     *          description="פעולה נמחקה בהצלחה",
+     *          description="הפעולה התבצעה בהצלחה",
      *      ),
      *      @OA\Response(
      *          response=500,

@@ -26,19 +26,19 @@ class AuthController extends Controller
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="המשתמש התחבר בהצלחה",
+     *          description="הפעולה התבצעה בהצלחה",
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="בקשה לא תקינה",
      *      ),
      *      @OA\Response(
      *          response=404,
-     *          description="משתמש אינו קיים",
+     *          description="משתמש אינו נמצא",
      *      ),
      *      @OA\Response(
      *          response=500,
-     *          description="אירעה שגיאה בהתחברות",
-     *      ),
-     *      @OA\Response(
-     *          response=204,
-     *          description="אין תוכן",
+     *          description="אירעה שגיאה",
      *      ),
      * )
      *
@@ -48,7 +48,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         try {
-            if (!$request->has('personal_id')) {
+            if (!$request->filled('personal_id')) {
                 return response()->json(["message" => ResponseMessages::INVALID_REQUEST], 400);
             }
             $user = User::where('personal_id', $request->personal_id)->first();
@@ -60,14 +60,14 @@ class AuthController extends Controller
             $token = $user->createToken('PortalHatalToken')->accessToken;
             $cookie = cookie('PortalHatalToken', $token, 60);
             return response()->json([
-                'message' => 'התחבר בהצלחה',
+                'message' => ResponseMessages::SUCCESS_ACTION,
             ])->withCookie($cookie);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 400);
+            ], 500);
         }
     }
     //

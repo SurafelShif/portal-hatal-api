@@ -81,7 +81,7 @@ class WebsiteController extends Controller
      *      ),
      *      @OA\Response(
      *          response=201,
-     *          description="אתר נוצר בהצלחה",
+     *          description="הפעולה התבצעה בהצלחה",
      *      ),
      *      @OA\Response(
      *          response=500,
@@ -116,7 +116,7 @@ class WebsiteController extends Controller
      *     ),
      *      @OA\Response(
      *          response=200,
-     *          description="אתר נמחק בהצלחה",
+     *          description="הפעולה התבצעה בהצלחה",
      *      ),
      *      @OA\Response(
      *          response=404,
@@ -181,11 +181,11 @@ class WebsiteController extends Controller
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="אתר עודכן בהצלחה",
+     *          description="הפעולה התבצעה בהצלחה",
      *      ),
      *      @OA\Response(
      *          response=400,
-     *          description="הכנס לפחות שדה אחד לעדכון",
+     *          description="בקשה לא תקינה",
      *      ),
      *      @OA\Response(
      *          response=404,

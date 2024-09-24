@@ -3,9 +3,10 @@
 namespace App\Services;
 
 use App\Messages\ResponseMessages;
-use App\Models\image;
+use App\Models\Image;
 use App\Models\Website;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,9 +21,9 @@ class WebsiteService
     public function getWebsites()
     {
         try {
-            $websites = Website::all()->where("is_deleted", false);
+            $websites = Website::where("is_deleted", false)->get();
             $websitesData = $websites->map(function ($website) {
-                $file = Image::find($website->image_id);
+                $file = $website->image;
                 $imageUrl = Storage::url($file->image_path);
                 return [
                     'uuid' => $website->uuid,
@@ -32,13 +33,13 @@ class WebsiteService
                     'image_url' => $imageUrl
                 ];
             });
-            return response()->json(['message' => ResponseMessages::SUCCESS_ACTION, "websites" => $websitesData], 200);
+            return response()->json(['message' => ResponseMessages::SUCCESS_ACTION, "websites" => $websitesData], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -54,37 +55,41 @@ class WebsiteService
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION,
                 'Website' => $website,
-            ], 201);
+            ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function deleteWebsite($uuid)
     {
         try {
-            $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
+            $website = Website::where('uuid', $uuid)->first();
             if (!$website) {
                 return response()->json([
                     'message' => ResponseMessages::WEBSITE_NOT_FOUND
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
-
+            if ($website->is_deleted) {
+                return response()->json([
+                    'message' => ResponseMessages::SUCCESS_NO_ACTION_NEEDED
+                ], Response::HTTP_NO_CONTENT);
+            }
             $website->is_deleted = true;
             $website->save();
 
             return   response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION
-            ], 200);;
+            ], Response::HTTP_OK);;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function updateWebsite(Request $request, $uuid)
@@ -95,13 +100,13 @@ class WebsiteService
             if (!$website) {
                 return response()->json([
                     'message' => ResponseMessages::WEBSITE_NOT_FOUND
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
 
             if (!$request->hasAny(['name', 'link', 'image', 'description'])) {
                 return response()->json([
                     'message' => ResponseMessages::INVALID_REQUEST
-                ], 400);
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             if ($request->filled('name')) {
@@ -120,13 +125,13 @@ class WebsiteService
             $website->save();
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION
-            ], 200);
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

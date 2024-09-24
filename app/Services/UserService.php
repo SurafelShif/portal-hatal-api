@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Messages\ResponseMessages;
 use App\Models\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -16,7 +17,7 @@ class UserService
             if (!$user) {
                 return response()->json([
                     "message" => ResponseMessages::UNAUTHENTICATED,
-                ], 401);
+                ], Response::HTTP_UNAUTHORIZED);
             }
             $role = $user->roles->first();
             //to make the format user->role->display_name
@@ -29,13 +30,13 @@ class UserService
             return response()->json([
                 "message" => ResponseMessages::SUCCESS_ACTION,
                 'user' => $userData
-            ], 200);
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function getAdmins()
@@ -49,13 +50,13 @@ class UserService
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION,
                 'admins' => $admins
-            ], 200);
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function addAdmin($uuid)
@@ -65,12 +66,12 @@ class UserService
             if (!$user) {
                 return response()->json([
                     'message' => ResponseMessages::USER_NOT_FOUND
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
             if ($user->hasRole('admin')) {
                 return response()->json([
                     'message' => ResponseMessages::NOT_USER
-                ], 409);
+                ], Response::HTTP_CONFLICT);
             }
             if ($user->hasRole('user')) {
                 $user->removeRole('user');
@@ -80,35 +81,35 @@ class UserService
             $user->givePermissionTo('מנהל מערכת');
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION,
-            ], 200);
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function deleteAdmin($uuid)
     {
         try {
-            $user = User::where("uuid", $uuid)->where("is_deleted", 0)->first();
+            $user = User::where("uuid", $uuid)->where("is_deleted", false)->first();
 
             if (!$user) {
                 return response()->json([
                     'message' => ResponseMessages::USER_NOT_FOUND
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
             if ($user->hasRole('user')) {
                 return response()->json([
                     'message' => ResponseMessages::NOT_ADMIN
-                ], 409);
+                ], Response::HTTP_CONFLICT);
             }
             $logged_user = Auth::user();
             if ($logged_user->personal_id === $user->personal_id) {
                 return response()->json([
                     'message' => ResponseMessages::SELF_REMOVAL
-                ], 403);
+                ], Response::HTTP_CONFLICT);
             }
             if ($user->hasRole('admin')) {
                 $user->removeRole('admin');
@@ -124,7 +125,7 @@ class UserService
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -141,13 +142,13 @@ class UserService
                 "message" => ResponseMessages::SUCCESS_ACTION,
                 'users' => $users,
 
-            ], 200);
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

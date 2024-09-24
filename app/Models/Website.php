@@ -11,7 +11,7 @@ class Website extends Model
     use HasFactory;
     public function image()
     {
-        return $this->hasOne(Image::class);
+        return $this->hasOne(Image::class, 'id', 'image_id');
     }
     protected static function boot()
     {

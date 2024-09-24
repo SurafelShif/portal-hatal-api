@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Messages\ResponseMessages;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
@@ -49,13 +50,13 @@ class AuthController extends Controller
     {
         try {
             if (!$request->filled('personal_id')) {
-                return response()->json(["message" => ResponseMessages::INVALID_REQUEST], 400);
+                return response()->json(["message" => ResponseMessages::INVALID_REQUEST], Response::HTTP_BAD_REQUEST);
             }
             $user = User::where('personal_id', $request->personal_id)->first();
             if (!$user) {
                 return response()->json([
                     'message' => ResponseMessages::USER_NOT_FOUND
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
             $token = $user->createToken('PortalHatalToken')->accessToken;
             $cookie = cookie('PortalHatalToken', $token, 60);
@@ -67,7 +68,7 @@ class AuthController extends Controller
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     //

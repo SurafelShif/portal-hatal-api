@@ -93,8 +93,8 @@ class WebsiteController extends Controller
      */
     public function store(StoreWebsiteRequest $request)
     {
-        $image = $this->CommonService->uploadimage($request);
-        $website = $this->WebsiteService->createWebsite($request, $image->id);
+
+        $website = $this->WebsiteService->createWebsite($request);
         return $website;
     }
     /**
@@ -117,6 +117,10 @@ class WebsiteController extends Controller
      *      @OA\Response(
      *          response=200,
      *          description="הפעולה התבצעה בהצלחה",
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="לא נדרש לבצע את הפעולה",
      *      ),
      *      @OA\Response(
      *          response=404,

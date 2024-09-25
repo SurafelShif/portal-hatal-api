@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Messages\ResponseMessages;
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,21 +26,30 @@ class CommonService
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
-                'message' => $e->getMessage(),
-            ], 400);
+                'message' => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function updateImage($associatedimageId, $request)
     {
-        $oldImage = Image::find($associatedimageId);
-        $newimage = $request->file('image');
-        $imagePath = $newimage->store('images', 'public');
-        if (Storage::disk('public')->exists($oldImage->image_path)) {
-            Storage::disk('public')->delete($oldImage->image_path);
+        try {
+            $oldImage = Image::find($associatedimageId);
+            $newimage = $request->file('image');
+            $imagePath = $newimage->store('images', 'public');
+            if (Storage::disk('public')->exists($oldImage->image_path)) {
+                Storage::disk('public')->delete($oldImage->image_path);
+            }
+            $oldImage->image_path = $imagePath;
+            $oldImage->image_name = $request->image->getClientOriginalName();
+            $oldImage->image_type =  $request->image->getMimeType();
+            $oldImage->save();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                'message' => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        $oldImage->image_path = $imagePath;
-        $oldImage->image_name = $request->image->getClientOriginalName();
-        $oldImage->image_type =  $request->image->getMimeType();
-        $oldImage->save();
     }
 }

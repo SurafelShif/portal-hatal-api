@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Role;
 use App\Models\Image;
 use App\Models\Rahtal;
 use App\Models\User;
@@ -21,7 +22,7 @@ class UsersSeeder extends Seeder
             'full_name' => 'משתמש רגיל חט"ל',
 
         ]);
-        $user->assignRole('user');
+        $user->assignRole(Role::USER);
 
         $user2 = User::create([
             'personal_id' => '333333333',
@@ -29,14 +30,14 @@ class UsersSeeder extends Seeder
             'full_name' => 'משתמש רגיל 1 חט"ל',
 
         ]);
-        $user2->assignRole('user');
+        $user2->assignRole(Role::USER);
 
         $user3 = User::create([
             'personal_id' => '444444444',
             'personal_number' => '4444444',
             'full_name' => 'משתמש רגיל 2 חט"ל',
         ]);
-        $user3->assignRole('user');
+        $user3->assignRole(Role::USER);
 
         $admin1 = User::create([
             'personal_id' => '123456789',
@@ -44,14 +45,14 @@ class UsersSeeder extends Seeder
             'full_name' => 'מנהל מערכת 1',
 
         ]);
-        $admin1->assignRole('admin');
+        $admin1->assignRole(Role::ADMIN);
 
         $admin2 = User::create([
             'personal_id' => '123456788',
             'personal_number' => '1234568',
             'full_name' => 'מנהל מערכת 2',
         ]);
-        $admin2->assignRole('admin');
+        $admin2->assignRole(Role::ADMIN);
 
         // admin 3
         $admin3 = User::create([
@@ -59,7 +60,7 @@ class UsersSeeder extends Seeder
             'personal_number' => '1234569',
             'full_name' => 'מנהל מערכת 3',
         ]);
-        $admin3->assignRole('admin');
+        $admin3->assignRole(Role::ADMIN);
         // admin 3
         $image = Image::create([
             'image_name' => '30330b5e8e0f772f0edaa310294703a2.jpg',
@@ -72,6 +73,6 @@ class UsersSeeder extends Seeder
             'image_id' => $image->id,
         ]);
 
-        $rahtal->assignRole('user');
+        $rahtal->assignRole(Role::USER);
     }
 }

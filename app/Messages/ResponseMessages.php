@@ -15,5 +15,5 @@ class ResponseMessages
     const NOT_USER = 'המשתמש הינו מנהל מערכת';
     const INVALID_REQUEST = 'בקשה לא תקינה';
     const SELF_REMOVAL = 'לא ניתן להסיר הרשאה לעצמך';
-    const SUCCESS_NO_ACTION_NEEDED = 'לא נדרשה פעולה';
+    const SUCCESS_NO_ACTION_NEEDED = 'לא נדרש לבצע את הפעולה';
 }

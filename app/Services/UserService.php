@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Enums\Permission;
+use App\Enums\Role;
+use App\Http\Resources\UserResource;
 use App\Messages\ResponseMessages;
 use App\Models\User;
 use Illuminate\Http\Response;
@@ -13,23 +16,16 @@ class UserService
     public function getLoggedUser()
     {
         try {
-            $user = Auth::user();
-            if (!$user) {
+            if (!Auth::check()) {
                 return response()->json([
                     "message" => ResponseMessages::UNAUTHENTICATED,
                 ], Response::HTTP_UNAUTHORIZED);
             }
-            $role = $user->roles->first();
-            //to make the format user->role->display_name
-            $userData = json_decode(json_encode($user), true);
-            $userData['role'] = [
-                'name' => $role->name,
-                'display_name' => $role->display_name
-            ];
 
+            $user = Auth::user();
             return response()->json([
                 "message" => ResponseMessages::SUCCESS_ACTION,
-                'user' => $userData
+                'user' => new UserResource($user),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -68,17 +64,17 @@ class UserService
                     'message' => ResponseMessages::USER_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
             }
-            if ($user->hasRole('admin')) {
+            if ($user->hasRole(Role::ADMIN)) {
                 return response()->json([
                     'message' => ResponseMessages::NOT_USER
                 ], Response::HTTP_CONFLICT);
             }
-            if ($user->hasRole('user')) {
-                $user->removeRole('user');
-                $user->revokePermissionTo('משתמש');
+            if ($user->hasRole(Role::USER)) {
+                $user->removeRole(Role::USER);
+                $user->revokePermissionTo(Permission::VIEW_WEBSITE);
             }
-            $user->assignRole('admin');
-            $user->givePermissionTo('מנהל מערכת');
+            $user->assignRole(Role::ADMIN);
+            $user->givePermissionTo(Permission::MANAGE_USERS);
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION,
             ], Response::HTTP_OK);
@@ -100,7 +96,7 @@ class UserService
                     'message' => ResponseMessages::USER_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
             }
-            if ($user->hasRole('user')) {
+            if ($user->hasRole(Role::USER)) {
                 return response()->json([
                     'message' => ResponseMessages::NOT_ADMIN
                 ], Response::HTTP_CONFLICT);
@@ -111,13 +107,13 @@ class UserService
                     'message' => ResponseMessages::SELF_REMOVAL
                 ], Response::HTTP_CONFLICT);
             }
-            if ($user->hasRole('admin')) {
-                $user->removeRole('admin');
-                $user->revokePermissionTo('מנהל מערכת');
+            if ($user->hasRole(Role::ADMIN)) {
+                $user->removeRole(Role::ADMIN);
+                $user->revokePermissionTo(Permission::MANAGE_USERS);
             }
 
-            $user->assignRole('user');
-            $user->givePermissionTo('משתמש');
+            $user->assignRole(Role::USER);
+            $user->givePermissionTo(Permission::VIEW_WEBSITE);
             $user->save();
             return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], 200);
         } catch (\Exception $e) {

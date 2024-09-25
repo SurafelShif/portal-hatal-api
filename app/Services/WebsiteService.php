@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Http\Resources\WebsiteResource;
 use App\Messages\ResponseMessages;
 use App\Models\Image;
 use App\Models\Website;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,19 +23,8 @@ class WebsiteService
     public function getWebsites()
     {
         try {
-            $websites = Website::where("is_deleted", false)->get();
-            $websitesData = $websites->map(function ($website) {
-                $file = $website->image;
-                $imageUrl = Storage::url($file->image_path);
-                return [
-                    'uuid' => $website->uuid,
-                    'name' => $website->name,
-                    'description' => $website->description,
-                    'link' => $website->link,
-                    'image_url' => $imageUrl
-                ];
-            });
-            return response()->json(['message' => ResponseMessages::SUCCESS_ACTION, "websites" => $websitesData], Response::HTTP_OK);
+            $websites = Website::where("is_deleted", false)->with('image')->get();
+            return response()->json(['message' => ResponseMessages::SUCCESS_ACTION, "websites" => WebsiteResource::collection($websites)], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
@@ -43,20 +34,27 @@ class WebsiteService
         }
     }
 
-    public function createWebsite(Request $request, int $imageId)
+    public function createWebsite(Request $request)
     {
         try {
+            DB::beginTransaction();
+
+            $image = $this->CommonService->uploadimage($request);
+            $imageId = $image->id;
             $website = Website::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
                 'link' => $request->input('link'),
                 'image_id' => $imageId,
             ]);
+            DB::commit();
+
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION,
                 'Website' => $website,
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
@@ -76,7 +74,7 @@ class WebsiteService
             if ($website->is_deleted) {
                 return response()->json([
                     'message' => ResponseMessages::SUCCESS_NO_ACTION_NEEDED
-                ], Response::HTTP_NO_CONTENT);
+                ], Response::HTTP_OK);
             }
             $website->is_deleted = true;
             $website->save();
@@ -95,6 +93,7 @@ class WebsiteService
     public function updateWebsite(Request $request, $uuid)
     {
         try {
+            DB::beginTransaction();
             $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
 
             if (!$website) {
@@ -123,10 +122,12 @@ class WebsiteService
                 $this->CommonService->updateImage($associatedimageId, $request);
             }
             $website->save();
+            DB::commit();
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,

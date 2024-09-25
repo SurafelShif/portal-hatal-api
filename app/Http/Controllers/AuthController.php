@@ -49,7 +49,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         try {
-            if (!$request->filled('personal_id')) {
+            if (!$request->filled('personal_id') || strlen($request->personal_id) !== 9 || !ctype_digit($request->personal_id)) {
                 return response()->json(["message" => ResponseMessages::INVALID_REQUEST], Response::HTTP_BAD_REQUEST);
             }
             $user = User::where('personal_id', $request->personal_id)->first();

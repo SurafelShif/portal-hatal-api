@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Middleware\VerifyCookie;
+use App\Messages\ResponseMessages;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -25,5 +29,12 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+        // Custom exception handling
+        $exceptions->render(function (UnauthorizedException $e, Request $request) {
+            return response()->json([
+                'message' => ResponseMessages::FORBIDDEN,
+                'exception' => class_basename($e),
+            ], Response::HTTP_FORBIDDEN);
+        });
+    })
+    ->create();

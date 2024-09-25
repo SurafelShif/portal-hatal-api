@@ -11,6 +11,7 @@ class RahtalResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'uuid' => $this->uuid,
             'full_name' => $this->full_name,
             'image_url' => $this->image ? Storage::url($this->image->image_path) : null,
 

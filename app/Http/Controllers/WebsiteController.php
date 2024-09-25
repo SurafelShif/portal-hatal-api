@@ -119,7 +119,7 @@ class WebsiteController extends Controller
      *          description="הפעולה התבצעה בהצלחה",
      *      ),
      *      @OA\Response(
-     *          response=200,
+     *          response=204,
      *          description="לא נדרש לבצע את הפעולה",
      *      ),
      *      @OA\Response(

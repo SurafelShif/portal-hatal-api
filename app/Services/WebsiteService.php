@@ -74,7 +74,7 @@ class WebsiteService
             if ($website->is_deleted) {
                 return response()->json([
                     'message' => ResponseMessages::SUCCESS_NO_ACTION_NEEDED
-                ], Response::HTTP_OK);
+                ], Response::HTTP_NO_CONTENT);
             }
             $website->is_deleted = true;
             $website->save();

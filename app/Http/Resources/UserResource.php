@@ -10,6 +10,8 @@ class UserResource extends JsonResource
     {
         return [
             'full_name' => $this->full_name,
+            'personal_id' => $this->personal_id,
+            'personal_number' => $this->personal_number,
             'role' => [
                 'name' => $this->roles->first()->name ?? null,
                 'display_name' => $this->roles->first()->display_name ?? null,

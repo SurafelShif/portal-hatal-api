@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Http\Resources\RahtalResource;
 use App\Messages\ResponseMessages;
 use App\Models\Image;
 use App\Models\Rahtal;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -22,21 +24,17 @@ class RahtalService
     {
         try {
             $rahtal = Rahtal::find(1);
-            $file = Image::find($rahtal->image_id)->first();
-            $rahtalData = json_decode(json_encode($rahtal), true);
-            $imageUrl = Storage::url($file->image_path);
-            $rahtalData['image_url'] =
-                $imageUrl;
+
             return response()->json([
                 "message" => ResponseMessages::SUCCESS_ACTION,
-                "rahtal" => $rahtalData
-            ], 200);
+                "rahtal" => new RahtalResource($rahtal)
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function updateRahtal(Request $request, $uuid)
@@ -47,7 +45,7 @@ class RahtalService
             if (!$rahtal) {
                 return response()->json([
                     'message' => ResponseMessages::USER_NOT_FOUND
-                ], 404);
+                ], Response::HTTP_NOT_FOUND);
             }
             DB::beginTransaction();
             if ($request->hasFile('image')) {
@@ -61,14 +59,14 @@ class RahtalService
             DB::commit();
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION,
-            ], 200);
+            ], Response::HTTP_OK);
             dd($request->all(), $id);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

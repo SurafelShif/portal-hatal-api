@@ -15,6 +15,12 @@ class Rahtal extends Model
 
     protected $table = 'rahtal';
     protected $guard_name = 'api';
+
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'id', 'image_id');
+    }
+
     protected static function boot()
     {
         parent::boot();

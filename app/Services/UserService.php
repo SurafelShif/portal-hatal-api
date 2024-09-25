@@ -115,7 +115,7 @@ class UserService
             $user->assignRole(Role::USER);
             $user->givePermissionTo(Permission::VIEW_WEBSITE);
             $user->save();
-            return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], 200);
+            return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([

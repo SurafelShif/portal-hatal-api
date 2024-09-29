@@ -39,7 +39,7 @@ class WebsiteController extends Controller
         $result = $this->WebsiteService->getWebsites();
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
-                HttpStatusEnum::ERROR => response()->json('אירעה שגיאה', Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
                 default => response()->json('', Response::HTTP_NO_CONTENT)
             };
         }

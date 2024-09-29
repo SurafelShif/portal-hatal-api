@@ -8,18 +8,16 @@ use App\Models\Image;
 use App\Models\Website;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class WebsiteService
 {
-    protected $CommonService;
 
-    public function __construct(CommonService $CommonService)
-    {
-        $this->CommonService = $CommonService;
-    }
+    public function __construct(private CommonService $CommonService) {}
+
     public function getWebsites()
     {
         try {
@@ -29,7 +27,7 @@ class WebsiteService
             Log::error($e->getMessage());
             return response()->json([
                 "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
+                "error" => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -50,7 +48,7 @@ class WebsiteService
 
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION,
-                'Website' => $website,
+                'website' => $website,
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -61,10 +59,11 @@ class WebsiteService
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     public function deleteWebsite($uuid)
     {
         try {
-            $website = Website::where('uuid', $uuid)->first();
+            $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
             if (!$website) {
                 return response()->json([
                     'message' => ResponseMessages::WEBSITE_NOT_FOUND
@@ -75,6 +74,7 @@ class WebsiteService
                     'message' => ResponseMessages::SUCCESS_NO_ACTION_NEEDED
                 ], Response::HTTP_NO_CONTENT);
             }
+
             $website->is_deleted = true;
             $website->save();
 
@@ -89,7 +89,7 @@ class WebsiteService
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    public function updateWebsite(Request $request, $uuid)
+    public function updateWebsite(Request $request, $uuid, ?UploadedFile $image = null)
     {
         try {
             DB::beginTransaction();
@@ -116,6 +116,7 @@ class WebsiteService
             if ($request->filled('link')) {
                 $website->link = $request->link;
             }
+
             if ($request->hasFile('image')) {
                 $associatedimageId = $website->image_id;
                 $this->CommonService->updateImage($associatedimageId, $request);

@@ -40,12 +40,11 @@ class WebsiteService
             DB::beginTransaction();
 
             $image = $this->CommonService->uploadimage($request);
-            $imageId = $image->id;
             $website = Website::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
                 'link' => $request->input('link'),
-                'image_id' => $imageId,
+                'image_id' => $image->id,
             ]);
             DB::commit();
 

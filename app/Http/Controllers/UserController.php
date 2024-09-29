@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Services\UserService;
+use App\Enums\HttpStatusEnum;
+use App\Messages\ResponseMessages;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -35,8 +38,13 @@ class UserController extends Controller
      */
     public function user()
     {
-        $logged_user = $this->UserService->getLoggedUser();
-        return $logged_user;
+        $result = $this->UserService->getLoggedUser();
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+            };
+        }
+        return $result;
     }
     /**
      * @OA\Get(
@@ -59,8 +67,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->UserService->getAdmins();
-        return $users;
+        $result = $this->UserService->getAdmins();
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+            };
+        }
+        return $result;
     }
     /**
      * @OA\Post(
@@ -99,8 +112,15 @@ class UserController extends Controller
      */
     public function store($uuid)
     {
-        $user = $this->UserService->addAdmin($uuid);
-        return $user;
+        $result = $this->UserService->addAdmin($uuid);
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::CONFLICT => response()->json(ResponseMessages::NOT_USER, Response::HTTP_CONFLICT),
+                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USER_NOT_FOUND, Response::HTTP_NOT_FOUND),
+            };
+        }
+        return $result;
     }
     /**
      * @OA\Delete(
@@ -139,8 +159,15 @@ class UserController extends Controller
      */
     public function delete($uuid)
     {
-        $deleted_user = $this->UserService->deleteAdmin($uuid);
-        return $deleted_user;
+        $result = $this->UserService->deleteAdmin($uuid);
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::CONFLICT => response()->json(ResponseMessages::NOT_ADMIN, Response::HTTP_CONFLICT),
+                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USER_NOT_FOUND, Response::HTTP_NOT_FOUND),
+            };
+        }
+        return $result;
     }
     /**
      * @OA\Get(
@@ -164,8 +191,13 @@ class UserController extends Controller
     public function getUsers()
     {
 
-        $users = $this->UserService->getUsers();
-        return $users;
+        $result = $this->UserService->getUsers();
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+            };
+        }
+        return $result;
     }
 
     //

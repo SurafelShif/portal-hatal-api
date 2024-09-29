@@ -6,7 +6,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::post("/login", [AuthController::class, 'login']);
 Route::get("user", [UserController::class, 'user'])->middleware(['auth:api']);
 

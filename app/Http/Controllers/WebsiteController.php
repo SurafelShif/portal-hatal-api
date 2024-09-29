@@ -2,22 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\HttpStatusEnum;
 use App\Http\Requests\StoreWebsiteRequest;
 use App\Http\Requests\UpdateWebsiteRequest;
-use App\Services\CommonService;
+use App\Messages\ResponseMessages;
 use App\Services\WebsiteService;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Http;
 
 class WebsiteController extends Controller
 {
-    protected $WebsiteService;
-    protected $CommonService;
-
     // Dependency Injection via Constructor
-    public function __construct(WebsiteService $WebsiteService, CommonService $CommonService)
-    {
-        $this->WebsiteService = $WebsiteService;
-        $this->CommonService = $CommonService;
-    }
+    public function __construct(private WebsiteService $WebsiteService) {}
     //
     /**
      * @OA\Get(
@@ -40,8 +36,14 @@ class WebsiteController extends Controller
      */
     public function index()
     {
-        $websites = $this->WebsiteService->getWebsites();
-        return $websites;
+        $result = $this->WebsiteService->getWebsites();
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json('אירעה שגיאה', Response::HTTP_INTERNAL_SERVER_ERROR),
+                default => response()->json('', Response::HTTP_NO_CONTENT)
+            };
+        }
+        return $result;
     }
     /**
      * @OA\Post(
@@ -94,8 +96,14 @@ class WebsiteController extends Controller
     public function store(StoreWebsiteRequest $request)
     {
 
-        $website = $this->WebsiteService->createWebsite($request);
-        return $website;
+        $result = $this->WebsiteService->createWebsite($request);
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+                default => response()->json('', Response::HTTP_NO_CONTENT)
+            };
+        }
+        return $result;
     }
     /**
      * @OA\Delete(
@@ -134,8 +142,15 @@ class WebsiteController extends Controller
      */
     public function delete($uuid)
     {
-        $deleted = $this->WebsiteService->deleteWebsite($uuid);
-        return $deleted;
+        $result = $this->WebsiteService->deleteWebsite($uuid);
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::WEBSITE_NOT_FOUND, Response::HTTP_NOT_FOUND),
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+                default => response()->json('', Response::HTTP_NO_CONTENT)
+            };
+        }
+        return $result;
     }
     /**
      * @OA\Post(
@@ -206,7 +221,16 @@ class WebsiteController extends Controller
 
     public function update(UpdateWebsiteRequest $request, $uuid)
     {
-        $updatedWebsite = $this->WebsiteService->updateWebsite($request, $uuid);
-        return $updatedWebsite;
+        $result = $this->WebsiteService->updateWebsite($request, $uuid);
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR =>  response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::WEBSITE_NOT_FOUND, Response::HTTP_NOT_FOUND),
+                HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
+                default => response()->json('', Response::HTTP_NO_CONTENT)
+            };
+        }
+
+        return $result;
     }
 }

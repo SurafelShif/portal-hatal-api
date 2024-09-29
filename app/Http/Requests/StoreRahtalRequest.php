@@ -35,7 +35,7 @@ class StoreRahtalRequest extends FormRequest
             'image.file' => 'התמונה חייבת להיות קובץ.',
             'image.mimes' => 'התמונה חייבת להיות מסוג: jpeg, png, jpg, gif.',
             'image.max' => 'גודל התמונה לא יכול לעלות על 2MB.',
-            'required_without_all' => 'עליך לספק לפחות אחד מהשדות: full_name, image.',
+            'required_without_all' => 'עליך לספק לפחות אחד מהשדות: שם מלא, תמונה.',
         ];
     }
 }

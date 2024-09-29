@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\HttpStatusEnum;
 use App\Enums\Permission;
 use App\Enums\Role;
 use App\Http\Resources\UserResource;
@@ -16,12 +17,6 @@ class UserService
     public function getLoggedUser()
     {
         try {
-            if (!Auth::check()) {
-                return response()->json([
-                    "message" => ResponseMessages::UNAUTHENTICATED,
-                ], Response::HTTP_UNAUTHORIZED);
-            }
-
             $user = Auth::user();
             return response()->json([
                 "message" => ResponseMessages::SUCCESS_ACTION,
@@ -29,10 +24,7 @@ class UserService
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
     public function getAdmins()
@@ -49,25 +41,18 @@ class UserService
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
     public function addAdmin($uuid)
     {
         try {
-            $user = User::where('is_deleted', false)->where('uuid', $uuid)->first();
+            $user = User::where('uuid', $uuid)->first();
             if (!$user) {
-                return response()->json([
-                    'message' => ResponseMessages::USER_NOT_FOUND
-                ], Response::HTTP_NOT_FOUND);
+                return HttpStatusEnum::NOT_FOUND;
             }
             if ($user->hasRole(Role::ADMIN)) {
-                return response()->json([
-                    'message' => ResponseMessages::NOT_USER
-                ], Response::HTTP_CONFLICT);
+                return HttpStatusEnum::CONFLICT;
             }
             if ($user->hasRole(Role::USER)) {
                 $user->removeRole(Role::USER);
@@ -80,10 +65,7 @@ class UserService
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
     public function deleteAdmin($uuid)
@@ -92,14 +74,10 @@ class UserService
             $user = User::where("uuid", $uuid)->where("is_deleted", false)->first();
 
             if (!$user) {
-                return response()->json([
-                    'message' => ResponseMessages::USER_NOT_FOUND
-                ], Response::HTTP_NOT_FOUND);
+                return HttpStatusEnum::NOT_FOUND;
             }
             if ($user->hasRole(Role::USER)) {
-                return response()->json([
-                    'message' => ResponseMessages::NOT_ADMIN
-                ], Response::HTTP_CONFLICT);
+                return HttpStatusEnum::CONFLICT;
             }
             $logged_user = Auth::user();
             if ($logged_user->personal_id === $user->personal_id) {
@@ -118,10 +96,7 @@ class UserService
             return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
 
@@ -141,10 +116,7 @@ class UserService
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
 }

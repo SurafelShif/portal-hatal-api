@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\HttpStatusEnum;
 use App\Http\Requests\StoreRahtalRequest;
+use App\Messages\ResponseMessages;
 use App\Services\CommonService;
 use App\Services\RahtalService;
-
+use Illuminate\Http\Response;
 
 class RahtalController extends Controller
 {
@@ -40,8 +42,13 @@ class RahtalController extends Controller
      */
     public function index()
     {
-        $rahtal = $this->RahtalService->getCurrentRahtal();
-        return $rahtal;
+        $result = $this->RahtalService->getCurrentRahtal();
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+            };
+        }
+        return $result;
     }
     /**
      * @OA\Post(
@@ -102,7 +109,13 @@ class RahtalController extends Controller
     public function update(StoreRahtalRequest $request, $uuid)
     {
 
-        $rahtal = $this->RahtalService->updateRahtal($request, $uuid);
-        return $rahtal;
+        $result = $this->RahtalService->updateRahtal($request, $uuid);
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::RAHTAL_NOT_FOUND, Response::HTTP_NOT_FOUND),
+            };
+        }
+        return $result;
     }
 }

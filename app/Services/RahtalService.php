@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\HttpStatusEnum;
 use App\Http\Resources\RahtalResource;
 use App\Messages\ResponseMessages;
 use App\Models\Image;
@@ -31,10 +32,7 @@ class RahtalService
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
     public function updateRahtal(Request $request, $uuid)
@@ -43,9 +41,7 @@ class RahtalService
             $rahtal = Rahtal::where("uuid", $uuid)->first();
 
             if (!$rahtal) {
-                return response()->json([
-                    'message' => ResponseMessages::USER_NOT_FOUND
-                ], Response::HTTP_NOT_FOUND);
+                return HttpStatusEnum::NOT_FOUND;
             }
             DB::beginTransaction();
             if ($request->hasFile('image')) {
@@ -60,13 +56,9 @@ class RahtalService
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION,
             ], Response::HTTP_OK);
-            dd($request->all(), $id);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
 }

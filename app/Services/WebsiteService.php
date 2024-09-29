@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\HttpStatusEnum;
 use App\Http\Resources\WebsiteResource;
 use App\Messages\ResponseMessages;
 use App\Models\Image;
@@ -25,10 +26,7 @@ class WebsiteService
             return response()->json(['message' => ResponseMessages::SUCCESS_ACTION, "websites" => WebsiteResource::collection($websites)], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                "error" => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
 
@@ -53,10 +51,7 @@ class WebsiteService
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
 
@@ -65,28 +60,18 @@ class WebsiteService
         try {
             $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
             if (!$website) {
-                return response()->json([
-                    'message' => ResponseMessages::WEBSITE_NOT_FOUND
-                ], Response::HTTP_NOT_FOUND);
-            }
-            if ($website->is_deleted) {
-                return response()->json([
-                    'message' => ResponseMessages::SUCCESS_NO_ACTION_NEEDED
-                ], Response::HTTP_NO_CONTENT);
+                return HttpStatusEnum::NOT_FOUND;
             }
 
             $website->is_deleted = true;
             $website->save();
 
-            return   response()->json([
+            return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION
-            ], Response::HTTP_OK);;
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
     public function updateWebsite(Request $request, $uuid, ?UploadedFile $image = null)
@@ -96,16 +81,9 @@ class WebsiteService
             $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
 
             if (!$website) {
-                return response()->json([
-                    'message' => ResponseMessages::WEBSITE_NOT_FOUND
-                ], Response::HTTP_NOT_FOUND);
+                return HttpStatusEnum::NOT_FOUND;
             }
 
-            if (!$request->hasAny(['name', 'link', 'image', 'description'])) {
-                return response()->json([
-                    'message' => ResponseMessages::INVALID_REQUEST
-                ], Response::HTTP_BAD_REQUEST);
-            }
 
             if ($request->filled('name')) {
                 $website->name = $request->name;
@@ -129,10 +107,7 @@ class WebsiteService
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
 }

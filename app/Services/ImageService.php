@@ -46,11 +46,11 @@ class ImageService
             $imagePath = $newimage->storeAs('images', $randomFileName, config('filesystems.storage_service'));
 
             if (Storage::disk(config('filesystems.storage_service'))->exists($oldImage->image_name)) {
-                Storage::disk('public')->delete($oldImage->image_name);
+                Storage::disk(config('filesystems.storage_service'))->delete($oldImage->image_name);
             }
 
             $oldImage->image_path = $imagePath;
-            $oldImage->image_name = $imagePath;
+            $oldImage->image_name = $randomFileName;
             $oldImage->image_type = $extension;
             $oldImage->save();
         } catch (\Exception $e) {

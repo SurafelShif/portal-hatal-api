@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Enums\HttpStatusEnum;
-use App\Enums\ResponseMessages;
 use App\Http\Resources\RahtalResource;
 use App\Models\Rahtal;
 use Illuminate\Http\Request;
@@ -22,7 +21,8 @@ class RahtalService
     public function getCurrentRahtal()
     {
         try {
-            return Rahtal::find(1);
+            $rahtal = Rahtal::find(1);
+            return new RahtalResource($rahtal);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;

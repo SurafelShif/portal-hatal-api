@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Services\UserService;
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
-use App\Http\Resources\UserResource;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
@@ -47,7 +46,7 @@ class UserController extends Controller
         }
         return response()->json([
             "message" => ResponseMessages::SUCCESS_ACTION,
-            'user' => new UserResource($result),
+            'user' => $result,
         ], Response::HTTP_OK);
     }
     /**

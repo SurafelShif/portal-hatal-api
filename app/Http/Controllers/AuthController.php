@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
-use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
+    protected $AuthService;
 
+    public function __construct(AuthService $AuthService)
+    {
+        $this->AuthService = $AuthService;
+    }
     /**
      * @OA\Post(
      *      path="/api/login",
@@ -49,27 +54,19 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        try {
-            if (!$request->filled('personal_id') || strlen($request->personal_id) !== 9 || !ctype_digit($request->personal_id)) {
-                return response()->json(["message" => ResponseMessages::INVALID_REQUEST], Response::HTTP_BAD_REQUEST);
-            }
-            $user = User::where('personal_id', $request->personal_id)->first();
-            if (!$user) {
-                return response()->json([
-                    'message' => ResponseMessages::USER_NOT_FOUND
-                ], Response::HTTP_NOT_FOUND);
-            }
-            $tokenName = config('auth.access_token_name');
-            $token = $user->createToken($tokenName);
-            return response()->json([
-                'message' => ResponseMessages::SUCCESS_ACTION,
-            ])->withCookie(Cookie::make($tokenName, $token->accessToken));
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return response()->json([
-                "message" => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+
+        $result = $this->AuthService->login($request);
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::INVALID => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
+                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USER_NOT_FOUND, Response::HTTP_NOT_FOUND),
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+            };
         }
+        $token = $result['token'];
+        $tokenName = $result['tokenName'];
+        return response()->json([
+            'message' => ResponseMessages::SUCCESS_ACTION,
+        ])->withCookie(Cookie::make($tokenName, $token->accessToken));
     }
 }

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 class WebsiteService
 {
 
-    public function __construct(private CommonService $CommonService) {}
+    public function __construct(private ImageService $ImageService) {}
 
     public function getWebsites()
     {
@@ -35,7 +35,7 @@ class WebsiteService
         try {
             DB::beginTransaction();
 
-            $image = $this->CommonService->uploadimage($request);
+            $image = $this->ImageService->uploadimage($request);
             $website = Website::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
@@ -97,7 +97,7 @@ class WebsiteService
 
             if ($request->hasFile('image')) {
                 $associatedimageId = $website->image_id;
-                $this->CommonService->updateImage($associatedimageId, $request);
+                $this->ImageService->updateImage($associatedimageId, $request);
             }
             $website->save();
             DB::commit();

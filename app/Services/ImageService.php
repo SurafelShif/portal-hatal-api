@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
-class CommonService
+class ImageService
 {
 
     public function uploadImage(Request $request)
@@ -35,6 +35,7 @@ class CommonService
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    
     public function updateImage($associatedimageId, $request)
     {
         try {

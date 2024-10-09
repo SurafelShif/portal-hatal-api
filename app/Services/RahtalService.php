@@ -5,21 +5,19 @@ namespace App\Services;
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
 use App\Http\Resources\RahtalResource;
-use App\Models\Image;
 use App\Models\Rahtal;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class RahtalService
 {
-    protected $CommonService;
+    protected $ImageService;
 
-    public function __construct(CommonService $CommonService)
+    public function __construct(ImageService $ImageService)
     {
-        $this->CommonService = $CommonService;
+        $this->ImageService = $ImageService;
     }
     public function getCurrentRahtal()
     {
@@ -46,7 +44,7 @@ class RahtalService
             DB::beginTransaction();
             if ($request->hasFile('image')) {
                 $associatedimageId = $rahtal->image_id;
-                $this->CommonService->updateImage($associatedimageId, $request);
+                $this->ImageService->updateImage($associatedimageId, $request);
             }
             if ($request->has('full_name')) {
                 $rahtal->full_name = $request->full_name;

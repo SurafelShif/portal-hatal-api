@@ -21,7 +21,6 @@ class ImageService
             $extension = $image->getClientOriginalExtension();
             $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
             $imagePath = $image->storeAs('images', $randomFileName, config('filesystems.storage_service'));
-
             return Image::create([
                 'image_name' => $randomFileName,
                 'image_path' => $imagePath,
@@ -35,7 +34,7 @@ class ImageService
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     public function updateImage($associatedimageId, $request)
     {
         try {

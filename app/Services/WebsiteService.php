@@ -23,7 +23,7 @@ class WebsiteService
     {
         try {
             $websites = Website::where("is_deleted", false)->with('image')->get();
-            return response()->json(['message' => ResponseMessages::SUCCESS_ACTION, "websites" => WebsiteResource::collection($websites)], Response::HTTP_OK);
+            return WebsiteResource::collection($websites);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
@@ -36,6 +36,7 @@ class WebsiteService
             DB::beginTransaction();
 
             $image = $this->ImageService->uploadimage($request);
+
             $website = Website::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
@@ -44,10 +45,7 @@ class WebsiteService
             ]);
             DB::commit();
 
-            return response()->json([
-                'message' => ResponseMessages::SUCCESS_ACTION,
-                'website' => $website,
-            ], Response::HTTP_CREATED);
+            return Response::HTTP_OK;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
@@ -66,9 +64,7 @@ class WebsiteService
             $website->is_deleted = true;
             $website->save();
 
-            return response()->json([
-                'message' => ResponseMessages::SUCCESS_ACTION
-            ], Response::HTTP_OK);
+            return Response::HTTP_OK;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
@@ -101,9 +97,7 @@ class WebsiteService
             }
             $website->save();
             DB::commit();
-            return response()->json([
-                'message' => ResponseMessages::SUCCESS_ACTION
-            ], Response::HTTP_OK);
+            return Response::HTTP_OK;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());

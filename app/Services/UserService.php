@@ -18,10 +18,7 @@ class UserService
     {
         try {
             $user = Auth::user();
-            return response()->json([
-                "message" => ResponseMessages::SUCCESS_ACTION,
-                'user' => new UserResource($user),
-            ], Response::HTTP_OK);
+            return new UserResource($user);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
@@ -35,10 +32,7 @@ class UserService
                     $query->where('name', 'admin');
                 })
                 ->get();
-            return response()->json([
-                'message' => ResponseMessages::SUCCESS_ACTION,
-                'admins' => $admins
-            ], Response::HTTP_OK);
+            return $admins;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
@@ -60,9 +54,7 @@ class UserService
             }
             $user->assignRole(Role::ADMIN);
             $user->givePermissionTo(Permission::MANAGE_USERS);
-            return response()->json([
-                'message' => ResponseMessages::SUCCESS_ACTION,
-            ], Response::HTTP_OK);
+            return Response::HTTP_OK;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
@@ -93,7 +85,7 @@ class UserService
             $user->assignRole(Role::USER);
             $user->givePermissionTo(Permission::VIEW_WEBSITE);
             $user->save();
-            return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], Response::HTTP_OK);
+            return Response::HTTP_OK;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
@@ -109,11 +101,7 @@ class UserService
                 })
                 ->get();
 
-            return response()->json([
-                "message" => ResponseMessages::SUCCESS_ACTION,
-                'users' => $users,
-
-            ], Response::HTTP_OK);
+            return $users;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;

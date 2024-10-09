@@ -15,6 +15,41 @@ class WebsiteController extends Controller
     public function __construct(private WebsiteService $WebsiteService) {}
 
     /**
+     * @OA\Get(
+     *      path="/api/websites",
+     *      operationId="index websites",
+     *      tags={"Websites"},
+     *      summary="Retrieve all websites",
+     *      description="Retrieve all websites",
+     *      @OA\Response(
+     *          response=200,
+     *          description="הפעולה התבצעה בהצלחה",
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="אירעה שגיאה",
+     *      )
+     * )
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index()
+    {
+        $result = $this->WebsiteService->getWebsites();
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+                default => response()->json('', Response::HTTP_NO_CONTENT)
+            };
+        }
+        return response()->json([
+            "message" => ResponseMessages::SUCCESS_ACTION,
+            'websites' => $result,
+
+        ], Response::HTTP_OK);
+    }
+
+    /**
      * @OA\Post(
      *      path="/api/websites",
      *      operationId="storeWebsite",
@@ -72,39 +107,12 @@ class WebsiteController extends Controller
                 default => response()->json('', Response::HTTP_NO_CONTENT)
             };
         }
-        return $result;
+        return response()->json([
+            "message" => ResponseMessages::SUCCESS_ACTION,
+        ]);
     }
 
-    /**
-     * @OA\Get(
-     *      path="/api/websites",
-     *      operationId="index websites",
-     *      tags={"Websites"},
-     *      summary="Retrieve all websites",
-     *      description="Retrieve all websites",
-     *      @OA\Response(
-     *          response=200,
-     *          description="הפעולה התבצעה בהצלחה",
-     *      ),
-     *      @OA\Response(
-     *          response=500,
-     *          description="אירעה שגיאה",
-     *      )
-     * )
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index()
-    {
-        $result = $this->WebsiteService->getWebsites();
-        if ($result instanceof HttpStatusEnum) {
-            return match ($result) {
-                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
-                default => response()->json('', Response::HTTP_NO_CONTENT)
-            };
-        }
-        return $result;
-    }
+
 
     /**
      * @OA\Delete(
@@ -151,7 +159,9 @@ class WebsiteController extends Controller
                 default => response()->json('', Response::HTTP_NO_CONTENT)
             };
         }
-        return $result;
+        return response()->json([
+            "message" => ResponseMessages::SUCCESS_ACTION,
+        ]);
     }
     /**
      * @OA\Post(
@@ -232,6 +242,8 @@ class WebsiteController extends Controller
             };
         }
 
-        return $result;
+        return response()->json([
+            "message" => ResponseMessages::SUCCESS_ACTION,
+        ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\UserService;
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
@@ -44,7 +45,10 @@ class UserController extends Controller
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
             };
         }
-        return $result;
+        return response()->json([
+            "message" => ResponseMessages::SUCCESS_ACTION,
+            'user' => new UserResource($result),
+        ], Response::HTTP_OK);
     }
     /**
      * @OA\Get(
@@ -73,7 +77,10 @@ class UserController extends Controller
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
             };
         }
-        return $result;
+        return response()->json([
+            "message" => ResponseMessages::SUCCESS_ACTION,
+            'admins' => $result,
+        ], Response::HTTP_OK);
     }
     /**
      * @OA\Post(
@@ -120,7 +127,9 @@ class UserController extends Controller
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USER_NOT_FOUND, Response::HTTP_NOT_FOUND),
             };
         }
-        return $result;
+        return response()->json([
+            "message" => ResponseMessages::SUCCESS_ACTION
+        ], Response::HTTP_CREATED);
     }
     /**
      * @OA\Delete(
@@ -167,7 +176,7 @@ class UserController extends Controller
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USER_NOT_FOUND, Response::HTTP_NOT_FOUND),
             };
         }
-        return $result;
+        return response()->json(["message" => ResponseMessages::SUCCESS_ACTION]);
     }
     /**
      * @OA\Get(
@@ -197,7 +206,11 @@ class UserController extends Controller
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
             };
         }
-        return $result;
+        return response()->json([
+            "message" => ResponseMessages::SUCCESS_ACTION,
+            'users' => $result,
+
+        ], Response::HTTP_OK);
     }
 
     //

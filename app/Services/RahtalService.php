@@ -22,12 +22,7 @@ class RahtalService
     public function getCurrentRahtal()
     {
         try {
-            $rahtal = Rahtal::find(1);
-
-            return response()->json([
-                "message" => ResponseMessages::SUCCESS_ACTION,
-                "rahtal" => new RahtalResource($rahtal)
-            ], Response::HTTP_OK);
+            return Rahtal::find(1);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
@@ -51,9 +46,7 @@ class RahtalService
             }
             $rahtal->save();
             DB::commit();
-            return response()->json([
-                'message' => ResponseMessages::SUCCESS_ACTION,
-            ], Response::HTTP_OK);
+            return Response::HTTP_OK;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;

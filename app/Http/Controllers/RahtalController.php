@@ -46,7 +46,10 @@ class RahtalController extends Controller
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
             };
         }
-        return $result;
+        return response()->json([
+            'message' => ResponseMessages::SUCCESS_ACTION,
+            'rahtal' => $result
+        ]);
     }
     /**
      * @OA\Post(
@@ -114,6 +117,8 @@ class RahtalController extends Controller
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::RAHTAL_NOT_FOUND, Response::HTTP_NOT_FOUND),
             };
         }
-        return $result;
+        return response()->json([
+            'message' => ResponseMessages::SUCCESS_ACTION,
+        ]);
     }
 }

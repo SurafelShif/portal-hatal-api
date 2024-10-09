@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Enums\HttpStatusEnum;
+use App\Enums\ResponseMessages;
 use App\Http\Resources\WebsiteResource;
-use App\Messages\ResponseMessages;
 use App\Models\Image;
 use App\Models\Website;
 use Illuminate\Http\Request;

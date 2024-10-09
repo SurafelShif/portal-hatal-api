@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Messages;
+namespace App\Enums;
 
-class ResponseMessages
+enum ResponseMessages: string
 {
     const SUCCESS_ACTION = 'הפעולה התבצעה בהצלחה';
     const ERROR_OCCURRED = 'אירעה שגיאה';

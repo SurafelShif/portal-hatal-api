@@ -6,24 +6,31 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
-Route::post("/login", [AuthController::class, 'login']);
+Route::post("login", [AuthController::class, 'login']);
 Route::get("user", [UserController::class, 'user'])->middleware(['auth:api']);
 
 Route::controller(WebsiteController::class)
-    ->prefix("websites")->group(function () {
+    ->prefix("websites")
+    ->middleware('auth:api')
+    ->group(function () {
+        Route::post("/", "store")->middleware(['role:admin']);
+        Route::post("/{uuid}", "update")->middleware(['role:admin']);
         Route::get("/", "index");
-        Route::post("/", "store")->middleware(['auth:api', 'role:admin']);
-        Route::delete("/{uuid}", "delete")->middleware(['auth:api', 'role:admin']);
-        Route::post("/{uuid}", "update")->middleware(['auth:api', 'role:admin']);
+        Route::delete("/{uuid}", "delete")->middleware(['role:admin']);
     });
 Route::controller(UserController::class)
-    ->prefix("users")->middleware(['auth:api', 'role:admin'])->group(function () {
-        Route::get("/admins", "index"); //getAdmins
-        Route::get("/users", "getUsers");
+    ->prefix("users")
+    ->middleware(['auth:api', 'role:admin'])
+    ->group(function () {
         Route::post("/{uuid}", "store");
+        Route::get("/admins", "index"); 
+        Route::get("/users", "getUsers");
         Route::delete("/{uuid}", "delete");
     });
-Route::controller(RahtalController::class)->prefix("rahtal")->middleware(['auth:api', 'role:admin'])->group(function () {
-    Route::get("/", "index");
-    Route::post("/{uuid}", "update");
-});
+Route::controller(RahtalController::class)
+    ->prefix("rahtal")
+    ->middleware(['auth:api', 'role:admin'])
+    ->group(function () {
+        Route::post("/{uuid}", "update");
+        Route::get("/", "index");
+    });

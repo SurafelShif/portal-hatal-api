@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\UserService;
 use App\Enums\HttpStatusEnum;
-use App\Messages\ResponseMessages;
+use App\Enums\ResponseMessages;
 use Illuminate\Http\Response;
 
 class UserController extends Controller

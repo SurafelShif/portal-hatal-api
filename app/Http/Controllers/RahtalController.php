@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusEnum;
+use App\Enums\ResponseMessages;
 use App\Http\Requests\StoreRahtalRequest;
-use App\Messages\ResponseMessages;
-use App\Services\CommonService;
 use App\Services\RahtalService;
 use Illuminate\Http\Response;
 
 class RahtalController extends Controller
 {
     protected $RahtalService;
-    // protected $CommonService;
 
     public function __construct(RahtalService $RahtalService)
     {

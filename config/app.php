@@ -122,7 +122,7 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
-    'access_token_name' => env('ACCESS_TOKEN_NAME'),
+
 
 
 ];

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Messages\ResponseMessages;
+use App\Enums\ResponseMessages;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
@@ -58,11 +59,11 @@ class AuthController extends Controller
                     'message' => ResponseMessages::USER_NOT_FOUND
                 ], Response::HTTP_NOT_FOUND);
             }
-            $token = $user->createToken('PortalHatalToken')->accessToken;
-            $cookie = cookie('PortalHatalToken', $token, 60);
+            $tokenName = config('auth.access_token_name');
+            $token = $user->createToken($tokenName);
             return response()->json([
                 'message' => ResponseMessages::SUCCESS_ACTION,
-            ])->withCookie($cookie);
+            ])->withCookie(Cookie::make($tokenName, $token->accessToken));
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([

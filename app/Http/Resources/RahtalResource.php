@@ -13,7 +13,7 @@ class RahtalResource extends JsonResource
         return [
             'uuid' => $this->uuid,
             'full_name' => $this->full_name,
-            'image_url' => $this->image ? Storage::url($this->image->image_path) : null,
+            'image_url' => $this->image ? config('app.url') . Storage::url($this->image->image_path) : null,
 
         ];
     }

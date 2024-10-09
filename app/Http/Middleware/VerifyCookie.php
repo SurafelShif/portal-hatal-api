@@ -15,7 +15,7 @@ class VerifyCookie
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $cookieName = config("app.access_token_name");
+        $cookieName = config("auth.access_token_name");
         if ($request->hasCookie($cookieName)) {
             $token = $request->cookie($cookieName);
             $request->headers->set('Authorization', 'Bearer ' . $token);

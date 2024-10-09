@@ -45,8 +45,8 @@ class ImageService
             $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
             $imagePath = $newimage->storeAs('images', $randomFileName, config('filesystems.storage_service'));
 
-            if (Storage::disk(config('filesystems.storage_service'))->exists($oldImage->image_name)) {
-                Storage::disk(config('filesystems.storage_service'))->delete($oldImage->image_name);
+            if (Storage::disk(config('filesystems.storage_service'))->exists('images/' . $oldImage->image_name)) {
+                Storage::disk(config('filesystems.storage_service'))->delete('images/' . $oldImage->image_name);
             }
 
             $oldImage->image_path = $imagePath;

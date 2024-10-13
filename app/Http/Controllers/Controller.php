@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 /**
- * @OA\Info(title="Class API", version="2")
+ * @OA\Info(title="Portal-Hatal API", version="2")
  *  @OA\SecurityScheme(
  *    securityScheme="bearerAuth",
  *    in="header",

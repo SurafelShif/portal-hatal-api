@@ -9,12 +9,7 @@ use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
-    protected $UserService;
-
-    public function __construct(UserService $UserService)
-    {
-        $this->UserService = $UserService;
-    }
+    public function __construct(private UserService $UserService) {}
     /**
      * @OA\Get(
      *      path="/api/user",

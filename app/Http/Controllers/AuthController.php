@@ -11,12 +11,8 @@ use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
-    protected $AuthService;
 
-    public function __construct(AuthService $AuthService)
-    {
-        $this->AuthService = $AuthService;
-    }
+    public function __construct(private AuthService $AuthService) {}
     /**
      * @OA\Post(
      *      path="/api/login",

@@ -11,7 +11,6 @@ use Illuminate\Http\Response;
 
 class WebsiteController extends Controller
 {
-    // Dependency Injection via Constructor
     public function __construct(private WebsiteService $WebsiteService) {}
 
     /**

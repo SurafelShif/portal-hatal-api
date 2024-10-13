@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Portal-Hatal API",
+        "title": "Class API",
         "version": "2"
     },
     "paths": {

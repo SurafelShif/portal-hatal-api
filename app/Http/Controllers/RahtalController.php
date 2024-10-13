@@ -10,12 +10,8 @@ use Illuminate\Http\Response;
 
 class RahtalController extends Controller
 {
-    protected $RahtalService;
 
-    public function __construct(RahtalService $RahtalService)
-    {
-        $this->RahtalService = $RahtalService;
-    }
+    public function __construct(private RahtalService $RahtalService) {}
     //
     /**
      * @OA\Get(

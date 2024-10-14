@@ -35,7 +35,7 @@ class ImageService
         }
     }
 
-    public function updateImage($associatedimageId, UploadedFile $newImage = null)
+    public function updateImage($associatedimageId, UploadedFile $newImage = null, $imageName = null)
     {
         try {
 
@@ -46,7 +46,8 @@ class ImageService
                 $imagePath = $newImage->storeAs('images', $randomFileName, config('filesystems.storage_service'));
             } else {
                 $extension = 'png';
-                $randomFileName = 'placeholder.png';
+                dd($imageName . $extension);
+                $randomFileName = $imageName . $extension;
                 $imagePath = 'constants/' . $randomFileName;
             }
 

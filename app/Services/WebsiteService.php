@@ -95,7 +95,7 @@ class WebsiteService
             if ($request->has('image')) {
                 $associatedImageId = $website->image_id;
                 if ($request->image === null) {
-                    $this->ImageService->updateImage($associatedImageId);
+                    $this->ImageService->updateImage($associatedImageId, null, "websiteplaceholder");
                 } else if ($request->hasFile('image')) {
                     $this->ImageService->updateImage($associatedImageId, $request->image);
                 }

@@ -6,6 +6,7 @@ use App\Enums\ResponseMessages;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -35,15 +36,20 @@ class ImageService
         }
     }
 
-    public function updateImage($associatedimageId, $request)
+    public function updateImage($associatedimageId, UploadedFile $newImage = null)
     {
         try {
-            $oldImage = Image::find($associatedimageId);
-            $newimage = $request->file('image');
 
-            $extension = $newimage->getClientOriginalExtension();
-            $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
-            $imagePath = $newimage->storeAs('images', $randomFileName, config('filesystems.storage_service'));
+            $oldImage = Image::find($associatedimageId);
+            if ($newImage !== null) {
+                $extension = $newImage->getClientOriginalExtension();
+                $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
+                $imagePath = $newImage->storeAs('images', $randomFileName, config('filesystems.storage_service'));
+            } else {
+                $extension = 'png';
+                $randomFileName = 'placeholder.png';
+                $imagePath = 'constants/' . $randomFileName;
+            }
 
             $this->deleteImage($oldImage->image_name);
 

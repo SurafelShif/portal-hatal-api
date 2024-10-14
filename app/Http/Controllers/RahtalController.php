@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
-use App\Http\Requests\StoreRahtalRequest;
+use App\Http\Requests\UpdateRahtalRequest;
 use App\Services\RahtalService;
 use Illuminate\Http\Response;
 
@@ -89,7 +89,7 @@ class RahtalController extends Controller
      *      ),
      *      @OA\Response(
      *          response=400,
-     *          description="הכנס לפחות שדה אחד לעדכון",
+     *          description="בקשה לא תקינה",
      *      ),
      *      @OA\Response(
      *          response=404,
@@ -103,14 +103,15 @@ class RahtalController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(StoreRahtalRequest $request, $uuid)
+    public function update(UpdateRahtalRequest $request, $uuid)
     {
 
         $result = $this->RahtalService->updateRahtal($request, $uuid);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
-                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::RAHTAL_NOT_FOUND, Response::HTTP_NOT_FOUND),
+                HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
             };
         }
         return response()->json([

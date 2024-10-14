@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRahtalRequest extends FormRequest
+class UpdateRahtalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,6 @@ class StoreRahtalRequest extends FormRequest
         return [
             'full_name' => 'nullable|string|min:2',
             'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
-            'required_without_all' => 'required_without_all:full_name,image',
         ];
     }
     public function messages()
@@ -35,7 +34,6 @@ class StoreRahtalRequest extends FormRequest
             'image.file' => 'התמונה חייבת להיות קובץ.',
             'image.mimes' => 'התמונה חייבת להיות מסוג: jpeg, png, jpg, gif.',
             'image.max' => 'גודל התמונה לא יכול לעלות על 2MB.',
-            'required_without_all' => 'עליך לספק לפחות אחד מהשדות: שם מלא, תמונה.',
         ];
     }
 }

@@ -31,15 +31,22 @@ class RahtalService
     public function updateRahtal(Request $request, $uuid)
     {
         try {
+            if (empty($request->all())) {
+                return HttpStatusEnum::BAD_REQUEST;
+            }
             $rahtal = Rahtal::where("uuid", $uuid)->first();
 
             if (!$rahtal) {
                 return HttpStatusEnum::NOT_FOUND;
             }
             DB::beginTransaction();
-            if ($request->hasFile('image')) {
-                $associatedimageId = $rahtal->image_id;
-                $this->ImageService->updateImage($associatedimageId, $request);
+            if ($request->has('image')) {
+                $associatedImageId = $rahtal->image_id;
+                if ($request->image === null) {
+                    $this->ImageService->updateImage($associatedImageId);
+                } else if ($request->hasFile('image')) {
+                    $this->ImageService->updateImage($associatedImageId, $request->image);
+                }
             }
             if ($request->filled('full_name')) {
                 $rahtal->full_name = $request->full_name;

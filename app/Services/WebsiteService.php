@@ -69,9 +69,12 @@ class WebsiteService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function updateWebsite(Request $request, $uuid, ?UploadedFile $image = null)
+    public function updateWebsite(Request $request, $uuid)
     {
         try {
+            if (empty($request->all())) {
+                return HttpStatusEnum::BAD_REQUEST;
+            }
             DB::beginTransaction();
             $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
 
@@ -89,10 +92,13 @@ class WebsiteService
             if ($request->filled('link')) {
                 $website->link = $request->link;
             }
-
-            if ($request->hasFile('image')) {
-                $associatedimageId = $website->image_id;
-                $this->ImageService->updateImage($associatedimageId, $request);
+            if ($request->has('image')) {
+                $associatedImageId = $website->image_id;
+                if ($request->image === null) {
+                    $this->ImageService->updateImage($associatedImageId);
+                } else if ($request->hasFile('image')) {
+                    $this->ImageService->updateImage($associatedImageId, $request->image);
+                }
             }
             $website->save();
             DB::commit();

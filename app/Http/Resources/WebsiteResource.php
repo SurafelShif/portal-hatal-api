@@ -6,7 +6,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
-
+// TODO change the hard coded port to something else
 class WebsiteResource extends JsonResource
 {
     public function toArray($request)
@@ -16,7 +16,7 @@ class WebsiteResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'link' => $this->link,
-            'image_url' => $this->image ? Storage::url($this->image->image_path) : null,
+            'image_url' => $this->image ? config('app.url') . ":8000" . Storage::url($this->image->image_path) : null,
         ];
     }
 }

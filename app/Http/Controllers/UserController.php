@@ -40,8 +40,8 @@ class UserController extends Controller
             };
         }
         return response()->json([
-            "message" => ResponseMessages::SUCCESS_ACTION,
-            'user' => $result,
+            'message' => ResponseMessages::SUCCESS_ACTION,
+            'data' => $result,
         ], Response::HTTP_OK);
     }
     /**
@@ -72,8 +72,8 @@ class UserController extends Controller
             };
         }
         return response()->json([
-            "message" => ResponseMessages::SUCCESS_ACTION,
-            'admins' => $result,
+            'message' => ResponseMessages::SUCCESS_ACTION,
+            'data' => $result,
         ], Response::HTTP_OK);
     }
     /**
@@ -122,7 +122,7 @@ class UserController extends Controller
             };
         }
         return response()->json([
-            "message" => ResponseMessages::SUCCESS_ACTION
+            'message' => ResponseMessages::SUCCESS_ACTION
         ], Response::HTTP_CREATED);
     }
     /**
@@ -170,7 +170,7 @@ class UserController extends Controller
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USER_NOT_FOUND, Response::HTTP_NOT_FOUND),
             };
         }
-        return response()->json(["message" => ResponseMessages::SUCCESS_ACTION]);
+        return response()->json(['message' => ResponseMessages::SUCCESS_ACTION]);
     }
     /**
      * @OA\Get(
@@ -201,8 +201,8 @@ class UserController extends Controller
             };
         }
         return response()->json([
-            "message" => ResponseMessages::SUCCESS_ACTION,
-            'users' => $result,
+            'message' => ResponseMessages::SUCCESS_ACTION,
+            'data' => $result,
 
         ], Response::HTTP_OK);
     }

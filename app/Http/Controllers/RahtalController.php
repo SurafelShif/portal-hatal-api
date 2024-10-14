@@ -44,7 +44,7 @@ class RahtalController extends Controller
         }
         return response()->json([
             'message' => ResponseMessages::SUCCESS_ACTION,
-            'rahtal' => $result
+            'data' => $result
         ]);
     }
     /**

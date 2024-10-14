@@ -42,8 +42,8 @@ class WebsiteController extends Controller
             };
         }
         return response()->json([
-            "message" => ResponseMessages::SUCCESS_ACTION,
-            'websites' => $result,
+            'message' => ResponseMessages::SUCCESS_ACTION,
+            'data' => $result,
 
         ], Response::HTTP_OK);
     }
@@ -107,7 +107,7 @@ class WebsiteController extends Controller
             };
         }
         return response()->json([
-            "message" => ResponseMessages::SUCCESS_ACTION,
+            'message' => ResponseMessages::SUCCESS_ACTION,
         ]);
     }
 
@@ -159,7 +159,7 @@ class WebsiteController extends Controller
             };
         }
         return response()->json([
-            "message" => ResponseMessages::SUCCESS_ACTION,
+            'message' => ResponseMessages::SUCCESS_ACTION,
         ]);
     }
     /**
@@ -242,7 +242,7 @@ class WebsiteController extends Controller
         }
 
         return response()->json([
-            "message" => ResponseMessages::SUCCESS_ACTION,
+            'message' => ResponseMessages::SUCCESS_ACTION,
         ]);
     }
 }

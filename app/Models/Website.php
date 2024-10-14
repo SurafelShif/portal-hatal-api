@@ -28,11 +28,10 @@ class Website extends Model
         'name',
         'description',
         'link',
-        "image_id"
-
+        'image_id'
     ];
     protected $hidden = [
-        "image_id",
+        'image_id',
         'created_at',
         'updated_at',
         'is_deleted',

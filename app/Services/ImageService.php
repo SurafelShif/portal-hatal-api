@@ -15,10 +15,9 @@ use Illuminate\Support\Str;
 class ImageService
 {
 
-    public function uploadImage(Request $request)
+    public function uploadImage(UploadedFile $image)
     {
         try {
-            $image = $request->file('image');
             $extension = $image->getClientOriginalExtension();
             $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
             $imagePath = $image->storeAs('images', $randomFileName, config('filesystems.storage_service'));

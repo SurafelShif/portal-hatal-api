@@ -31,7 +31,7 @@ class WebsiteService
     {
         try {
             DB::beginTransaction();
-            $image = $this->ImageService->uploadimage($request);
+            $image = $this->ImageService->uploadimage($request->image);
             Website::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),

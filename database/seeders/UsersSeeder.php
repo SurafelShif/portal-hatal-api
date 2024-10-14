@@ -63,9 +63,9 @@ class UsersSeeder extends Seeder
         $admin3->assignRole(Role::ADMIN);
         // admin 3
         $image = Image::create([
-            'image_name' => '30330b5e8e0f772f0edaa310294703a2.jpg',
-            'image_type' => 'jpg',
-            'image_path' => 'images/30330b5e8e0f772f0edaa310294703a2.jpg',
+            'image_name' => 'placeholder.png',
+            'image_type' => 'png',
+            'image_path' => 'constants/placeholder.png'
         ]);
 
         $rahtal = Rahtal::create([

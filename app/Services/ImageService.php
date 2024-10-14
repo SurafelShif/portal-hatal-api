@@ -46,8 +46,7 @@ class ImageService
                 $imagePath = $newImage->storeAs('images', $randomFileName, config('filesystems.storage_service'));
             } else {
                 $extension = 'png';
-                dd($imageName . $extension);
-                $randomFileName = $imageName . $extension;
+                $randomFileName = $imageName . '.' . $extension;
                 $imagePath = 'constants/' . $randomFileName;
             }
 

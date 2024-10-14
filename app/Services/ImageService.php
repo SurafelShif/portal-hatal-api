@@ -45,7 +45,7 @@ class ImageService
                 $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
                 $imagePath = $newImage->storeAs('images', $randomFileName, config('filesystems.storage_service'));
             } else {
-                $extension = 'png';
+                $extension = 'svg';
                 $randomFileName = $imageName . '.' . $extension;
                 $imagePath = 'constants/' . $randomFileName;
             }

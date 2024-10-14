@@ -32,7 +32,6 @@ class WebsiteService
         try {
             DB::beginTransaction();
             $image = $this->ImageService->uploadimage($request);
-
             Website::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
@@ -44,6 +43,10 @@ class WebsiteService
             return Response::HTTP_OK;
         } catch (\Exception $e) {
             DB::rollBack();
+            if (isset($image) && $image) {
+                $this->ImageService->deleteImage($image->image_name);
+                dd("image deleted:" . $image->image_name);
+            }
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
         }

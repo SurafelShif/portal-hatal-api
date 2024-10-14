@@ -41,7 +41,7 @@ class RahtalService
                 $associatedimageId = $rahtal->image_id;
                 $this->ImageService->updateImage($associatedimageId, $request);
             }
-            if ($request->has('full_name')) {
+            if ($request->filled('full_name')) {
                 $rahtal->full_name = $request->full_name;
             }
             $rahtal->save();

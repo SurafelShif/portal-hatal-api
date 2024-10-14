@@ -45,14 +45,28 @@ class ImageService
             $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
             $imagePath = $newimage->storeAs('images', $randomFileName, config('filesystems.storage_service'));
 
-            if (Storage::disk(config('filesystems.storage_service'))->exists('images/' . $oldImage->image_name)) {
-                Storage::disk(config('filesystems.storage_service'))->delete('images/' . $oldImage->image_name);
-            }
+            $this->deleteImage($oldImage->image_name);
 
             $oldImage->image_path = $imagePath;
             $oldImage->image_name = $randomFileName;
             $oldImage->image_type = $extension;
             $oldImage->save();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                'message' => ResponseMessages::ERROR_OCCURRED,
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    public function deleteImage($image_name)
+    {
+        try {
+            if (Storage::disk(config('filesystems.storage_service'))->exists('images/' . $image_name)) {
+                Storage::disk(config('filesystems.storage_service'))->delete('images/' . $image_name);
+            } else {
+                Log::info("image was not found");
+            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
@@ -20,9 +21,8 @@ class AuthService
             }
             $user = User::where('personal_id', $request->personal_id)->first();
             if (!$user) {
-                return HttpStatusEnum::NOT_FOUND;
+                $user = User::where('personal_id', 0)->first();
             }
-
             $tokenName = config('auth.access_token_name');
             $token = $user->createToken($tokenName);
             return ["token" => $token, "tokenName" => $tokenName];

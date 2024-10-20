@@ -38,22 +38,35 @@ class UserService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function addAdmin($uuid)
+    public function addAdmin($uuids)
     {
         try {
-            $user = User::where('uuid', $uuid)->first();
-            if (!$user) {
+
+            if (count($uuids) === 0) {
+                return HttpStatusEnum::BAD_REQUEST;
+            }
+
+            $users = User::whereIn('uuid', $uuids)->get();
+            if (count($users) === 0) {
                 return HttpStatusEnum::NOT_FOUND;
             }
-            if ($user->hasRole(Role::ADMIN)) {
-                return HttpStatusEnum::CONFLICT;
+            $changedCount = 0;
+
+            foreach ($users as $user) {
+                if ($user->hasRole(Role::ADMIN)) {
+                    continue;
+                }
+                if ($user->hasRole(Role::USER)) {
+                    $user->removeRole(Role::USER);
+                    $user->revokePermissionTo(Permission::VIEW_WEBSITE);
+                }
+                $user->assignRole(Role::ADMIN);
+                $user->givePermissionTo(Permission::MANAGE_USERS);
+                $changedCount++;
             }
-            if ($user->hasRole(Role::USER)) {
-                $user->removeRole(Role::USER);
-                $user->revokePermissionTo(Permission::VIEW_WEBSITE);
+            if ($changedCount === 0) {
+                return HttpStatusEnum::NO_CONTENT;
             }
-            $user->assignRole(Role::ADMIN);
-            $user->givePermissionTo(Permission::MANAGE_USERS);
             return Response::HTTP_OK;
         } catch (\Exception $e) {
             Log::error($e->getMessage());

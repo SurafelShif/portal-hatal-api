@@ -9,9 +9,11 @@ enum ResponseMessages: string
     const NO_ROLE_ASSIGNED = 'לא הוקצה תפקיד למשתמש';
     const UNAUTHORIZED = 'המשתמש לא מחובר';
     const USER_NOT_FOUND = 'המשתמש לא נמצא';
+    const USERS_NOT_FOUND = 'המשתמשים לא נמצאו';
     const WEBSITE_NOT_FOUND = 'אתר לא נמצא';
     const MISSING_ROLE = 'לא נמצא תפקיד';
     const NOT_ADMIN = 'המשתמש אינו מנהל מערכת';
+    const NO_CONTENT = '';
     const NOT_USER = 'המשתמש הינו מנהל מערכת';
     const INVALID_REQUEST = 'בקשה לא תקינה';
     const SELF_REMOVAL = 'לא ניתן להסיר הרשאה לעצמך';

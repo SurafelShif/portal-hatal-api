@@ -7,6 +7,7 @@ enum HttpStatusEnum
     case OK;
     case ERROR;
     case CREATED;
+    case NO_CONTENT;
     case INVALID;
     case MISSING;
     case CONFLICT;

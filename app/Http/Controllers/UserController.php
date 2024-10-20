@@ -80,21 +80,22 @@ class UserController extends Controller
     }
     /**
      * @OA\Post(
-     *      path="/api/users/{uuid}",
+     *      path="/api/users/admins",
      *      operationId="store",
      *      tags={"Users"},
-     *      summary="add admin",
-     *      description="add admin",
-     *     @OA\Parameter(
-     *         name="uuid",
-     *         in="path",
-     *         description="UUID of the user",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="string",
-     *             format="uuid"
-     *         )
-     *     ),
+     *      summary="add admins",
+     *      description="add admins",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              type="array",
+     *              @OA\Items(
+     *                  type="string",
+     *                  format="uuid",
+     *                  example="uuid-1" 
+     *              ),
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="הפעולה התבצעה בהצלחה",
@@ -128,7 +129,7 @@ class UserController extends Controller
         }
         return response()->json([
             'message' => ResponseMessages::SUCCESS_ACTION
-        ], Response::HTTP_CREATED);
+        ], Response::HTTP_OK);
     }
     /**
      * @OA\Delete(

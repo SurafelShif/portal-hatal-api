@@ -163,28 +163,29 @@
                         "description": "אירעה שגיאה"
                     }
                 }
-            }
-        },
-        "/api/users/{uuid}": {
+            },
             "post": {
                 "tags": [
                     "Users"
                 ],
-                "summary": "add admin",
-                "description": "add admin",
+                "summary": "add admins",
+                "description": "add admins",
                 "operationId": "store",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "UUID of the user",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "uuid-1"
+                                }
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "הפעולה התבצעה בהצלחה"
@@ -199,7 +200,9 @@
                         "description": "אירעה שגיאה"
                     }
                 }
-            },
+            }
+        },
+        "/api/users/{uuid}": {
             "delete": {
                 "tags": [
                     "Users"

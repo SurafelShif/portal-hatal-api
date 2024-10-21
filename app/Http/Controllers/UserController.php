@@ -117,7 +117,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
-        $result = $this->UserService->addAdmin($request->all());
+        $result = $this->UserService->addAdmin($request);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),

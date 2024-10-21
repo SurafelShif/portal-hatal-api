@@ -27,17 +27,23 @@ class WebsiteService
         }
     }
 
-    public function createWebsite(Request $request)
+    public function createWebsite($request)
     {
         try {
+            $websites = $request->all();
+            if (count($websites) === 0) {
+                return HttpStatusEnum::BAD_REQUEST;
+            }
             DB::beginTransaction();
-            $image = $this->ImageService->uploadimage($request->image);
-            Website::create([
-                'name' => $request->input('name'),
-                'description' => $request->input('description'),
-                'link' => $request->input('link'),
-                'image_id' => $image->id,
-            ]);
+            foreach ($websites as  $website) {
+                $image = $this->ImageService->uploadimage($website['image']);
+                Website::create([
+                    'name' => $website['name'],
+                    'description' => $website['description'],
+                    'link' => $website[('link')],
+                    'image_id' => $image->id,
+                ]);
+            }
             DB::commit();
 
             return Response::HTTP_OK;

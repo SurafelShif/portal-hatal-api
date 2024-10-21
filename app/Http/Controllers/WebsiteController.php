@@ -97,7 +97,7 @@ class WebsiteController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(StoreWebsiteRequest $request)
+    public function store(Request $request)
     {
 
         $result = $this->WebsiteService->createWebsite($request);

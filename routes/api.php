@@ -16,7 +16,7 @@ Route::controller(WebsiteController::class)
         Route::post("/", "store")->middleware(['role:admin']);
         Route::post("/{uuid}", "update")->middleware(['role:admin']);
         Route::get("/", "index");
-        Route::delete("/{uuid}", "delete")->middleware(['role:admin']);
+        Route::delete("/", "delete")->middleware(['role:admin']);
     });
 Route::controller(UserController::class)
     ->prefix("users")

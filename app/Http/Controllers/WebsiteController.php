@@ -7,6 +7,7 @@ use App\Enums\ResponseMessages;
 use App\Http\Requests\StoreWebsiteRequest;
 use App\Http\Requests\UpdateWebsiteRequest;
 use App\Services\WebsiteService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class WebsiteController extends Controller
@@ -115,21 +116,22 @@ class WebsiteController extends Controller
 
     /**
      * @OA\Delete(
-     *      path="/api/websites/{uuid}",
+     *      path="/api/websites",
      *      operationId="delete website",
      *      tags={"Websites"},
      *      summary="delete website",
      *      description="delete website",
-     *     @OA\Parameter(
-     *         name="uuid",
-     *         in="path",
-     *         description="UUID of the website",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="string",
-     *             format="uuid"
-     *         )
-     *     ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              type="array",
+     *              @OA\Items(
+     *                  type="string",
+     *                  format="uuid",
+     *                  example="b143c4ab-91a7-481a-ab1a-cf4a00d2fc11" 
+     *              ),
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="הפעולה התבצעה בהצלחה",
@@ -140,7 +142,7 @@ class WebsiteController extends Controller
      *      ),
      *      @OA\Response(
      *          response=404,
-     *          description="אתר לא נמצא",
+     *          description="אתרים לא נמצאו",
      *      ),
      *      @OA\Response(
      *          response=500,
@@ -148,13 +150,14 @@ class WebsiteController extends Controller
      *      )
      * )
      */
-    public function delete($uuid)
+    public function delete(Request $request)
     {
-        $result = $this->WebsiteService->deleteWebsite($uuid);
+        $result = $this->WebsiteService->deleteWebsite($request->all());
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
-                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::WEBSITE_NOT_FOUND, Response::HTTP_NOT_FOUND),
+                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::WEBSITES_NOT_FOUND, Response::HTTP_NOT_FOUND),
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
                 default => response()->json('', Response::HTTP_NO_CONTENT)
             };
         }

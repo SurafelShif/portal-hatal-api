@@ -52,16 +52,20 @@ class WebsiteService
         }
     }
 
-    public function deleteWebsite($uuid)
+    public function deleteWebsite($uuids)
     {
         try {
-            $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
-            if (!$website) {
+            if (count($uuids) === 0) {
+                return HttpStatusEnum::BAD_REQUEST;
+            }
+            $websites = Website::whereIn('uuid', $uuids)->get();
+            if (count($websites) === 0) {
                 return HttpStatusEnum::NOT_FOUND;
             }
-
-            $website->is_deleted = true;
-            $website->save();
+            foreach ($websites as $website) {
+                $website->is_deleted = true;
+                $website->save();
+            }
 
             return Response::HTTP_OK;
         } catch (\Exception $e) {

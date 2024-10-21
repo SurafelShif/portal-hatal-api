@@ -323,6 +323,43 @@
                         "description": "אירעה שגיאה"
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Websites"
+                ],
+                "summary": "delete website",
+                "description": "delete website",
+                "operationId": "delete website",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "format": "uuid",
+                                    "example": "b143c4ab-91a7-481a-ab1a-cf4a00d2fc11"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "הפעולה התבצעה בהצלחה"
+                    },
+                    "204": {
+                        "description": "לא נדרש לבצע את הפעולה"
+                    },
+                    "404": {
+                        "description": "אתרים לא נמצאו"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
             }
         },
         "/api/websites/{uuid}": {
@@ -383,40 +420,6 @@
                     },
                     "404": {
                         "description": "האתר לא נמצא"
-                    },
-                    "500": {
-                        "description": "אירעה שגיאה"
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Websites"
-                ],
-                "summary": "delete website",
-                "description": "delete website",
-                "operationId": "delete website",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "UUID of the website",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "הפעולה התבצעה בהצלחה"
-                    },
-                    "204": {
-                        "description": "לא נדרש לבצע את הפעולה"
-                    },
-                    "404": {
-                        "description": "אתר לא נמצא"
                     },
                     "500": {
                         "description": "אירעה שגיאה"

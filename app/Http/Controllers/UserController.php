@@ -92,7 +92,7 @@ class UserController extends Controller
      *              @OA\Items(
      *                  type="string",
      *                  format="uuid",
-     *                  example="uuid-1" 
+     *                  example="b143c4ab-91a7-481a-ab1a-cf4a00d2fc11" 
      *              ),
      *          )
      *      ),
@@ -133,21 +133,22 @@ class UserController extends Controller
     }
     /**
      * @OA\Delete(
-     *      path="/api/users/{uuid}",
+     *      path="/api/users/admins",
      *      operationId="delete",
      *      tags={"Users"},
-     *      summary="delete admin",
+     *      summary="delete admins",
      *      description="delete admin role",
-     *     @OA\Parameter(
-     *         name="uuid",
-     *         in="path",
-     *         description="UUID of the admin",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="string",
-     *             format="uuid"
-     *         )
-     *     ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              type="array",
+     *              @OA\Items(
+     *                  type="string",
+     *                  format="uuid",
+     *                  example="b143c4ab-91a7-481a-ab1a-cf4a00d2fc11" 
+     *              ),
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="הפעולה התבצעה בהצלחה",
@@ -166,14 +167,16 @@ class UserController extends Controller
      *      )
      * )
      */
-    public function delete($uuid)
+    public function delete(Request $request)
     {
-        $result = $this->UserService->deleteAdmin($uuid);
+        $result = $this->UserService->deleteAdmin($request->all());
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
                 HttpStatusEnum::CONFLICT => response()->json(ResponseMessages::NOT_ADMIN, Response::HTTP_CONFLICT),
-                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USER_NOT_FOUND, Response::HTTP_NOT_FOUND),
+                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USERS_NOT_FOUND, Response::HTTP_NOT_FOUND),
+                HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
+                HttpStatusEnum::NO_CONTENT => response()->json(ResponseMessages::NO_CONTENT, Response::HTTP_NO_CONTENT),
             };
         }
         return response()->json(['message' => ResponseMessages::SUCCESS_ACTION]);

@@ -41,7 +41,6 @@ class UserService
     public function addAdmin($uuids)
     {
         try {
-
             if (count($uuids) === 0) {
                 return HttpStatusEnum::BAD_REQUEST;
             }
@@ -73,31 +72,38 @@ class UserService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function deleteAdmin($uuid)
+    public function deleteAdmin($uuids)
     {
         try {
-            $user = User::where("uuid", $uuid)->where("is_deleted", false)->first();
-
-            if (!$user) {
+            if (count($uuids) === 0) {
+                return HttpStatusEnum::BAD_REQUEST;
+            }
+            $admins = User::whereIn('uuid', $uuids)->get();
+            if (count($admins) === 0) {
                 return HttpStatusEnum::NOT_FOUND;
             }
-            if ($user->hasRole(Role::USER)) {
-                return HttpStatusEnum::CONFLICT;
-            }
-            $logged_user = Auth::user();
-            if ($logged_user->personal_id === $user->personal_id) {
-                return response()->json([
-                    'message' => ResponseMessages::SELF_REMOVAL
-                ], Response::HTTP_CONFLICT);
-            }
-            if ($user->hasRole(Role::ADMIN)) {
-                $user->removeRole(Role::ADMIN);
-                $user->revokePermissionTo(Permission::MANAGE_USERS);
-            }
+            $changedCount = 0;
+            foreach ($admins as $admin) {
+                if ($admin->hasRole(Role::USER)) {
+                    continue;
+                }
+                $logged_user = Auth::user();
+                if ($logged_user->personal_id === $admin->personal_id) {
+                    continue;
+                }
+                if ($admin->hasRole(Role::ADMIN)) {
+                    $admin->removeRole(Role::ADMIN);
+                    $admin->revokePermissionTo(Permission::MANAGE_USERS);
+                }
 
-            $user->assignRole(Role::USER);
-            $user->givePermissionTo(Permission::VIEW_WEBSITE);
-            $user->save();
+                $admin->assignRole(Role::USER);
+                $admin->givePermissionTo(Permission::VIEW_WEBSITE);
+                $admin->save();
+                $changedCount++;
+            }
+            if ($changedCount === 0) {
+                return HttpStatusEnum::NO_CONTENT;
+            }
             return Response::HTTP_OK;
         } catch (\Exception $e) {
             Log::error($e->getMessage());

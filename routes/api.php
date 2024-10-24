@@ -14,7 +14,7 @@ Route::controller(WebsiteController::class)
     ->middleware('auth:api')
     ->group(function () {
         Route::post("/", "store")->middleware(['role:admin']);
-        Route::post("/{uuid}", "update")->middleware(['role:admin']);
+        Route::post("/", "update")->middleware(['role:admin']);
         Route::get("/", "index");
         Route::delete("/", "delete")->middleware(['role:admin']);
     });

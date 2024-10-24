@@ -232,9 +232,9 @@ class WebsiteController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function update(UpdateWebsiteRequest $request, $uuid)
+    public function update(Request $request)
     {
-        $result = $this->WebsiteService->updateWebsite($request, $uuid);
+        $result = $this->WebsiteService->updateWebsite($request);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR =>  response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),

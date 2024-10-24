@@ -79,38 +79,49 @@ class WebsiteService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function updateWebsite(Request $request, $uuid)
+    public function updateWebsite(Request $request)
     {
         try {
             if (empty($request->all())) {
                 return HttpStatusEnum::BAD_REQUEST;
             }
             DB::beginTransaction();
-            $website = Website::where('uuid', $uuid)->where('is_deleted', false)->first();
+            foreach ($request->all() as $index => $updateInfo) {
 
-            if (!$website) {
-                return HttpStatusEnum::NOT_FOUND;
-            }
+                $website = Website::where('uuid', $updateInfo['uuid'])->where('is_deleted', false)->first();
 
-
-            if ($request->filled('name')) {
-                $website->name = $request->name;
-            }
-            if ($request->filled('description')) {
-                $website->description = $request->description;
-            }
-            if ($request->filled('link')) {
-                $website->link = $request->link;
-            }
-            if ($request->has('image')) {
-                $associatedImageId = $website->image_id;
-                if ($request->image === null) {
-                    $this->ImageService->updateImage($associatedImageId, null, "websiteplaceholder");
-                } else if ($request->hasFile('image')) {
-                    $this->ImageService->updateImage($associatedImageId, $request->image);
+                if (!$website) {
+                    continue;
                 }
+
+                if (isset($updateInfo['name']) && !empty($updateInfo['name'])) {
+                    $website->name = $updateInfo['name'];
+                }
+
+                if (isset($updateInfo['description']) && !empty($updateInfo['description'])) {
+                    $website->description = $updateInfo['description'];
+                }
+
+                if (isset($updateInfo['link']) && !empty($updateInfo['link'])) {
+                    $website->link = $updateInfo['link'];
+                }
+
+                if (isset($request[$index]['image'])) {
+                    $associatedImageId = $website->image_id;
+                    if ($request[$index]['image'] === null) {
+                        $this->ImageService->updateImage($associatedImageId, null, "websiteplaceholder");
+                    } else if (is_file($request[$index]['image'])) {
+                        $this->ImageService->updateImage($associatedImageId, $updateInfo['image']);
+                    }
+                }
+
+                $website->save();
             }
-            $website->save();
+
+
+
+
+
             DB::commit();
             return Response::HTTP_OK;
         } catch (\Exception $e) {

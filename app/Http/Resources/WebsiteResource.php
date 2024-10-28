@@ -16,7 +16,7 @@ class WebsiteResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'link' => $this->link,
-            'image_url' => $this->image ? config('app.url') . ":8000" . Storage::url($this->image->image_path) : null,
+            'image_url' => $this->image ? config('filesystems.storage_path') . $this->image->image_path : null,
         ];
     }
 }

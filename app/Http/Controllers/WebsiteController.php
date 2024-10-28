@@ -54,8 +54,8 @@ class WebsiteController extends Controller
      *      path="/api/websites",
      *      operationId="storeWebsite",
      *      tags={"Websites"},
-     *      summary="Upload a website",
-     *      description="Upload a website",
+     *      summary="Upload websites",
+     *      description="Upload websites",
      *      @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
@@ -167,15 +167,15 @@ class WebsiteController extends Controller
     }
     /**
      * @OA\Post(
-     *      path="/api/websites/{uuid}",
+     *      path="/api/websites/update",
      *      operationId="updateWebsite",
      *      tags={"Websites"},
-     *      summary="Update a website",
-     *      description="Update a website",
+     *      summary="Update websites ",
+     *      description="Update websites",
      *      @OA\Parameter(
      *         name="uuid",
      *         in="path",
-     *         description="UUID of the website",
+     *         description="array of update details",
      *         required=true,
      *         @OA\Schema(
      *             type="string",

@@ -278,8 +278,8 @@
                 "tags": [
                     "Websites"
                 ],
-                "summary": "Upload a website",
-                "description": "Upload a website",
+                "summary": "Upload websites",
+                "description": "Upload websites",
                 "operationId": "storeWebsite",
                 "requestBody": {
                     "required": true,
@@ -362,19 +362,19 @@
                 }
             }
         },
-        "/api/websites/{uuid}": {
+        "/api/websites/update": {
             "post": {
                 "tags": [
                     "Websites"
                 ],
-                "summary": "Update a website",
-                "description": "Update a website",
+                "summary": "Update websites ",
+                "description": "Update websites",
                 "operationId": "updateWebsite",
                 "parameters": [
                     {
                         "name": "uuid",
                         "in": "path",
-                        "description": "UUID of the website",
+                        "description": "array of update details",
                         "required": true,
                         "schema": {
                             "type": "string",

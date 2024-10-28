@@ -8,6 +8,7 @@ use App\Enums\ResponseMessages;
 use App\Enums\Role;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -38,9 +39,10 @@ class UserService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function addAdmin($uuids)
+    public function addAdmin(Request $request)
     {
         try {
+            $uuids = $request->all();
             if (count($uuids) === 0) {
                 return HttpStatusEnum::BAD_REQUEST;
             }

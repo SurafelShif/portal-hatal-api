@@ -43,7 +43,7 @@ class RahtalService
             if ($request->has('image')) {
                 $associatedImageId = $rahtal->image_id;
                 if ($request->image === null) {
-                    $this->ImageService->updateImage($associatedImageId, null, "rahtalplaceholder");
+                    $this->ImageService->updateImage($associatedImageId, null);
                 } else if ($request->hasFile('image')) {
                     $this->ImageService->updateImage($associatedImageId, $request->image);
                 }

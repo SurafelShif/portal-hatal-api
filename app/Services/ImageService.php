@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -28,14 +29,11 @@ class ImageService
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                'message' => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
 
-    public function updateImage($associatedimageId, UploadedFile $newImage = null, $imageName = null)
+    public function updateImage($associatedimageId, UploadedFile $newImage = null)
     {
         try {
 
@@ -45,23 +43,19 @@ class ImageService
                 $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
                 $imagePath = $newImage->storeAs('images', $randomFileName, config('filesystems.storage_service'));
             } else {
-                $extension = 'svg';
-                $randomFileName = $imageName . '.' . $extension;
-                $imagePath = 'constants/' . $randomFileName;
+                $imagePath = null;
+                $randomFileName = null;
+                $extension = null;
             }
 
             $this->deleteImage($oldImage->image_name);
-
             $oldImage->image_path = $imagePath;
             $oldImage->image_name = $randomFileName;
             $oldImage->image_type = $extension;
             $oldImage->save();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                'message' => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
     public function deleteImage($image_name)
@@ -74,10 +68,7 @@ class ImageService
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return response()->json([
-                'message' => ResponseMessages::ERROR_OCCURRED,
-                'error' => $e->getMessage(),
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return HttpStatusEnum::ERROR;
         }
     }
 }

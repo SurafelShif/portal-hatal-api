@@ -105,11 +105,10 @@ class WebsiteService
                 if (isset($updateInfo['link']) && !empty($updateInfo['link'])) {
                     $website->link = $updateInfo['link'];
                 }
-
                 if (isset($request[$index]['image'])) {
                     $associatedImageId = $website->image_id;
                     if ($request[$index]['image'] === null) {
-                        $this->ImageService->updateImage($associatedImageId, null, "websiteplaceholder");
+                        $this->ImageService->updateImage($associatedImageId, null);
                     } else if (is_file($request[$index]['image'])) {
                         $this->ImageService->updateImage($associatedImageId, $updateInfo['image']);
                     }

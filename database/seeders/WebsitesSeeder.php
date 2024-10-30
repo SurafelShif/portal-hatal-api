@@ -16,9 +16,9 @@ class WebsitesSeeder extends Seeder
     {
         //
         $image1 = Image::create([
-            'image_name' => 'websiteplaceholder.svg',
-            'image_type' => 'svg',
-            'image_path' => 'constants/websiteplaceholder.svg'
+            'image_name' => null,
+            'image_type' => null,
+            'image_path' => null
         ]);
         Website::create([
             'name' => "Class",
@@ -26,10 +26,11 @@ class WebsitesSeeder extends Seeder
             'link' => 'https://www.Class.com/',
             "image_id" => $image1->id
         ]);
+
         $image2 = Image::create([
-            'image_name' => 'websiteplaceholder.svg',
-            'image_type' => 'svg',
-            'image_path' => 'constants/websiteplaceholder.svg'
+            'image_name' => null,
+            'image_type' => null,
+            'image_path' => null
         ]);
         Website::create([
             'name' => "Ibiza",
@@ -38,9 +39,9 @@ class WebsitesSeeder extends Seeder
             "image_id" => $image2->id
         ]);
         $image3 = Image::create([
-            'image_name' => 'websiteplaceholder.svg',
-            'image_type' => 'svg',
-            'image_path' => 'constants/websiteplaceholder.svg'
+            'image_name' => null,
+            'image_type' => null,
+            'image_path' => null
         ]);
         Website::create([
             'name' => "Inzim",
@@ -49,9 +50,9 @@ class WebsitesSeeder extends Seeder
             "image_id" => $image3->id
         ]);
         $image4 = Image::create([
-            'image_name' => 'websiteplaceholder.svg',
-            'image_type' => 'svg',
-            'image_path' => 'constants/websiteplaceholder.svg'
+            'image_name' => null,
+            'image_type' => null,
+            'image_path' => null
         ]);
         Website::create([
             'name' => "Lo yodea",
@@ -60,9 +61,9 @@ class WebsitesSeeder extends Seeder
             "image_id" => $image4->id
         ]);
         $image5 = Image::create([
-            'image_name' => 'websiteplaceholder.svg',
-            'image_type' => 'svg',
-            'image_path' => 'constants/websiteplaceholder.svg'
+            'image_name' => null,
+            'image_type' => null,
+            'image_path' => null
         ]);
         Website::create([
             'name' => "Ronaldinio",
@@ -71,9 +72,9 @@ class WebsitesSeeder extends Seeder
             "image_id" => $image5->id
         ]);
         $image6 = Image::create([
-            'image_name' => 'websiteplaceholder.svg',
-            'image_type' => 'svg',
-            'image_path' => 'constants/websiteplaceholder.svg'
+            'image_name' => null,
+            'image_type' => null,
+            'image_path' => null
         ]);
         Website::create([
             'name' => "Raccoon",
@@ -82,9 +83,9 @@ class WebsitesSeeder extends Seeder
             "image_id" => $image6->id
         ]);
         $image7 = Image::create([
-            'image_name' => 'websiteplaceholder.svg',
-            'image_type' => 'svg',
-            'image_path' => 'constants/websiteplaceholder.svg'
+            'image_name' => null,
+            'image_type' => null,
+            'image_path' => null
         ]);
         Website::create([
             'name' => "Mathematics",

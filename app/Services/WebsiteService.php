@@ -64,21 +64,34 @@ class WebsiteService
             if (count($uuids) === 0) {
                 return HttpStatusEnum::BAD_REQUEST;
             }
+
             $websites = Website::whereIn('uuid', $uuids)->get();
-            if (count($websites) === 0) {
+            if ($websites->isEmpty()) {
                 return HttpStatusEnum::NOT_FOUND;
             }
+
+            DB::beginTransaction();
+
+            $positionsToDelete = $websites->pluck('position')->sort()->toArray();
+            dd($positionsToDelete);
             foreach ($websites as $website) {
-                $website->is_deleted = true;
-                $website->save();
+                $website->delete();
             }
+
+            foreach ($positionsToDelete as $position) {
+                Website::where('position', '>', $position)->decrement('position');
+            }
+
+            DB::commit();
 
             return Response::HTTP_OK;
         } catch (\Exception $e) {
+            DB::rollBack(); // Roll back transaction on error
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
         }
     }
+
     public function updateWebsite(Request $request)
     {
         try {

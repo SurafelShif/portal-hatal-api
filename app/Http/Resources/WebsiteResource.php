@@ -13,6 +13,7 @@ class WebsiteResource extends JsonResource
     {
         return [
             'uuid' => $this->uuid,
+            'position' => $this->position,
             'name' => $this->name,
             'description' => $this->description,
             'link' => $this->link,

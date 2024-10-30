@@ -24,11 +24,13 @@ class Website extends Model
         });
     }
 
+
     protected $fillable = [
         'name',
         'description',
         'link',
-        'image_id'
+        'image_id',
+        'position'
     ];
     protected $hidden = [
         'image_id',

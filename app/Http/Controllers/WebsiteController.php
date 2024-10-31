@@ -97,9 +97,8 @@ class WebsiteController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreWebsiteRequest $request)
     {
-
         $result = $this->WebsiteService->createWebsite($request);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {

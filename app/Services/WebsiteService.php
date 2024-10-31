@@ -31,16 +31,15 @@ class WebsiteService
     {
         try {
             $websites = $request->all();
-            if (count($websites) === 0) {
-                return HttpStatusEnum::BAD_REQUEST;
-            }
             DB::beginTransaction();
+
             foreach ($websites as  $website) {
                 $image = $this->ImageService->uploadimage($website['image']);
                 Website::create([
                     'name' => $website['name'],
                     'description' => $website['description'],
-                    'link' => $website[('link')],
+                    'link' => $website['link'],
+                    'position' => $website['position'],
                     'image_id' => $image->id,
                 ]);
             }
@@ -51,7 +50,6 @@ class WebsiteService
             DB::rollBack();
             if (isset($image) && $image) {
                 $this->ImageService->deleteImage($image->image_name);
-                dd("image deleted:" . $image->image_name);
             }
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;

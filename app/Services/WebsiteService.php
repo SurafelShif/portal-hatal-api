@@ -72,21 +72,18 @@ class WebsiteService
 
             DB::beginTransaction();
 
-            $positionsToDelete = $websites->pluck('position')->sort()->toArray();
-            dd($positionsToDelete);
             foreach ($websites as $website) {
                 $website->delete();
             }
-
-            foreach ($positionsToDelete as $position) {
-                Website::where('position', '>', $position)->decrement('position');
+            $allWebsites = Website::orderBy('position')->get();
+            foreach ($allWebsites as $index => $website) {
+                $website->position = $index;
+                $website->save();
             }
-
             DB::commit();
-
             return Response::HTTP_OK;
         } catch (\Exception $e) {
-            DB::rollBack(); // Roll back transaction on error
+            DB::rollBack();
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
         }

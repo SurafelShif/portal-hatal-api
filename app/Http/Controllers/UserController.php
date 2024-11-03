@@ -215,6 +215,9 @@ class UserController extends Controller
 
         ], Response::HTTP_OK);
     }
-
+    public function getUserByUUID($perosnal_number)
+    {
+        dd($perosnal_number);
+    }
     //
 }

@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
-use App\Http\Requests\StoreWebsiteRequest;
+use App\Http\Requests\DeleteWebsitesRequest;
+use App\Http\Requests\StoreWebsitesRequest;
 use App\Http\Requests\UpdateWebsiteRequest;
 use App\Services\WebsiteService;
 use Illuminate\Http\Request;
@@ -97,7 +98,7 @@ class WebsiteController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(StoreWebsiteRequest $request)
+    public function store(StoreWebsitesRequest $request)
     {
         $result = $this->WebsiteService->createWebsite($request);
         if ($result instanceof HttpStatusEnum) {
@@ -149,7 +150,7 @@ class WebsiteController extends Controller
      *      )
      * )
      */
-    public function delete(Request $request)
+    public function delete(DeleteWebsitesRequest $request)
     {
         $result = $this->WebsiteService->deleteWebsite($request->all());
         if ($result instanceof HttpStatusEnum) {

@@ -43,9 +43,6 @@ class UserService
     {
         try {
             $uuids = $request->all();
-            if (count($uuids) === 0) {
-                return HttpStatusEnum::BAD_REQUEST;
-            }
 
             $users = User::whereIn('uuid', $uuids)->get();
             if (count($users) === 0) {
@@ -77,9 +74,6 @@ class UserService
     public function deleteAdmin($uuids)
     {
         try {
-            if (count($uuids) === 0) {
-                return HttpStatusEnum::BAD_REQUEST;
-            }
             $admins = User::whereIn('uuid', $uuids)->get();
             if (count($admins) === 0) {
                 return HttpStatusEnum::NOT_FOUND;

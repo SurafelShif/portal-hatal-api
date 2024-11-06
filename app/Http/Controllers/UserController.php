@@ -233,38 +233,20 @@ class UserController extends Controller
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="Operation completed successfully",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Operation successful"),
-     *              @OA\Property(property="data", type="object",
-     *                  @OA\Property(property="id", type="integer", example=1),
-     *                  @OA\Property(property="name", type="string", example="John Doe"),
-     *                  @OA\Property(property="email", type="string", example="johndoe@example.com"),
-     *                  @OA\Property(property="role", type="string", example="user"),
-     *              )
-     *          )
+     *          description="הפעולה התבצעה בהצלחה",
      *      ),
      *      @OA\Response(
      *          response=400,
-     *          description="Invalid request",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Invalid request")
-     *          )
+     *          description="בקשה לא תקינה",
      *      ),
      *      @OA\Response(
      *          response=404,
-     *          description="User not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="User not found")
-     *          )
+     *          description="משתמש לא נמצא",
      *      ),
      *      @OA\Response(
      *          response=500,
-     *          description="Server error occurred",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="An error occurred")
-     *          )
-     *      )
+     *          description="אירעה שגיאה",
+     *      ),
      * )
      *
      * @return \Illuminate\Http\JsonResponse

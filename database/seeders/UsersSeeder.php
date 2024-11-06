@@ -77,7 +77,7 @@ class UsersSeeder extends Seeder
         ]);
 
         $rahtal = Rahtal::create([
-            'full_name' => 'משתמש רהט"ל',
+            'full_name' => 'שלמה העברי',
             'image_id' => $image->id,
         ]);
 

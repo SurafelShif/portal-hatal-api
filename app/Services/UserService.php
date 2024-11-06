@@ -8,6 +8,7 @@ use App\Enums\ResponseMessages;
 use App\Enums\Role;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -49,9 +50,8 @@ class UserService
                 return HttpStatusEnum::NOT_FOUND;
             }
             $changedCount = 0;
-
             foreach ($users as $user) {
-                if ($user->hasRole(Role::ADMIN)) {
+                if ($user->hasRole(Role::ADMIN) || $user->personal_id == -1) {
                     continue;
                 }
                 if ($user->hasRole(Role::USER)) {
@@ -131,12 +131,57 @@ class UserService
 
             $user = User::where('personal_id', $id)->first();
             if (!$user) {
+                // $user = $this->getUserFromAdfs($id);
+                // if (!$user) {
+                // }
                 return HttpStatusEnum::NOT_FOUND;
             }
             return $user;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
+        }
+    }
+    private function getUserFromAdfs($id)
+    {
+        try {
+            $client = new Client();
+            $adfsUrl = env("ADFS_URL");
+            $adfsUser = env("ADFS_USER");
+            $adfsPassword = env("ADFS_PASSWORD");
+
+            $queryParams = [
+                'columns' => implode(',', [
+                    'personalId',
+                    'personalNumber',
+                    'firstName',
+                    'surname',
+                ])
+            ];
+
+            $response = $client->get(
+                $adfsUrl . "/api/employees/" . $id,
+                [
+                    'verify' => false,
+                    'auth' => [
+                        $adfsUser,
+                        $adfsPassword,
+                        'ntlm'
+                    ],
+                    'query' => $queryParams
+                ]
+            );
+
+            $user = json_decode($response->getBody(), true);
+
+            // $user = self::FAKE_USER;
+
+            return $user;
+        } catch (\Exception $e) {
+            $statusCode = $e->getCode();
+            if ($statusCode === 0) {
+                return null;
+            }
         }
     }
 }

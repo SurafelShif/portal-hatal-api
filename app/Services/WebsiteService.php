@@ -91,6 +91,7 @@ class WebsiteService
     {
         try {
             DB::beginTransaction();
+            $changedCount = 0;
             foreach ($request->all() as $index => $updateInfo) {
 
                 $website = Website::where('uuid', $updateInfo['uuid'])->where('is_deleted', false)->first();
@@ -118,7 +119,11 @@ class WebsiteService
                         $this->ImageService->updateImage($associatedImageId, $updateInfo['image']);
                     }
                 }
+                $changedCount++;
                 $website->save();
+            }
+            if ($changedCount === 0) {
+                return HttpStatusEnum::NO_CONTENT;
             }
             DB::commit();
             return Response::HTTP_OK;

@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Role;
-use App\Enums\RolesEnum;
 
-use App\Models\Unit;
 use App\Models\User;
 
 use Illuminate\Http\JsonResponse;

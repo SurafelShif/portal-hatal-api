@@ -90,9 +90,6 @@ class WebsiteService
     public function updateWebsite(Request $request)
     {
         try {
-            if (empty($request->all())) {
-                return HttpStatusEnum::BAD_REQUEST;
-            }
             DB::beginTransaction();
             foreach ($request->all() as $index => $updateInfo) {
 
@@ -121,14 +118,8 @@ class WebsiteService
                         $this->ImageService->updateImage($associatedImageId, $updateInfo['image']);
                     }
                 }
-
                 $website->save();
             }
-
-
-
-
-
             DB::commit();
             return Response::HTTP_OK;
         } catch (\Exception $e) {

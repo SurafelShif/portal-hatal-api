@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteWebsitesRequest extends FormRequest
+class UuidsArrayRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +29,7 @@ class DeleteWebsitesRequest extends FormRequest
     public function messages()
     {
         return [
-            '*.string' => 'נא לשלוח את הפורמט הנכון עבור מזהה האתר (UUID)',
+            '*.uuid' => 'נא לשלוח את הפורמט הנכון עבור מזהה האתר (UUID)',
 
         ];
     }

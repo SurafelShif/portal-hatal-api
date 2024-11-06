@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
-use App\Http\Requests\DeleteWebsitesRequest;
 use App\Http\Requests\StoreWebsitesRequest;
-use App\Http\Requests\UpdateWebsiteRequest;
+use App\Http\Requests\UpdateWebsitesRequest;
+use App\Http\Requests\UuidsArrayRequest;
 use App\Services\WebsiteService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class WebsiteController extends Controller
@@ -150,7 +149,7 @@ class WebsiteController extends Controller
      *      )
      * )
      */
-    public function delete(DeleteWebsitesRequest $request)
+    public function delete(UuidsArrayRequest $request)
     {
         $result = $this->WebsiteService->deleteWebsite($request->all());
         if ($result instanceof HttpStatusEnum) {
@@ -232,14 +231,13 @@ class WebsiteController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function update(Request $request)
+    public function update(UpdateWebsitesRequest $request)
     {
         $result = $this->WebsiteService->updateWebsite($request);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR =>  response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::WEBSITE_NOT_FOUND, Response::HTTP_NOT_FOUND),
-                HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
                 default => response()->json('', Response::HTTP_NO_CONTENT)
             };
         }

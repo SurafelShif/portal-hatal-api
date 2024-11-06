@@ -6,6 +6,7 @@ use App\Services\UserService;
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
 use App\Http\Requests\StoreAdminRequest;
+use App\Http\Requests\UuidsArrayRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -114,7 +115,7 @@ class UserController extends Controller
      *      )
      * )
      */
-    public function store(Request $request)
+    public function store(UuidsArrayRequest $request)
     {
 
         $result = $this->UserService->addAdmin($request);
@@ -167,7 +168,7 @@ class UserController extends Controller
      *      )
      * )
      */
-    public function delete(Request $request)
+    public function delete(UuidsArrayRequest $request)
     {
         $result = $this->UserService->deleteAdmin($request->all());
         if ($result instanceof HttpStatusEnum) {

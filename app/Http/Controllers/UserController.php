@@ -228,7 +228,7 @@ class UserController extends Controller
      *          description="User ID",
      *          @OA\Schema(
      *              type="integer",
-     *              example=1
+     *              example=111111111
      *          )
      *      ),
      *      @OA\Response(

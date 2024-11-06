@@ -94,8 +94,7 @@ class WebsiteService
             $changedCount = 0;
             foreach ($request->all() as $index => $updateInfo) {
 
-                $website = Website::where('uuid', $updateInfo['uuid'])->where('is_deleted', false)->first();
-
+                $website = Website::where('uuid', $updateInfo['uuid'])->first();
                 if (!$website) {
                     continue;
                 }

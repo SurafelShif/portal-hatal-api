@@ -94,8 +94,8 @@ class UserService
 
                 $admin->assignRole(Role::USER);
                 $admin->givePermissionTo(Permission::VIEW_WEBSITE);
-                $admin->save();
                 $changedCount++;
+                $admin->save();
             }
             if ($changedCount === 0) {
                 return HttpStatusEnum::NO_CONTENT;

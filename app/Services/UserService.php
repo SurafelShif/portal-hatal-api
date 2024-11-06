@@ -128,4 +128,21 @@ class UserService
             return HttpStatusEnum::ERROR;
         }
     }
+    public function getUserById($id)
+    {
+        try {
+            if ($id && preg_match('/^\d{9}$/', $id) !== 1) {
+                return HttpStatusEnum::BAD_REQUEST;
+            }
+
+            $user = User::where('personal_id', $id)->first();
+            if (!$user) {
+                return HttpStatusEnum::NOT_FOUND;
+            }
+            return $user;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return HttpStatusEnum::ERROR;
+        }
+    }
 }

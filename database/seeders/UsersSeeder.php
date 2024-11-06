@@ -17,24 +17,24 @@ class UsersSeeder extends Seeder
     public function run(): void
     {
         $user = User::create([
-            'personal_id' => '0',
-            'personal_number' => '0',
+            'personal_id' => '000000000',
+            'personal_number' => '0000000',
             'full_name' => 'משתמש רגיל חט"ל',
 
         ]);
         $user->assignRole(Role::USER);
 
         $user2 = User::create([
-            'personal_id' => '1',
-            'personal_number' => '1',
+            'personal_id' => '111111111',
+            'personal_number' => '1111111',
             'full_name' => 'משתמש רגיל 1 חט"ל',
 
         ]);
         $user2->assignRole(Role::USER);
 
         $user3 = User::create([
-            'personal_id' => '2',
-            'personal_number' => '2',
+            'personal_id' => '222222222',
+            'personal_number' => '2222222',
             'full_name' => 'משתמש רגיל 2 חט"ל',
         ]);
         $user3->assignRole(Role::USER);

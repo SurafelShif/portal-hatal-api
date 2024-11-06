@@ -25,7 +25,7 @@ Route::controller(UserController::class)
         Route::post("/admins", "store");
         Route::get("/admins", "index");
         Route::get("/users", "getUsers");
-        Route::get("/{personal_id}", "getUserByUUID");
+        Route::get("/{id}", "getUserById");
         Route::delete("/admins", "delete");
     });
 Route::controller(RahtalController::class)

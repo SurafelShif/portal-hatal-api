@@ -215,9 +215,21 @@ class UserController extends Controller
 
         ], Response::HTTP_OK);
     }
-    public function getUserByUUID($perosnal_number)
+    public function getUserById($id)
     {
-        dd($perosnal_number);
+        $result = $this->UserService->getUserById($id);
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
+                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USER_NOT_FOUND, Response::HTTP_NOT_FOUND),
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+            };
+        }
+        return response()->json([
+            'message' => ResponseMessages::SUCCESS_ACTION,
+            'data' => $result,
+
+        ], Response::HTTP_OK);
     }
     //
 }

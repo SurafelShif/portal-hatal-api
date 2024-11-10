@@ -41,6 +41,7 @@ class RahtalService
             }
             DB::beginTransaction();
             if ($request->has('image')) {
+                dd($request->image->getClientOriginalExtension());
                 $associatedImageId = $rahtal->image_id;
                 if ($request->image === null) {
                     $this->ImageService->updateImage($associatedImageId, null);

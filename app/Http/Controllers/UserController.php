@@ -216,19 +216,19 @@ class UserController extends Controller
     }
     /**
      * @OA\Get(
-     *      path="/api/users/{id}",
-     *      operationId="getUserById",
+     *      path="/api/users/{personal_number}",
+     *      operationId="getUserByPersonalNumber",
      *      tags={"Users"},
-     *      summary="Retrieve user by ID excluding admins",
-     *      description="מחזיר משתמש על ידי תעודת הזהות",
+     *      summary="Retrieve user by personal number excluding admins",
+     *      description="מחזיר משתמש על ידי מספר אישי",
      *      @OA\Parameter(
-     *          name="id",
+     *          name="personal_number",
      *          in="path",
      *          required=true,
-     *          description="User ID",
+     *          description="User personal number",
      *          @OA\Schema(
      *              type="integer",
-     *              example=111111111
+     *              example=1111111
      *          )
      *      ),
      *      @OA\Response(

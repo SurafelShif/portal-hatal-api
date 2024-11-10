@@ -26,10 +26,37 @@ class StoreWebsitesRequest extends FormRequest
             '*.position' => 'required|integer|min:0',
             '*.description' => 'required|string|min:2',
             '*.link' => 'required|url|unique:websites,link',
-            '*.image' => 'required|file|mimes:jpeg,png,jpg|max:10248',
+            '*.image' => 'required|file|max:10248',
         ];
     }
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (count($this->all()) === 0) {
+                return $validator->errors()->add('', 'הכנס לפחות אתר אחד להעלאה');
+            }
 
+            foreach ($this->all() as $key => $item) {
+                if (!isset($item['name']) || !isset($item['position']) || !isset($item['description']) || !isset($item['link']) || !array_key_exists('image', $item)) {
+                    $validator->errors()->add("$key", 'הכנס לפחות ערך אחד לעדכון');
+                }
+
+                if ($this->hasFile("{$key}.image")) {
+                    $file = $this->file("{$key}.image");
+                    $extension = $file->getClientOriginalExtension();
+                    if (!in_array($extension, ['jpeg', 'jpg', 'png'])) {
+                        $validator->errors()->add("{$key}.image", 'התמונה חייבת להיות מסוג: jpeg, png, jpg.');
+                    }
+                }
+            }
+        });
+    }
     public function messages()
     {
         return [

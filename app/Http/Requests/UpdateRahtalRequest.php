@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class UpdateRahtalRequest extends FormRequest
 {
@@ -23,16 +24,33 @@ class UpdateRahtalRequest extends FormRequest
     {
         return [
             'full_name' => 'nullable|string|min:2',
-            'image' => 'nullable|file|mimes:jpeg,png,jpg|max:10248',
+            'image' => 'nullable|file|max:2048',
         ];
     }
+
+    /**
+     * Configure the validator instance.
+     */
+    public function withValidator(Validator $validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->hasFile('image')) {
+                $file = $this->file('image');
+                $extension = $file->getClientOriginalExtension();
+
+                if (!in_array($extension, ['jpeg', 'jpg', 'png'])) {
+                    $validator->errors()->add('image', 'התמונה חייבת להיות מסוג: jpeg, png, jpg.');
+                }
+            }
+        });
+    }
+
     public function messages()
     {
         return [
-            'full_name.string' => 'שם הרחת"ל חייב להיות מחרוזת.',
-            'full_name.min' => 'שם הרחת"ל צריך להכיל לפחות שני תווים.',
+            'full_name.string' => 'שם הרחט"ל חייב להיות מחרוזת.',
+            'full_name.min' => 'שם הרחט"ל צריך להכיל לפחות שני תווים.',
             'image.file' => 'התמונה חייבת להיות קובץ.',
-            'image.mimes' => 'התמונה חייבת להיות מסוג: jpeg, png, jpg.',
             'image.max' => 'גודל התמונה לא יכול לעלות על 2MB.',
         ];
     }

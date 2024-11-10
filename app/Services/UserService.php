@@ -143,44 +143,4 @@ class UserService
             return HttpStatusEnum::ERROR;
         }
     }
-    private function getUserFromAdfs($personal_number)
-    {
-        try {
-            $client = new Client();
-            $adfsUrl = env("ADFS_URL");
-            $adfsUser = env("ADFS_USER");
-            $adfsPassword = env("ADFS_PASSWORD");
-
-            $queryParams = [
-                'columns' => implode(',', [
-                    'personalId',
-                    'personalNumber',
-                    'firstName',
-                    'surname',
-                ])
-            ];
-
-            $response = $client->get(
-                $adfsUrl . "/api/employees/" . $personal_number,
-                [
-                    'verify' => false,
-                    'auth' => [
-                        $adfsUser,
-                        $adfsPassword,
-                        'ntlm'
-                    ],
-                    'query' => $queryParams
-                ]
-            );
-
-            $user = json_decode($response->getBody(), true);
-
-            return $user;
-        } catch (\Exception $e) {
-            $statusCode = $e->getCode();
-            if ($statusCode === 0) {
-                return null;
-            }
-        }
-    }
 }

@@ -257,23 +257,23 @@
                 }
             }
         },
-        "/api/users/{id}": {
+        "/api/users/{personal_number}": {
             "get": {
                 "tags": [
                     "Users"
                 ],
-                "summary": "Retrieve user by ID excluding admins",
-                "description": "מחזיר משתמש על ידי תעודת הזהות",
-                "operationId": "getUserById",
+                "summary": "Retrieve user by personal number excluding admins",
+                "description": "מחזיר משתמש על ידי מספר אישי",
+                "operationId": "getUserByPersonalNumber",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "personal_number",
                         "in": "path",
-                        "description": "User ID",
+                        "description": "User personal number",
                         "required": true,
                         "schema": {
                             "type": "integer",
-                            "example": 111111111
+                            "example": 1111111
                         }
                     }
                 ],

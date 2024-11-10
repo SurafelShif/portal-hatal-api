@@ -27,7 +27,7 @@ class UpdateWebsitesRequest extends FormRequest
             '*.position' => 'nullable|integer|min:0',
             '*.description' => 'nullable|string|min:2',
             '*.link' => 'nullable|url|unique:websites,link',
-            '*.image' => 'nullable|file|mimes:jpeg,png,jpg|max:10248',
+            '*.image' => 'nullable|file|max:10248',
         ];
     }
 
@@ -43,13 +43,23 @@ class UpdateWebsitesRequest extends FormRequest
             if (count($this->all()) === 0) {
                 return $validator->errors()->add('', 'הכנס לפחות אתר אחד לעדכון');
             }
+
             foreach ($this->all() as $key => $item) {
-                if (!isset($item['name']) && !isset($item['position']) && !isset($item['description']) && !isset($item['link']) && !isset($item['image'])) {
+                if (!isset($item['name']) && !isset($item['position']) && !isset($item['description']) && !isset($item['link']) && !array_key_exists('image', $item)) {
                     $validator->errors()->add("$key", 'הכנס לפחות ערך אחד לעדכון');
+                }
+
+                if ($this->hasFile("{$key}.image")) {
+                    $file = $this->file("{$key}.image");
+                    $extension = $file->getClientOriginalExtension();
+                    if (!in_array($extension, ['jpeg', 'jpg', 'png'])) {
+                        $validator->errors()->add("{$key}.image", 'התמונה חייבת להיות מסוג: jpeg, png, jpg.');
+                    }
                 }
             }
         });
     }
+
 
     public function messages(): array
     {

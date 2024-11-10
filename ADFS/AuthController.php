@@ -49,40 +49,13 @@ class AuthController extends Controller
             $userDecoded = json_decode($userFromADFS->getBody(), true);
             $personalNumber = $userDecoded['personal_number'] ?? null;
 
-            $user = null;
             if (!is_null($personalNumber)) {
                 $user = User::where('personal_number', $personalNumber)->first();
+                if (is_null($user)) {
+                    $user = User::where('personal_id', -1)->first();
+                }
             }
 
-            if (is_null($user)) {
-                $queryParams = [
-                    'columns' => implode(',', [
-                        AdfsColumnsEnum::PERSONAL_ID->value,
-                        AdfsColumnsEnum::PERSONAL_NUMBER->value,
-                        AdfsColumnsEnum::FIRST_NAME->value,
-                        AdfsColumnsEnum::SURNAME->value,
-                    ]),
-                ];
-
-                $response = $client->get(
-                    $vaticanUrl . "/api/users/" . $personalNumber,
-                    [
-                        'verify' => false,
-                        'query' => $queryParams,
-                        'headers' => [
-                            'Authorization' => 'Bearer ' . $vaticanToken,
-                        ],
-                    ]
-                );
-
-                $user = json_decode($response->getBody(), true);
-
-
-
-
-                $user = User::create($user);
-                $user->assignRole(Role::USER);
-            }
 
             // revoking old token before creating a new one.
             Token::where('user_id', $user->id)->update(['revoked' => true]);

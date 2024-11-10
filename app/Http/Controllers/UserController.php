@@ -251,9 +251,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getUserById($id)
+    public function getUserByPersonalId($personal_number)
     {
-        $result = $this->UserService->getUserById($id);
+        $result = $this->UserService->getUserByPersonalId($personal_number);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),

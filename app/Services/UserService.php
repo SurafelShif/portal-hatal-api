@@ -122,16 +122,16 @@ class UserService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function getUserById($id)
+    public function getUserByPersonalId($personal_number)
     {
         try {
-            if ($id && preg_match('/^\d{9}$/', $id) !== 1) {
+            if ($personal_number && preg_match('/^\d{7,8}$/', $personal_number) !== 1) {
                 return HttpStatusEnum::BAD_REQUEST;
             }
 
-            $user = User::where('personal_id', $id)->first();
+            $user = User::where('personal_number', $personal_number)->first();
             if (!$user) {
-                // $user = $this->getUserFromAdfs($id);
+                // $user = $this->getUserFromAdfs($personal_number);
                 // if (!$user) {
                 // }
                 return HttpStatusEnum::NOT_FOUND;
@@ -142,7 +142,7 @@ class UserService
             return HttpStatusEnum::ERROR;
         }
     }
-    private function getUserFromAdfs($id)
+    private function getUserFromAdfs($personal_number)
     {
         try {
             $client = new Client();
@@ -160,7 +160,7 @@ class UserService
             ];
 
             $response = $client->get(
-                $adfsUrl . "/api/employees/" . $id,
+                $adfsUrl . "/api/employees/" . $personal_number,
                 [
                     'verify' => false,
                     'auth' => [

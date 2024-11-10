@@ -79,6 +79,7 @@ class UsersSeeder extends Seeder
         $rahtal = Rahtal::create([
             'full_name' => 'שלמה העברי',
             'image_id' => $image->id,
+            'personal_number' => "0123456"
         ]);
 
         $rahtal->assignRole(Role::USER);

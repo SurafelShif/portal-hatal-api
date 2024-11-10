@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Enums\AdfsColumnsEnum;
 use App\Enums\HttpStatusEnum;
 use App\Enums\Permission;
 use App\Enums\ResponseMessages;
 use App\Enums\Role;
 use App\Http\Resources\UserResource;
+use App\Models\Rahtal;
 use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -132,19 +134,62 @@ class UserService
             if ($personal_number && preg_match('/^\d{7,8}$/', $personal_number) !== 1) {
                 return HttpStatusEnum::BAD_REQUEST;
             }
-
+            $rahtal = Rahtal::find(1);
             $user = User::where('personal_number', $personal_number)->first();
             if (!$user) {
 
-                // $user = $this->getUserFromAdfs($personal_number);
+                // $user = $this->getUserFromVatican($personal_number);
                 // if (!$user) {
                 return HttpStatusEnum::NOT_FOUND;
                 // }
+            } else {
+                if (!$user->hasRole('user')) {
+                    return HttpStatusEnum::CONFLICT;
+                }
+            }
+            if ($user?->personal_number === $rahtal->personal_number) {
+                return HttpStatusEnum::CONFLICT;
             }
             return $user;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
+        }
+    }
+    private function getUserFromVatican($personalNumber)
+    {
+        try {
+            $client = new Client();
+            $vaticanUrl = env("VATICAN_URL");
+            $vaticanToken = env("VATICAN_TOKEN");
+
+            $queryParams = [
+                'columns' => implode(',', [
+                    AdfsColumnsEnum::PERSONAL_ID->value,
+                    AdfsColumnsEnum::PERSONAL_NUMBER->value,
+                    AdfsColumnsEnum::FIRST_NAME->value,
+                    AdfsColumnsEnum::SURNAME->value,
+                ]),
+            ];
+
+            $response = $client->get(
+                $vaticanUrl . "/api/users/" . $personalNumber,
+                [
+                    'verify' => false,
+                    'query' => $queryParams,
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $vaticanToken,
+                    ],
+                ]
+            );
+
+            $user = json_decode($response->getBody(), true);
+            return $user;
+        } catch (\Exception $e) {
+            $statusCode = $e->getCode();
+            if ($statusCode === 0) {
+                return null;
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UserService
@@ -49,10 +50,15 @@ class UserService
             if (count($users) === 0) {
                 return HttpStatusEnum::NOT_FOUND;
             }
-            $changedCount = 0;
+            DB::beginTransaction();
             foreach ($users as $user) {
-                if ($user->hasRole(Role::ADMIN) || $user->personal_id == -1) {
-                    continue;
+                if ($user->hasRole(Role::ADMIN)) {
+                    DB::rollBack();
+                    return HttpStatusEnum::CONFLICT;
+                }
+                if ($user->personal_id == -1) {
+                    DB::rollBack();
+                    return HttpStatusEnum::FORBIDDEN;
                 }
                 if ($user->hasRole(Role::USER)) {
                     $user->removeRole(Role::USER);
@@ -60,13 +66,11 @@ class UserService
                 }
                 $user->assignRole(Role::ADMIN);
                 $user->givePermissionTo(Permission::MANAGE_USERS);
-                $changedCount++;
             }
-            if ($changedCount === 0) {
-                return HttpStatusEnum::NO_CONTENT;
-            }
+            DB::commit();
             return Response::HTTP_OK;
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
         }
@@ -78,14 +82,16 @@ class UserService
             if (count($admins) === 0) {
                 return HttpStatusEnum::NOT_FOUND;
             }
-            $changedCount = 0;
+            DB::beginTransaction();
             foreach ($admins as $admin) {
                 if ($admin->hasRole(Role::USER)) {
-                    continue;
+                    DB::rollBack();
+                    return HttpStatusEnum::CONFLICT;
                 }
                 $logged_user = Auth::user();
                 if ($logged_user->personal_id === $admin->personal_id) {
-                    continue;
+                    DB::rollBack();
+                    return HttpStatusEnum::FORBIDDEN;
                 }
                 if ($admin->hasRole(Role::ADMIN)) {
                     $admin->removeRole(Role::ADMIN);
@@ -94,14 +100,12 @@ class UserService
 
                 $admin->assignRole(Role::USER);
                 $admin->givePermissionTo(Permission::VIEW_WEBSITE);
-                $changedCount++;
                 $admin->save();
             }
-            if ($changedCount === 0) {
-                return HttpStatusEnum::NO_CONTENT;
-            }
+            DB::commit();
             return Response::HTTP_OK;
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
         }

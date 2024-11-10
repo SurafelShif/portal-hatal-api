@@ -96,7 +96,8 @@ class WebsiteService
 
                 $website = Website::where('uuid', $updateInfo['uuid'])->first();
                 if (!$website) {
-                    continue;
+                    DB::rollBack();
+                    return HttpStatusEnum::BAD_REQUEST;
                 }
 
                 if (isset($updateInfo['name']) && !empty($updateInfo['name'])) {

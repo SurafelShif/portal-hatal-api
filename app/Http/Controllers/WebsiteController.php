@@ -237,6 +237,7 @@ class WebsiteController extends Controller
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR =>  response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::WEBSITE_NOT_FOUND, Response::HTTP_NOT_FOUND),
                 default => response()->json('', Response::HTTP_NO_CONTENT)
             };

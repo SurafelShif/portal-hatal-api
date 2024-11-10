@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AdfsColumnsEnum;
 use App\Enums\Role;
 
 use App\Models\User;
@@ -30,6 +31,8 @@ class AuthController extends Controller
             $adfsUrl = env("ADFS_URL");
             $adfsUser = env("ADFS_USER");
             $adfsPassword = env("ADFS_PASSWORD");
+            $vaticanUrl = env("VATICAN_URL");
+            $vaticanToken = env("VATICAN_TOKEN");
 
             $userFromADFS = $client->get(
                 $adfsUrl . "/api/token/" . $request->token,
@@ -44,41 +47,41 @@ class AuthController extends Controller
             );
 
             $userDecoded = json_decode($userFromADFS->getBody(), true);
-            $personalId = $userDecoded['personal_id'] ?? null;
+            $personalNumber = $userDecoded['personal_number'] ?? null;
 
             $user = null;
-            if (!is_null($personalId)) {
-                $user = User::where('personal_id', $personalId)->first();
+            if (!is_null($personalNumber)) {
+                $user = User::where('personal_number', $personalNumber)->first();
             }
 
             if (is_null($user)) {
                 $queryParams = [
                     'columns' => implode(',', [
-                        'personalId',
-                        'personalNumber',
-                        'firstName',
-                        'surname',
-                    ])
+                        AdfsColumnsEnum::PERSONAL_ID->value,
+                        AdfsColumnsEnum::PERSONAL_NUMBER->value,
+                        AdfsColumnsEnum::FIRST_NAME->value,
+                        AdfsColumnsEnum::SURNAME->value,
+                    ]),
                 ];
 
                 $response = $client->get(
-                    $adfsUrl . "/api/employees/" . $personalId,
+                    $vaticanUrl . "/api/users/" . $personalNumber,
                     [
                         'verify' => false,
-                        'auth' => [
-                            $adfsUser,
-                            $adfsPassword,
-                            'ntlm'
+                        'query' => $queryParams,
+                        'headers' => [
+                            'Authorization' => 'Bearer ' . $vaticanToken,
                         ],
-                        'query' => $queryParams
                     ]
                 );
 
                 $user = json_decode($response->getBody(), true);
 
 
+
+
                 $user = User::create($user);
-                $user->assignRole(Role::USER->value);
+                $user->assignRole(Role::USER);
             }
 
             // revoking old token before creating a new one.
@@ -111,46 +114,5 @@ class AuthController extends Controller
             Log::error($e->getMessage());
             return response()->json('חלה שגיאה בעת ההתחברות', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    // --------------------- Private Functions ---------------------
-
-    private function formatUserDetails(
-        $personalId,
-        $personalNumber,
-        $firstName,
-        $surname,
-        $rank,
-        $classification,
-        $securityClassStartDate,
-        $phoneNumber,
-        $division
-    ): array {
-        if (
-            is_null($personalId) ||
-            is_null($personalNumber) ||
-            is_null($firstName) ||
-            is_null($surname) ||
-            !is_array($rank) || !isset($rank['id']) ||
-            !is_array($classification) || !isset($classification['id']) ||
-            is_null($securityClassStartDate) ||
-            is_null($phoneNumber) ||
-            !is_array($division) || !isset($division['id'])
-        ) {
-            return [];
-        }
-
-        return [
-            'uuid' => Str::uuid(),
-            'personal_number' => $personalNumber,
-            'personal_id' => $personalId,
-            'full_name' => $firstName . " " . $surname,
-            'rank' => $rank['id'],
-            'classification' => $classification['id'],
-            'class_start_date' => $securityClassStartDate,
-            'phone' => $phoneNumber,
-            'unit' => $division['id'],
-            'is_deleted' => 0,
-        ];
     }
 }

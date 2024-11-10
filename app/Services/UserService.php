@@ -122,7 +122,7 @@ class UserService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function getUserByPersonalId($personal_number)
+    public function getUserByPersonalNumber($personal_number)
     {
         try {
             if ($personal_number && preg_match('/^\d{7,8}$/', $personal_number) !== 1) {
@@ -131,10 +131,11 @@ class UserService
 
             $user = User::where('personal_number', $personal_number)->first();
             if (!$user) {
+
                 // $user = $this->getUserFromAdfs($personal_number);
                 // if (!$user) {
-                // }
                 return HttpStatusEnum::NOT_FOUND;
+                // }
             }
             return $user;
         } catch (\Exception $e) {
@@ -173,8 +174,6 @@ class UserService
             );
 
             $user = json_decode($response->getBody(), true);
-
-            // $user = self::FAKE_USER;
 
             return $user;
         } catch (\Exception $e) {

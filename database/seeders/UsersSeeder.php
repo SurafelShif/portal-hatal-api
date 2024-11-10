@@ -17,7 +17,6 @@ class UsersSeeder extends Seeder
     public function run(): void
     {
         $user = User::create([
-            'personal_id' => '-1',
             'personal_number' => '-1',
             'full_name' => 'משתמש דיפולטיבי',
 
@@ -25,7 +24,6 @@ class UsersSeeder extends Seeder
         $user->assignRole(Role::USER);
 
         $user = User::create([
-            'personal_id' => '000000000',
             'personal_number' => '0000000',
             'full_name' => 'משתמש רגיל חט"ל',
 
@@ -33,7 +31,6 @@ class UsersSeeder extends Seeder
         $user->assignRole(Role::USER);
 
         $user2 = User::create([
-            'personal_id' => '111111111',
             'personal_number' => '1111111',
             'full_name' => 'משתמש רגיל 1 חט"ל',
 
@@ -41,14 +38,12 @@ class UsersSeeder extends Seeder
         $user2->assignRole(Role::USER);
 
         $user3 = User::create([
-            'personal_id' => '222222222',
             'personal_number' => '2222222',
             'full_name' => 'משתמש רגיל 2 חט"ל',
         ]);
         $user3->assignRole(Role::USER);
 
         $admin1 = User::create([
-            'personal_id' => '123456789',
             'personal_number' => '1234567',
             'full_name' => 'מנהל מערכת 1',
 
@@ -56,7 +51,6 @@ class UsersSeeder extends Seeder
         $admin1->assignRole(Role::ADMIN);
 
         $admin2 = User::create([
-            'personal_id' => '123456788',
             'personal_number' => '1234568',
             'full_name' => 'מנהל מערכת 2',
         ]);
@@ -64,7 +58,6 @@ class UsersSeeder extends Seeder
 
         // admin 3
         $admin3 = User::create([
-            'personal_id' => '123456787',
             'personal_number' => '1234569',
             'full_name' => 'מנהל מערכת 3',
         ]);

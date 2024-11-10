@@ -11,7 +11,7 @@
                     "Authentication"
                 ],
                 "summary": "Login user",
-                "description": "Authenticate and login user based on personal id",
+                "description": "Authenticate and login user based on personal number",
                 "operationId": "login",
                 "requestBody": {
                     "required": true,
@@ -19,12 +19,12 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "personal_id"
+                                    "personal_number"
                                 ],
                                 "properties": {
-                                    "personal_id": {
+                                    "personal_number": {
                                         "type": "string",
-                                        "example": "123456789"
+                                        "example": "1234567"
                                     }
                                 },
                                 "type": "object"

@@ -52,7 +52,7 @@ class AuthController extends Controller
             if (!is_null($personalNumber)) {
                 $user = User::where('personal_number', $personalNumber)->first();
                 if (is_null($user)) {
-                    $user = User::where('personal_id', -1)->first();
+                    $user = User::where('personal_number', -1)->first();
                 }
             }
 

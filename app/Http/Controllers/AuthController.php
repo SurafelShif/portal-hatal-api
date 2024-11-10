@@ -19,12 +19,12 @@ class AuthController extends Controller
      *      operationId="login",
      *      tags={"Authentication"},
      *      summary="Login user",
-     *      description="Authenticate and login user based on personal id",
+     *      description="Authenticate and login user based on personal number",
      *      @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
-     *              required={"personal_id"},
-     *              @OA\Property(property="personal_id", type="string", example="123456789")
+     *              required={"personal_number"},
+     *              @OA\Property(property="personal_number", type="string", example="1234567")
      *          )
      *      ),
      *      @OA\Response(
@@ -55,6 +55,7 @@ class AuthController extends Controller
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::INVALID => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
+                HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USER_NOT_FOUND, Response::HTTP_NOT_FOUND),
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
             };

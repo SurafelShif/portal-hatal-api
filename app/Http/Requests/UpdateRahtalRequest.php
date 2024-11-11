@@ -23,8 +23,9 @@ class UpdateRahtalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'nullable|string|min:2',
-            'image' => 'nullable|file|max:2048',
+            'full_name' => 'nullable|string|min:2|required_without:image',
+            'image' => 'nullable|file|max:10248|required_without:full_name',
+
         ];
     }
 
@@ -50,8 +51,11 @@ class UpdateRahtalRequest extends FormRequest
         return [
             'full_name.string' => 'שם הרחט"ל חייב להיות מחרוזת.',
             'full_name.min' => 'שם הרחט"ל צריך להכיל לפחות שני תווים.',
+            'full_name.required_without' => 'שם הרחט"ל או תמונה חייבים להיות נוכחים.',
+            'image.required_without' => 'שם הרחט"ל או תמונה חייבים להיות נוכחים.',
             'image.file' => 'התמונה חייבת להיות קובץ.',
-            'image.max' => 'גודל התמונה לא יכול לעלות על 2MB.',
+            'image.max' => 'גודל התמונה לא יכול לעלות על 10MB.',
+
         ];
     }
 }

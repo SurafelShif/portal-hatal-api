@@ -33,8 +33,9 @@ class Rahtal extends Model
     }
     protected $fillable = [
         'full_name',
-        'image_id'
+        'image_id',
     ];
+
     protected $hidden = [
         'created_at',
         "image_id",

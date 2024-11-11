@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\HttpStatusEnum;
 use App\Http\Resources\WebsiteResource;
 use App\Models\Website;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
@@ -29,12 +30,14 @@ class WebsiteService
 
     public function createWebsite($request)
     {
+        $uploadedImages = [];
         try {
             $websites = $request->all();
             DB::beginTransaction();
 
             foreach ($websites as  $website) {
                 $image = $this->ImageService->uploadimage($website['image']);
+                $uploadedImages[] = $image;
                 Website::create([
                     'name' => $website['name'],
                     'description' => $website['description'],
@@ -48,7 +51,7 @@ class WebsiteService
             return Response::HTTP_OK;
         } catch (\Exception $e) {
             DB::rollBack();
-            if (isset($image) && $image) {
+            foreach ($uploadedImages as $image) {
                 $this->ImageService->deleteImage($image->image_name);
             }
             Log::error($e->getMessage());
@@ -113,11 +116,7 @@ class WebsiteService
                 }
                 if (array_key_exists('image', $updateInfo)) {
                     $associatedImageId = $website->image_id;
-                    if ($updateInfo['image'] === null) {
-                        $this->ImageService->updateImage($associatedImageId, null);
-                    } else if (is_file($request[$index]['image'])) {
-                        $this->ImageService->updateImage($associatedImageId, $updateInfo['image']);
-                    }
+                    $this->ImageService->updateImage($associatedImageId, $updateInfo['image']);
                 }
                 $changedCount++;
                 $website->save();

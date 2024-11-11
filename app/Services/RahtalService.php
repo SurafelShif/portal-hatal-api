@@ -42,11 +42,7 @@ class RahtalService
             DB::beginTransaction();
             if ($request->has('image')) {
                 $associatedImageId = $rahtal->image_id;
-                if ($request->image === null) {
-                    $this->ImageService->updateImage($associatedImageId, null);
-                } else if ($request->hasFile('image')) {
-                    $this->ImageService->updateImage($associatedImageId, $request->image);
-                }
+                $this->ImageService->updateImage($associatedImageId, $request->image);
             }
             if ($request->filled('full_name')) {
                 $rahtal->full_name = $request->full_name;

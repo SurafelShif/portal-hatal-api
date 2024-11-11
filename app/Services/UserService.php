@@ -91,7 +91,7 @@ class UserService
                     return HttpStatusEnum::CONFLICT;
                 }
                 $logged_user = Auth::user();
-                if ($logged_user->personal_id === $admin->personal_id) {
+                if ($logged_user->personal_number === $admin->personal_number) {
                     DB::rollBack();
                     return HttpStatusEnum::FORBIDDEN;
                 }

@@ -58,7 +58,7 @@ class UserService
                     DB::rollBack();
                     return HttpStatusEnum::CONFLICT;
                 }
-                if ($user->personal_id == -1) {
+                if ($user->personal_number == -1) {
                     DB::rollBack();
                     return HttpStatusEnum::FORBIDDEN;
                 }

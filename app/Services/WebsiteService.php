@@ -114,6 +114,9 @@ class WebsiteService
                 if (isset($updateInfo['link']) && !empty($updateInfo['link'])) {
                     $website->link = $updateInfo['link'];
                 }
+                if (isset($updateInfo['position']) && !empty($updateInfo['position'])) {
+                    $website->position = $updateInfo['position'];
+                }
                 if (array_key_exists('image', $updateInfo)) {
                     $associatedImageId = $website->image_id;
                     $this->ImageService->updateImage($associatedImageId, $updateInfo['image']);

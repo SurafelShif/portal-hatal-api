@@ -38,7 +38,6 @@ class ImageService
         try {
 
             $oldImage = Image::find($associatedimageId);
-            is_file($newImage);
             if ($newImage !== null) {
                 $extension = $newImage->getClientOriginalExtension();
                 $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;

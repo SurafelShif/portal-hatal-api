@@ -23,9 +23,8 @@ class UpdateRahtalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'nullable|string|min:2|required_without:image',
-            'image' => 'nullable|file|max:10248|required_without:full_name',
-
+            'full_name' => 'nullable|string|min:2',
+            'image' => 'nullable|file|max:10248',
         ];
     }
 
@@ -35,6 +34,11 @@ class UpdateRahtalRequest extends FormRequest
     public function withValidator(Validator $validator)
     {
         $validator->after(function ($validator) {
+            if (!array_key_exists('full_name', $this->all()) && !array_key_exists('image', $this->all())) {
+                $validator->errors()->add('full_name', 'שם הרחט"ל או תמונה חייבים להיות נוכחים.');
+                $validator->errors()->add('image', 'שם הרחט"ל או תמונה חייבים להיות נוכחים.');
+            }
+
             if ($this->hasFile('image')) {
                 $file = $this->file('image');
                 $extension = $file->getClientOriginalExtension();
@@ -51,11 +55,8 @@ class UpdateRahtalRequest extends FormRequest
         return [
             'full_name.string' => 'שם הרחט"ל חייב להיות מחרוזת.',
             'full_name.min' => 'שם הרחט"ל צריך להכיל לפחות שני תווים.',
-            'full_name.required_without' => 'שם הרחט"ל או תמונה חייבים להיות נוכחים.',
-            'image.required_without' => 'שם הרחט"ל או תמונה חייבים להיות נוכחים.',
             'image.file' => 'התמונה חייבת להיות קובץ.',
             'image.max' => 'גודל התמונה לא יכול לעלות על 10MB.',
-
         ];
     }
 }

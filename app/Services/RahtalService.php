@@ -31,9 +31,6 @@ class RahtalService
     public function updateRahtal(Request $request, $uuid)
     {
         try {
-            if (empty($request->all())) {
-                return HttpStatusEnum::BAD_REQUEST;
-            }
             $rahtal = Rahtal::where("uuid", $uuid)->first();
 
             if (!$rahtal) {
@@ -44,7 +41,7 @@ class RahtalService
                 $associatedImageId = $rahtal->image_id;
                 $this->ImageService->updateImage($associatedImageId, $request->image);
             }
-            if ($request->filled('full_name')) {
+            if ($request->has('full_name')) {
                 $rahtal->full_name = $request->full_name;
             }
             $rahtal->save();

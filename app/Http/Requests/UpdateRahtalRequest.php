@@ -23,7 +23,7 @@ class UpdateRahtalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'nullable|string|min:2',
+            'full_name' => 'nullable|string',
             'image' => 'nullable|file|max:10248',
         ];
     }
@@ -53,8 +53,7 @@ class UpdateRahtalRequest extends FormRequest
     public function messages()
     {
         return [
-            'full_name.string' => 'שם הרחט"ל חייב להיות מחרוזת.',
-            'full_name.min' => 'שם הרחט"ל צריך להכיל לפחות שני תווים.',
+            'full_name.string' => 'פורמט לא תקין.',
             'image.file' => 'התמונה חייבת להיות קובץ.',
             'image.max' => 'גודל התמונה לא יכול לעלות על 10MB.',
         ];

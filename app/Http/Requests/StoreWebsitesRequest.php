@@ -22,10 +22,10 @@ class StoreWebsitesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.name' => 'required|string|unique:websites,name|min:2',
+            '*.name' => 'required|unique:websites,name',
             '*.position' => 'required|integer|unique:websites,position|min:0',
-            '*.description' => 'required|string|min:2',
-            '*.link' => 'required|url|unique:websites,link',
+            '*.description' => 'required',
+            '*.link' => 'required|unique:websites,link',
             '*.image' => 'required|file|max:10248',
         ];
     }
@@ -61,19 +61,13 @@ class StoreWebsitesRequest extends FormRequest
     {
         return [
             '*.name.required' => 'שם האתר דרוש.',
-            '*.name.string' => 'שם האתר חייב להיות מחרוזת.',
-            '*.name.min' => 'שם האתר צריך להכיל לפחות שני תווים.',
             '*.position.required' => 'מיקום האתר דרוש.',
-            '*.position.string' => 'מיקום האתר חייב להיות מספר.',
             '*.position.min' => 'מיקום האתר צריך להיות מינימום 0.',
             '*.link.required' => 'קישור האתר דרוש.',
-            '*.link.url' => 'קישור האתר חייב להיות כתובת URL חוקית.',
             '*.name.unique' => 'שם זה כבר קיים במערכת',
             '*.link.unique' => 'קישור האתר קיים במערכת.',
             '*.position.unique' => 'מיקום האתר קיים במערכת.',
             '*.description.required' => 'תיאור האתר דרוש.',
-            '*.description.string' => 'תיאור האתר חייב להיות מחרוזת.',
-            '*.description.min' => 'תיאור האתר צריך להכיל לפחות שני תווים.',
             '*.image.required' => 'דרוש קובץ תמונה.',
             '*.image.file' => 'התמונה חייבת להיות קובץ.',
             '*.image.mimes' => 'התמונה חייבת להיות מסוג: jpeg, png, jpg, gif.',

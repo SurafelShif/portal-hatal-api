@@ -20,7 +20,7 @@ class WebsiteService
     public function getWebsites()
     {
         try {
-            $websites = Website::where("is_deleted", false)->with('image')->get();
+            $websites = Website::where("is_deleted", false)->with('image')->orderBy('position', 'asc')->get();
             return WebsiteResource::collection($websites);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

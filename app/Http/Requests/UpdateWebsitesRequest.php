@@ -23,8 +23,8 @@ class UpdateWebsitesRequest extends FormRequest
     {
         return [
             '*.uuid' => 'required|string',
-            '*.name' => 'nullable|string|min:2',
-            '*.position' => 'nullable|integer|min:0',
+            '*.name' => 'nullable|string|unique:websites,name|min:2',
+            '*.position' => 'nullable|integer|unique:websites,position|min:0',
             '*.description' => 'nullable|string|min:2',
             '*.link' => 'nullable|url|unique:websites,link',
             '*.image' => 'nullable|file|max:10248',
@@ -70,6 +70,8 @@ class UpdateWebsitesRequest extends FormRequest
             '*.description.string' => 'נא לשלוח את התיאור באורך של לפחות 2 תווים',
             '*.link.url' => 'נא לשלוח קישור חוקי',
             '*.link.unique' => 'קישור זה כבר קיים במערכת',
+            '*.name.unique' => 'שם זה כבר קיים במערכת',
+            '*.position.unique' => 'מיקום זה כבר קיים במערכת',
             '*.image.file' => 'נא להעלות קובץ תמונה בפורמט נכון',
             '*.image.mimes' => 'נא להעלות קובץ תמונה בפורמט jpeg, png, או jpg בלבד',
             '*.image.max' => 'גודל הקובץ המקסימלי הוא 10MB',

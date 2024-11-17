@@ -22,8 +22,8 @@ class StoreWebsitesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.name' => 'required|string|min:2',
-            '*.position' => 'required|integer|min:0',
+            '*.name' => 'required|string|unique:websites,name|min:2',
+            '*.position' => 'required|integer|unique:websites,position|min:0',
             '*.description' => 'required|string|min:2',
             '*.link' => 'required|url|unique:websites,link',
             '*.image' => 'required|file|max:10248',
@@ -68,7 +68,9 @@ class StoreWebsitesRequest extends FormRequest
             '*.position.min' => 'מיקום האתר צריך להיות מינימום 0.',
             '*.link.required' => 'קישור האתר דרוש.',
             '*.link.url' => 'קישור האתר חייב להיות כתובת URL חוקית.',
+            '*.name.unique' => 'שם זה כבר קיים במערכת',
             '*.link.unique' => 'קישור האתר קיים במערכת.',
+            '*.position.unique' => 'מיקום האתר קיים במערכת.',
             '*.description.required' => 'תיאור האתר דרוש.',
             '*.description.string' => 'תיאור האתר חייב להיות מחרוזת.',
             '*.description.min' => 'תיאור האתר צריך להכיל לפחות שני תווים.',

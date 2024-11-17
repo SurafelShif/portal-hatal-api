@@ -65,7 +65,7 @@ class UpdateWebsitesRequest extends FormRequest
     {
         return [
             '*.uuid.required' => 'נא לשלוח את מזהה האתר (UUID)',
-            '*.position.integer' => 'נא לשלוח את המיקום כמספר שלם',
+            '*.position.integer' => 'נא לשלוח את המיקום בפורמט המתאים',
             '*.link.unique' => 'קישור זה כבר קיים במערכת',
             '*.name.unique' => 'שם זה כבר קיים במערכת',
             '*.image.file' => 'נא להעלות קובץ תמונה בפורמט נכון',

@@ -50,8 +50,8 @@ class StoreWebsitesRequest extends FormRequest
                 if ($this->hasFile("{$key}.image")) {
                     $file = $this->file("{$key}.image");
                     $extension = $file->getClientOriginalExtension();
-                    if (!in_array($extension, ['jpeg', 'jpg', 'png'])) {
-                        $validator->errors()->add("{$key}.image", 'התמונה חייבת להיות מסוג: jpeg, png, jpg.');
+                    if (!in_array($extension, ['jpeg', 'jpg', 'png', 'jfif'])) {
+                        $validator->errors()->add("{$key}.image", 'התמונה חייבת להיות מסוג: jpeg, png, jpg, jfif.');
                     }
                 }
             }
@@ -70,7 +70,6 @@ class StoreWebsitesRequest extends FormRequest
             '*.description.required' => 'תיאור האתר דרוש.',
             '*.image.required' => 'דרוש קובץ תמונה.',
             '*.image.file' => 'התמונה חייבת להיות קובץ.',
-            '*.image.mimes' => 'התמונה חייבת להיות מסוג: jpeg, png, jpg, gif.',
             '*.image.max' => 'גודל התמונה לא יכול לעלות על 2MB.',
         ];
     }

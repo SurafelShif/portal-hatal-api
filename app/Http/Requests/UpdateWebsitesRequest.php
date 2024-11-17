@@ -52,8 +52,8 @@ class UpdateWebsitesRequest extends FormRequest
                 if ($this->hasFile("{$key}.image")) {
                     $file = $this->file("{$key}.image");
                     $extension = $file->getClientOriginalExtension();
-                    if (!in_array($extension, ['jpeg', 'jpg', 'png'])) {
-                        $validator->errors()->add("{$key}.image", 'התמונה חייבת להיות מסוג: jpeg, png, jpg.');
+                    if (!in_array($extension, ['jpeg', 'jpg', 'png', 'jfif'])) {
+                        $validator->errors()->add("{$key}.image", 'התמונה חייבת להיות מסוג: jpeg, png, jpg, jfif.');
                     }
                 }
             }

@@ -23,7 +23,7 @@ class StoreWebsitesRequest extends FormRequest
     {
         return [
             '*.name' => 'required|unique:websites,name',
-            '*.position' => 'required|integer|unique:websites,position|min:0',
+            '*.position' => 'required|integer|min:0',
             '*.description' => 'required',
             '*.link' => 'required|unique:websites,link',
             '*.image' => 'required|file|max:10248',
@@ -66,7 +66,6 @@ class StoreWebsitesRequest extends FormRequest
             '*.link.required' => 'קישור האתר דרוש.',
             '*.name.unique' => 'שם זה כבר קיים במערכת',
             '*.link.unique' => 'קישור האתר קיים במערכת.',
-            '*.position.unique' => 'מיקום האתר קיים במערכת.',
             '*.description.required' => 'תיאור האתר דרוש.',
             '*.image.required' => 'דרוש קובץ תמונה.',
             '*.image.file' => 'התמונה חייבת להיות קובץ.',

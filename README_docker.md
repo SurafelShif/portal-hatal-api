@@ -10,7 +10,7 @@ To build the Docker image, use the following command format:
 docker build . -t <project_name>-api-<todays_date>-<version> -f <dockerfile_name> --no-cache
 ```
 
--   **<project_name>**: The name of your project (e.g., portalHatal).
+-   **<project_name>**: The name of your project (e.g., portalhatal).
 -   **<today's date>**: The date of the build in the format dd.mm.yyyy (e.g., 26.05.2024).
 -   **<version>**: The version number of the build (e.g., 1).
 -   **<dockerfile_name>**: The dockerfile you want to use (e.g., docker.balmas).
@@ -18,7 +18,7 @@ docker build . -t <project_name>-api-<todays_date>-<version> -f <dockerfile_name
 For Example:
 
 ```bash
-docker build . -t portalHatal-api-26.05.2024-1 -f dockerfile.balmas --no-cache
+docker build . -t portalhatal-api-26.05.2024-1 -f dockerfile.balmas --no-cache
 ```
 
 ### Saving the Docker Image
@@ -29,14 +29,14 @@ To save the Docker image as a tar file, use the following command format:
 docker save -o <project_name>-api-<todays_date>-<version>.tar <project_name>-api-<todays_date>-<version>
 ```
 
--   **<project_name>**: The name of your project (e.g., portalHatal).
+-   **<project_name>**: The name of your project (e.g., portalhatal).
 -   **<today's date>**: The date of the build in the format dd.mm.yyyy (e.g., 26.05.2024).
 -   **<version>**: The version number of the build (e.g., 1).
 
 For Example:
 
 ```bash
-docker save -o portalHatal-api-26.05.2024-1.tar portalHatal-api-26.05.2024-1
+docker save -o portalhatal-api-26.05.2024-1.tar portalhatal-api-26.05.2024-1
 ```
 
 ### Additional Notes

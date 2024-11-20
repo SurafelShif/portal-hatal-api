@@ -31,8 +31,6 @@ class AuthController extends Controller
             $adfsUrl = env("ADFS_URL");
             $adfsUser = env("ADFS_USER");
             $adfsPassword = env("ADFS_PASSWORD");
-            $vaticanUrl = env("VATICAN_URL");
-            $vaticanToken = env("VATICAN_TOKEN");
 
             $userFromADFS = $client->get(
                 $adfsUrl . "/api/token/" . $request->token,
@@ -55,7 +53,6 @@ class AuthController extends Controller
                     $user = User::where('personal_number', -1)->first();
                 }
             }
-
 
             // revoking old token before creating a new one.
             Token::where('user_id', $user->id)->update(['revoked' => true]);

@@ -47,7 +47,6 @@ class ImageService
                 $randomFileName = null;
                 $extension = null;
             }
-
             $this->deleteImage($oldImage->image_name);
             $oldImage->image_path = $imagePath;
             $oldImage->image_name = $randomFileName;

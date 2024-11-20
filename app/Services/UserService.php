@@ -134,21 +134,17 @@ class UserService
             if ($personal_number && preg_match('/^\d{7,8}$/', $personal_number) !== 1) {
                 return HttpStatusEnum::BAD_REQUEST;
             }
-            $rahtal = Rahtal::find(1);
             $user = User::where('personal_number', $personal_number)->first();
-            if (!$user) {
+            if (is_null($user)) {
 
-                // $user = $this->getUserFromVatican($personal_number);
-                // if (!$user) {
-                return HttpStatusEnum::NOT_FOUND;
-                // }
+                $user = $this->getUserFromVatican($personal_number);
+                if (is_null($user)) {
+                    return HttpStatusEnum::NOT_FOUND;
+                }
             } else {
-                if (!$user->hasRole('user')) {
+                if ($user->hasRole(Role::ADMIN)) {
                     return HttpStatusEnum::CONFLICT;
                 }
-            }
-            if ($user?->personal_number === $rahtal->personal_number) {
-                return HttpStatusEnum::CONFLICT;
             }
             return $user;
         } catch (\Exception $e) {
@@ -165,7 +161,6 @@ class UserService
 
             $queryParams = [
                 'columns' => implode(',', [
-                    AdfsColumnsEnum::PERSONAL_ID->value,
                     AdfsColumnsEnum::PERSONAL_NUMBER->value,
                     AdfsColumnsEnum::FIRST_NAME->value,
                     AdfsColumnsEnum::SURNAME->value,

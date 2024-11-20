@@ -11,7 +11,7 @@ class RahtalResource extends JsonResource
         return [
             'uuid' => $this->uuid,
             'full_name' => $this->full_name,
-            'image' => $this->image->image_path ? config('filesystems.storage_path') . $this->image->image_path : null,
+            'image' => $this->image?->image_path ? config('filesystems.storage_path') . $this->image->image_path : null,
         ];
     }
 }

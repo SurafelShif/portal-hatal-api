@@ -7,7 +7,6 @@ use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
 use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\UuidsArrayRequest;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -120,8 +119,6 @@ class UserController extends Controller
     {
 
         $result = $this->UserService->addAdmin($request);
-
-
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
@@ -130,9 +127,6 @@ class UserController extends Controller
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USERS_NOT_FOUND, Response::HTTP_NOT_FOUND),
                 HttpStatusEnum::NO_CONTENT => response()->json(ResponseMessages::NO_CONTENT, Response::HTTP_NO_CONTENT),
             };
-        }
-        if ($result instanceof JsonResponse && $result->getStatusCode() === 409) {
-            return $result;
         }
         return response()->json([
             'message' => ResponseMessages::SUCCESS_ACTION
@@ -185,9 +179,6 @@ class UserController extends Controller
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USERS_NOT_FOUND, Response::HTTP_NOT_FOUND),
                 HttpStatusEnum::NO_CONTENT => response()->json(ResponseMessages::NO_CONTENT, Response::HTTP_NO_CONTENT),
             };
-        }
-        if ($result instanceof JsonResponse && $result->getStatusCode() === 409) {
-            return $result;
         }
         return response()->json(['message' => ResponseMessages::SUCCESS_ACTION]);
     }

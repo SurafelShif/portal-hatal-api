@@ -32,10 +32,9 @@ class UserService
     public function getAdmins()
     {
         try {
-            $admins = User::where('is_deleted', false)
-                ->whereHas('roles', function ($query) {
-                    $query->where('name', 'admin');
-                })
+            $admins = User::whereHas('roles', function ($query) {
+                $query->where('name', 'admin');
+            })
                 ->get();
             return $admins;
         } catch (\Exception $e) {
@@ -53,14 +52,15 @@ class UserService
                 return HttpStatusEnum::NOT_FOUND;
             }
             DB::beginTransaction();
+            $failedUsers = [];
             foreach ($users as $user) {
                 if ($user->hasRole(Role::ADMIN)) {
-                    DB::rollBack();
-                    return HttpStatusEnum::CONFLICT;
+                    $failedUsers[] = $user->full_name;
+                    continue;
                 }
                 if ($user->personal_number == -1) {
-                    DB::rollBack();
-                    return HttpStatusEnum::FORBIDDEN;
+                    $failedUsers[] = $user->full_name;
+                    continue;
                 }
                 if ($user->hasRole(Role::USER)) {
                     $user->removeRole(Role::USER);
@@ -68,6 +68,12 @@ class UserService
                 }
                 $user->assignRole(Role::ADMIN);
                 $user->givePermissionTo(Permission::MANAGE_USERS);
+            }
+            if (!empty($failedUsers)) {
+                DB::rollBack();
+                return response()->json([
+                    'failed_users' => $failedUsers,
+                ], Response::HTTP_CONFLICT);
             }
             DB::commit();
             return Response::HTTP_OK;
@@ -85,15 +91,16 @@ class UserService
                 return HttpStatusEnum::NOT_FOUND;
             }
             DB::beginTransaction();
+            $failedUsers = [];
             foreach ($admins as $admin) {
                 if ($admin->hasRole(Role::USER)) {
-                    DB::rollBack();
-                    return HttpStatusEnum::CONFLICT;
+                    $failedUsers[] = $admin->full_name;
+                    continue;
                 }
                 $logged_user = Auth::user();
                 if ($logged_user->personal_number === $admin->personal_number) {
-                    DB::rollBack();
-                    return HttpStatusEnum::FORBIDDEN;
+                    $failedUsers[] = $admin->full_name;
+                    continue;
                 }
                 if ($admin->hasRole(Role::ADMIN)) {
                     $admin->removeRole(Role::ADMIN);
@@ -103,6 +110,12 @@ class UserService
                 $admin->assignRole(Role::USER);
                 $admin->givePermissionTo(Permission::VIEW_WEBSITE);
                 $admin->save();
+            }
+            if (!empty($failedUsers)) {
+                DB::rollBack();
+                return response()->json([
+                    'failed_users' => $failedUsers,
+                ], Response::HTTP_CONFLICT);
             }
             DB::commit();
             return Response::HTTP_OK;

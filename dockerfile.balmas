@@ -99,6 +99,10 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 RUN chmod -R 777 storage bootstrap/cache
 RUN rm -rf /var/www/html/bootstrap/cache/config.php
 
+# Add the cache:clear command
+RUN php artisan cache:clear
+
+
 # Add the config:clear command
 RUN php artisan config:clear
 

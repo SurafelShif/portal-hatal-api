@@ -24,7 +24,7 @@ class UpdateRahtalRequest extends FormRequest
     {
         return [
             'full_name' => 'nullable|string',
-            'image' => 'nullable|file|max:10248',
+            'image' => 'nullable|max:10248',
         ];
     }
 
@@ -54,7 +54,6 @@ class UpdateRahtalRequest extends FormRequest
     {
         return [
             'full_name.string' => 'פורמט לא תקין.',
-            'image.file' => 'התמונה חייבת להיות קובץ.',
             'image.max' => 'גודל התמונה לא יכול לעלות על 10MB.',
         ];
     }

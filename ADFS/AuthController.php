@@ -46,12 +46,12 @@ class AuthController extends Controller
 
             $userDecoded = json_decode($userFromADFS->getBody(), true);
             $personalNumber = $userDecoded['personal_number'] ?? null;
-
+            $user = null;
             if (!is_null($personalNumber)) {
                 $user = User::where('personal_number', $personalNumber)->first();
-                if (is_null($user)) {
-                    $user = User::where('personal_number', -1)->first();
-                }
+            }
+            if (is_null($user)) {
+                $user = User::where('personal_number', -1)->first();
             }
 
             // revoking old token before creating a new one.

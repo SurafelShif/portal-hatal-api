@@ -18,7 +18,7 @@ docker build . -t <project_name>-api-<todays_date>-<version> -f <dockerfile_name
 For Example:
 
 ```bash
-docker build . -t portalhatal-api-26.05.2024-1 -f dockerfile.balmas --no-cache
+docker build . -t portal-hatal-api-26.05.2024-1 -f dockerfile.balmas --no-cache
 ```
 
 ### Saving the Docker Image
@@ -36,7 +36,7 @@ docker save -o <project_name>-api-<todays_date>-<version>.tar <project_name>-api
 For Example:
 
 ```bash
-docker save -o portalhatal-api-26.05.2024-1.tar portalhatal-api-26.05.2024-1
+docker save -o portal-hatal-api-26.05.2024-1.tar portalhatal-api-26.05.2024-1
 ```
 
 ### Additional Notes

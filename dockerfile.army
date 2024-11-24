@@ -90,13 +90,6 @@ RUN composer install --ignore-platform-reqs
 
 
 
-# Puppeteer for Spatie PDF
-RUN mkdir -p "/var/www/html/.cache/puppeteer"
-ENV PUPPETEER_CACHE_DIR="/var/www/html/.cache/puppeteer"
-RUN chmod -R 777 $PUPPETEER_CACHE_DIR
-RUN npx puppeteer browsers install chrome
-
-
 
 # Clear the contents of the laravel.log file
 RUN truncate -s 0 /var/www/html/storage/logs/laravel.log

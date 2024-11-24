@@ -45,13 +45,17 @@ class AuthController extends Controller
             );
 
             $userDecoded = json_decode($userFromADFS->getBody(), true);
+            echo($userDecoded);
             $personalNumber = $userDecoded['personal_number'] ?? null;
-
+            echo($personalNumber);
+            $user=null;
             if (!is_null($personalNumber)) {
                 $user = User::where('personal_number', $personalNumber)->first();
                 if (is_null($user)) {
                     $user = User::where('personal_number', -1)->first();
                 }
+            }else{
+                return response()->json(["error"=>"מספר אישי לא תקין"],Response::HTTP_NOT_FOUND);
             }
 
             // revoking old token before creating a new one.

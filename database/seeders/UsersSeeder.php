@@ -16,12 +16,6 @@ class UsersSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::create([
-            'personal_number' => '-1',
-            'full_name' => 'משתמש דיפולטיבי',
-
-        ]);
-        $user->assignRole(Role::USER);
 
         $user = User::create([
             'personal_number' => '0000000',

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AdfsColumnsEnum;
-use App\Enums\Role;
+use App\Enums\ResponseMessages;
 
 use App\Models\User;
 
@@ -12,14 +11,12 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 use Laravel\Passport\Token;
 use GuzzleHttp\Client;
 
 use Symfony\Component\HttpFoundation\Response;
 
-use Exception;
 
 class AuthController extends Controller
 {
@@ -46,12 +43,13 @@ class AuthController extends Controller
 
             $userDecoded = json_decode($userFromADFS->getBody(), true);
             $personalNumber = $userDecoded['personal_number'] ?? null;
-            $user = null;
             if (!is_null($personalNumber)) {
                 $user = User::where('personal_number', $personalNumber)->first();
-            }
-            if (is_null($user)) {
-                $user = User::where('personal_number', -1)->first();
+                if (is_null($user)) {
+                    return response()->json(ResponseMessages::SUCCESS_ACTION, Response::HTTP_OK);
+                }
+            } else {
+                return response()->json('מספר אישי לא תקין', Response::HTTP_NOT_FOUND);
             }
 
             // revoking old token before creating a new one.

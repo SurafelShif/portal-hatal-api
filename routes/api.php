@@ -11,12 +11,11 @@ Route::get("user", [UserController::class, 'user'])->middleware(['auth:api']);
 
 Route::controller(WebsiteController::class)
     ->prefix("websites")
-    ->middleware('auth:api')
     ->group(function () {
-        Route::post("/", "store")->middleware(['role:admin']);
-        Route::post("/update", "update")->middleware(['role:admin']);
+        Route::post("/", "store")->middleware(['role:admin', 'auth:api']);
+        Route::post("/update", "update")->middleware(['role:admin', 'auth:api']);
         Route::get("/", "index");
-        Route::delete("/", "delete")->middleware(['role:admin']);
+        Route::delete("/", "delete")->middleware(['role:admin', 'auth:api']);
     });
 Route::controller(UserController::class)
     ->prefix("users")
@@ -30,8 +29,7 @@ Route::controller(UserController::class)
     });
 Route::controller(RahtalController::class)
     ->prefix("rahtal")
-    ->middleware(['auth:api', 'role:admin'])
     ->group(function () {
-        Route::post("/{uuid}", "update");
+        Route::post("/{uuid}", "update")->middleware(['auth:api', 'role:admin']);
         Route::get("/", "index");
     });

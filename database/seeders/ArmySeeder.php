@@ -16,14 +16,6 @@ class ArmySeeder extends Seeder
      */
     public function run(): void
     {
-
-        $user = User::create([
-            'personal_number' => '-1',
-            'full_name' => 'משתמש דיפולטיבי',
-
-        ]);
-        $user->assignRole(Role::USER);
-
         $admin1 = User::create([
             'personal_number' => '9165828',
             'full_name' => 'סוראפל שיפראוו',

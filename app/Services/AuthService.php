@@ -17,7 +17,8 @@ class AuthService
             }
             $user = User::where('personal_number', $request->personal_number)->role('admin')->first();
             if (!$user) {
-                $user = User::where('personal_number', -1)->first();
+
+                return HttpStatusEnum::OK;
             }
             $tokenName = config('auth.access_token_name');
             $token = $user->createToken($tokenName);

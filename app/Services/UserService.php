@@ -32,7 +32,7 @@ class UserService
     public function getAdmins()
     {
         try {
-            $admins = User::where('is_deleted', false)
+            $admins = User::select(['uuid', 'personal_number', 'full_name'])->where('is_deleted', false)
                 ->whereHas('roles', function ($query) {
                     $query->where('name', 'admin');
                 })
@@ -57,10 +57,6 @@ class UserService
                 if ($user->hasRole(Role::ADMIN)) {
                     DB::rollBack();
                     return HttpStatusEnum::CONFLICT;
-                }
-                if ($user->personal_number == -1) {
-                    DB::rollBack();
-                    return HttpStatusEnum::FORBIDDEN;
                 }
                 if ($user->hasRole(Role::USER)) {
                     $user->removeRole(Role::USER);
@@ -116,7 +112,7 @@ class UserService
     public function getUsers()
     {
         try {
-            $users = User::where('is_deleted', false)
+            $users = User::select(['uuid', 'personal_number', 'full_name'])->where('is_deleted', false)
                 ->whereHas('roles', function ($query) {
                     $query->where('name', 'user');
                 })

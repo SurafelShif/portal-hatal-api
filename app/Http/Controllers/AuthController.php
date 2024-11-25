@@ -54,6 +54,7 @@ class AuthController extends Controller
         $result = $this->AuthService->login($request);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
+                HttpStatusEnum::OK =>  response()->json(ResponseMessages::SUCCESS_ACTION, Response::HTTP_OK),
                 HttpStatusEnum::INVALID => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
                 HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USER_NOT_FOUND, Response::HTTP_NOT_FOUND),

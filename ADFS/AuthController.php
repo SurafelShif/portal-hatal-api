@@ -42,6 +42,7 @@ class AuthController extends Controller
             );
 
             $userDecoded = json_decode($userFromADFS->getBody(), true);
+            echo ($userDecoded);
             $personalNumber = $userDecoded['personal_number'] ?? null;
             if (!is_null($personalNumber)) {
                 $user = User::where('personal_number', $personalNumber)->first();

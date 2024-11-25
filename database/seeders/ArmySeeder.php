@@ -45,7 +45,7 @@ class ArmySeeder extends Seeder
             'image_path' => null
         ]);
         $rahtal = Rahtal::create([
-            'full_name' => null,
+            'full_name' => "",
             'image_id' => $image->id,
         ]);
     }

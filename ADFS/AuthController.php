@@ -41,15 +41,19 @@ class AuthController extends Controller
                 ]
             );
 
+            Log::error($userFromADFS);
             $userDecoded = json_decode($userFromADFS->getBody(), true);
-            echo ($userDecoded);
+            Log::error($userDecoded);
             $personalNumber = $userDecoded['personal_number'] ?? null;
+            Log::error($personalNumber);
             if (!is_null($personalNumber)) {
                 $user = User::where('personal_number', $personalNumber)->first();
                 if (is_null($user)) {
                     return response()->json(ResponseMessages::SUCCESS_ACTION, Response::HTTP_OK);
                 }
+                Log::error($user);
             } else {
+                Log::error("personal number not valid");
                 return response()->json('מספר אישי לא תקין', Response::HTTP_NOT_FOUND);
             }
 

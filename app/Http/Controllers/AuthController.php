@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
+use App\Http\Resources\UserResource;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -54,7 +55,7 @@ class AuthController extends Controller
         $result = $this->AuthService->login($request);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
-                HttpStatusEnum::OK =>  response()->json(ResponseMessages::SUCCESS_ACTION, Response::HTTP_OK),
+                HttpStatusEnum::OK =>  response()->json(["message" => ResponseMessages::SUCCESS_ACTION, "user" => null], Response::HTTP_OK),
                 HttpStatusEnum::INVALID => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
                 HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USER_NOT_FOUND, Response::HTTP_NOT_FOUND),
@@ -63,8 +64,10 @@ class AuthController extends Controller
         }
         $token = $result['token'];
         $tokenName = $result['tokenName'];
+        $user = $result['user'];
         return response()->json([
             'message' => ResponseMessages::SUCCESS_ACTION,
+            'user' => new UserResource($user),
         ])->withCookie(Cookie::make($tokenName, $token->accessToken));
     }
 }

@@ -17,12 +17,11 @@ class AuthService
             }
             $user = User::where('personal_number', $request->personal_number)->role('admin')->first();
             if (!$user) {
-
                 return HttpStatusEnum::OK;
             }
             $tokenName = config('auth.access_token_name');
             $token = $user->createToken($tokenName);
-            return ["token" => $token, "tokenName" => $tokenName];
+            return ["token" => $token, "tokenName" => $tokenName, "user" => $user];
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;

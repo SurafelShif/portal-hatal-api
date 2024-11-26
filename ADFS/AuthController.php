@@ -41,15 +41,14 @@ class AuthController extends Controller
                 ]
             );
 
-            Log::error($userFromADFS);
-            $userDecoded = json_decode($userFromADFS->getBody(), true);
+            $userDecoded = json_decode($userFromADFS->getBody());
             Log::error($userDecoded);
-            $personalNumber = $userDecoded['personal_number'] ?? null;
+            $personalNumber = $userDecoded->personal_number ?? null;
             Log::error($personalNumber);
             if (!is_null($personalNumber)) {
                 $user = User::where('personal_number', $personalNumber)->first();
                 if (is_null($user)) {
-                    return response()->json(ResponseMessages::SUCCESS_ACTION, Response::HTTP_OK);
+                    return response()->json(["message" => ResponseMessages::SUCCESS_ACTION, "user" => null], Response::HTTP_OK);
                 }
                 Log::error($user);
             } else {

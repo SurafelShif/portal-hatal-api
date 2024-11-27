@@ -239,24 +239,6 @@
                 }
             }
         },
-        "/api/users/users": {
-            "get": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Retrieve all users but admins",
-                "description": "Retrieve all users but admins",
-                "operationId": "getUsers",
-                "responses": {
-                    "200": {
-                        "description": "הפעולה התבצעה בהצלחה"
-                    },
-                    "500": {
-                        "description": "אירעה שגיאה"
-                    }
-                }
-            }
-        },
         "/api/users/{personal_number}": {
             "get": {
                 "tags": [

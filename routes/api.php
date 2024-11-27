@@ -23,7 +23,6 @@ Route::controller(UserController::class)
     ->group(function () {
         Route::post("/admins", "store");
         Route::get("/admins", "index");
-        Route::get("/users", "getUsers");
         Route::get("/{personal_number}", "getUserByPersonalNumber");
         Route::delete("/admins", "delete");
     });

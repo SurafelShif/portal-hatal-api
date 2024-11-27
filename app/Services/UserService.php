@@ -109,21 +109,6 @@ class UserService
         }
     }
 
-    public function getUsers()
-    {
-        try {
-            $users = User::select(['uuid', 'personal_number', 'full_name'])->where('is_deleted', false)
-                ->whereHas('roles', function ($query) {
-                    $query->where('name', 'user');
-                })
-                ->get();
-
-            return $users;
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            return HttpStatusEnum::ERROR;
-        }
-    }
     public function getUserByPersonalNumber($personal_number)
     {
         try {
@@ -174,8 +159,10 @@ class UserService
                 ]
             );
 
-            $user = json_decode($response->getBody(), true);
-            return $user;
+            $userFromAdfs = json_decode($response->getBody(), true);
+            return [
+                'full_name' => $userFromAdfs['first_name'] . ' ' . $userFromAdfs['surname']
+            ];
         } catch (\Exception $e) {
             $statusCode = $e->getCode();
             if ($statusCode === 0) {

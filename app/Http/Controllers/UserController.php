@@ -93,7 +93,7 @@ class UserController extends Controller
      *              @OA\Items(
      *                  type="string",
      *                  format="uuid",
-     *                  example="b143c4ab-91a7-481a-ab1a-cf4a00d2fc11" 
+     *                  example="b143c4ab-91a7-481a-ab1a-cf4a00d2fc11"
      *              ),
      *          )
      *      ),
@@ -146,7 +146,7 @@ class UserController extends Controller
      *              @OA\Items(
      *                  type="string",
      *                  format="uuid",
-     *                  example="b143c4ab-91a7-481a-ab1a-cf4a00d2fc11" 
+     *                  example="b143c4ab-91a7-481a-ab1a-cf4a00d2fc11"
      *              ),
      *          )
      *      ),
@@ -181,40 +181,6 @@ class UserController extends Controller
             };
         }
         return response()->json(['message' => ResponseMessages::SUCCESS_ACTION]);
-    }
-    /**
-     * @OA\Get(
-     *      path="/api/users/users",
-     *      operationId="getUsers",
-     *      tags={"Users"},
-     *      summary="Retrieve all users but admins",
-     *      description="Retrieve all users but admins",
-     *      @OA\Response(
-     *          response=200,
-     *          description="הפעולה התבצעה בהצלחה",
-     *      ),
-     *      @OA\Response(
-     *          response=500,
-     *          description="אירעה שגיאה",
-     *      ),
-     * )
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getUsers()
-    {
-
-        $result = $this->UserService->getUsers();
-        if ($result instanceof HttpStatusEnum) {
-            return match ($result) {
-                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
-            };
-        }
-        return response()->json([
-            'message' => ResponseMessages::SUCCESS_ACTION,
-            'data' => $result,
-
-        ], Response::HTTP_OK);
     }
     /**
      * @OA\Get(

@@ -46,27 +46,32 @@ class UserService
     public function addAdmin(Request $request)
     {
         try {
-            $uuids = $request->all();
-
-            $users = User::whereIn('uuid', $uuids)->get();
+            $users = $request->all();
             if (count($users) === 0) {
                 return HttpStatusEnum::NOT_FOUND;
             }
             DB::beginTransaction();
             foreach ($users as $user) {
-                if ($user->hasRole(Role::ADMIN)) {
-                    DB::rollBack();
-                    return HttpStatusEnum::CONFLICT;
+                $userData = User::where('personal_number', $user['personal_number'])->first();
+                if (!is_null($userData)) {
+                    if ($userData->hasRole(Role::ADMIN)) {
+                        DB::rollBack();
+                        return HttpStatusEnum::CONFLICT;
+                    }
+                    if ($userData->hasRole(Role::USER)) {
+                        $userData->removeRole(Role::USER);
+                        $userData->revokePermissionTo(Permission::VIEW_WEBSITE);
+                    }
+                    $userData->assignRole(Role::ADMIN);
+                    $userData->givePermissionTo(Permission::MANAGE_USERS);
+                } else {
+                    $createdUser = User::create(["personal_number" => $user['personal_number'], "full_name" => $user['full_name']]);
+                    $createdUser->assignRole(Role::ADMIN);
+                    $createdUser->givePermissionTo(Permission::MANAGE_USERS);
                 }
-                if ($user->hasRole(Role::USER)) {
-                    $user->removeRole(Role::USER);
-                    $user->revokePermissionTo(Permission::VIEW_WEBSITE);
-                }
-                $user->assignRole(Role::ADMIN);
-                $user->givePermissionTo(Permission::MANAGE_USERS);
             }
             DB::commit();
-            return Response::HTTP_OK;
+            return Response::HTTP_CREATED;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());

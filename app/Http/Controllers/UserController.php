@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Services\UserService;
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
-use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\UuidsArrayRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Requests\StoreAdminRequest;
 
 class UserController extends Controller
 {
@@ -115,7 +115,7 @@ class UserController extends Controller
      *      )
      * )
      */
-    public function store(UuidsArrayRequest $request)
+    public function store(StoreAdminRequest $request)
     {
 
         $result = $this->UserService->addAdmin($request);
@@ -130,7 +130,7 @@ class UserController extends Controller
         }
         return response()->json([
             'message' => ResponseMessages::SUCCESS_ACTION
-        ], Response::HTTP_OK);
+        ], Response::HTTP_CREATED);
     }
     /**
      * @OA\Delete(

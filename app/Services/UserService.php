@@ -166,7 +166,8 @@ class UserService
 
             $userFromAdfs = json_decode($response->getBody(), true);
             return [
-                'full_name' => $userFromAdfs['first_name'] . ' ' . $userFromAdfs['surname']
+                'full_name' => $userFromAdfs['first_name'] . ' ' . $userFromAdfs['surname'],
+                'personal_number' => $userFromAdfs['personal_number'],
             ];
         } catch (\Exception $e) {
             $statusCode = $e->getCode();

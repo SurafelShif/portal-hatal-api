@@ -118,8 +118,8 @@ class UserService
             }
             $user = User::where('personal_number', $personal_number)->first();
             if (is_null($user)) {
-                return ["personal_number" => 1111111, "full_name" => "Test User"];
-                $user = $this->getUserFromVatican($personal_number);
+                $user = ["personal_number" => 1111111, "full_name" => "Test User"];
+                // $user = $this->getUserFromVatican($personal_number);
                 if (is_null($user)) {
                     return HttpStatusEnum::NOT_FOUND;
                 }
@@ -128,7 +128,10 @@ class UserService
                     return HttpStatusEnum::CONFLICT;
                 }
             }
-            return $user;
+            return [
+                'full_name' => $user['full_name'],
+                'personal_number' => $user['personal_number'],
+            ];
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;

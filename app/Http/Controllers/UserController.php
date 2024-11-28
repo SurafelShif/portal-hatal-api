@@ -122,7 +122,6 @@ class UserController extends Controller
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
-                HttpStatusEnum::CONFLICT => response()->json(ResponseMessages::NOT_USER, Response::HTTP_CONFLICT),
                 HttpStatusEnum::FORBIDDEN => response()->json(ResponseMessages::SUCCESS_NO_ACTION_NEEDED, Response::HTTP_FORBIDDEN),
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USERS_NOT_FOUND, Response::HTTP_NOT_FOUND),
                 HttpStatusEnum::NO_CONTENT => response()->json(ResponseMessages::NO_CONTENT, Response::HTTP_NO_CONTENT),
@@ -175,7 +174,6 @@ class UserController extends Controller
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
                 HttpStatusEnum::FORBIDDEN => response()->json(ResponseMessages::SELF_REMOVAL, Response::HTTP_FORBIDDEN),
-                HttpStatusEnum::CONFLICT => response()->json(ResponseMessages::NOT_ADMIN, Response::HTTP_CONFLICT),
                 HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::USERS_NOT_FOUND, Response::HTTP_NOT_FOUND),
                 HttpStatusEnum::NO_CONTENT => response()->json(ResponseMessages::NO_CONTENT, Response::HTTP_NO_CONTENT),
             };

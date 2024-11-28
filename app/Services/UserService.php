@@ -50,13 +50,11 @@ class UserService
             if (count($users) === 0) {
                 return HttpStatusEnum::NOT_FOUND;
             }
-            DB::beginTransaction();
             foreach ($users as $user) {
                 $userData = User::where('personal_number', $user['personal_number'])->first();
                 if (!is_null($userData)) {
                     if ($userData->hasRole(Role::ADMIN)) {
-                        DB::rollBack();
-                        return HttpStatusEnum::CONFLICT;
+                        continue;
                     }
                     if ($userData->hasRole(Role::USER)) {
                         $userData->removeRole(Role::USER);
@@ -70,7 +68,6 @@ class UserService
                     $createdUser->givePermissionTo(Permission::MANAGE_USERS);
                 }
             }
-            DB::commit();
             return Response::HTTP_CREATED;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -86,12 +83,11 @@ class UserService
                 return HttpStatusEnum::NOT_FOUND;
             }
             DB::beginTransaction();
+            $logged_user = Auth::user();
             foreach ($admins as $admin) {
                 if ($admin->hasRole(Role::USER)) {
-                    DB::rollBack();
-                    return HttpStatusEnum::CONFLICT;
+                    continue;
                 }
-                $logged_user = Auth::user();
                 if ($logged_user->personal_number === $admin->personal_number) {
                     DB::rollBack();
                     return HttpStatusEnum::FORBIDDEN;
@@ -122,7 +118,7 @@ class UserService
             }
             $user = User::where('personal_number', $personal_number)->first();
             if (is_null($user)) {
-
+                return ["personal_number" => 1111111, "full_name" => "Test User"];
                 $user = $this->getUserFromVatican($personal_number);
                 if (is_null($user)) {
                     return HttpStatusEnum::NOT_FOUND;

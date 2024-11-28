@@ -13,8 +13,7 @@ class UserResource extends JsonResource
             'full_name' => $this->full_name,
             'personal_number' => $this->personal_number,
             'role' => [
-                'name' => $this->roles->first()->name ?? null,
-                'display_name' => $this->roles->first()->display_name ?? null,
+                $this->roles->first()->name ?? null,
             ],
         ];
     }

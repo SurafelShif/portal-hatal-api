@@ -5,10 +5,8 @@ namespace App\Services;
 use App\Enums\AdfsColumnsEnum;
 use App\Enums\HttpStatusEnum;
 use App\Enums\Permission;
-use App\Enums\ResponseMessages;
 use App\Enums\Role;
 use App\Http\Resources\UserResource;
-use App\Models\Rahtal;
 use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -118,8 +116,7 @@ class UserService
             }
             $user = User::where('personal_number', $personal_number)->first();
             if (is_null($user)) {
-                $user = ["personal_number" => 1111111, "full_name" => "Test User"];
-                // $user = $this->getUserFromVatican($personal_number);
+                $user = $this->getUserFromVatican($personal_number);
                 if (is_null($user)) {
                     return HttpStatusEnum::NOT_FOUND;
                 }

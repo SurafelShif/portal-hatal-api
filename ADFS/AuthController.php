@@ -67,7 +67,6 @@ class AuthController extends Controller
             foreach ($permissions as $permission) {
                 $userPermissions[] = $permission->name;
             }
-
             return response()->json(
                 [
                     "full name" => $user->full_name,

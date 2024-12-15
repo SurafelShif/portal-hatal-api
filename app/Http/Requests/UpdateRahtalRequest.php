@@ -41,10 +41,10 @@ class UpdateRahtalRequest extends FormRequest
 
             if ($this->hasFile('image')) {
                 $file = $this->file('image');
-                $extension = $file->getClientOriginalExtension();
+                $extension = strtolower($file->getClientOriginalExtension());
 
-                if (!in_array($extension, ['jpeg', 'jpg', 'png'])) {
-                    $validator->errors()->add('image', 'התמונה חייבת להיות מסוג: jpeg, png, jpg.');
+                if (!in_array($extension, ['jpeg', 'jpg', 'png', 'jfif'])) {
+                    $validator->errors()->add('image', 'התמונה חייבת להיות מסוג: jpeg, png, jpg, jfif.');
                 }
             }
         });

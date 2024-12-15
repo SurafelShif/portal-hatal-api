@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\RahtalController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
@@ -32,3 +33,7 @@ Route::controller(RahtalController::class)
         Route::post("/{uuid}", "update")->middleware(['auth:api', 'role:admin']);
         Route::get("/", "index");
     });
+Route::controller(GeneralController::class)->prefix("general")->group(function () {
+    Route::get("/", "index");
+    Route::put("/", "update")->middleware(['auth:api', 'role:admin']);
+});

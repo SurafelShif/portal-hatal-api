@@ -48,6 +48,76 @@
                 }
             }
         },
+        "/api/general": {
+            "get": {
+                "tags": [
+                    "General"
+                ],
+                "summary": "Retrieve Web Settings",
+                "description": "Retrieve Web Settings",
+                "operationId": "web settings",
+                "responses": {
+                    "200": {
+                        "description": "הפעולה התבצעה בהצלחה"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "General"
+                ],
+                "summary": "Update or create web settings",
+                "description": "Update or create web settings",
+                "operationId": "update or create web settings",
+                "requestBody": {
+                    "description": "Web settings content",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "content"
+                                ],
+                                "properties": {
+                                    "content": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "fcdsf": {
+                                                    "type": "integer",
+                                                    "example": 1235677
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "bold 2xp lo yodea"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Sample description"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Action successful"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
         "/api/rahtal": {
             "get": {
                 "tags": [
@@ -461,6 +531,10 @@
         {
             "name": "Authentication",
             "description": "Authentication"
+        },
+        {
+            "name": "General",
+            "description": "General"
         },
         {
             "name": "Rahtal",

@@ -13,7 +13,8 @@ class GeneralService
         try {
             $settings = General::find(1);
             if ($settings) {
-                return json_decode($settings->content, true);
+                // return json_decode($settings->content, true);
+                return $settings->content;
             } else {
                 return [];
             }

@@ -23,7 +23,7 @@ class UpdateGeneralSettingsRequest extends FormRequest
     {
         return [
             'content' => 'required|array',
-
+            'type' => 'required|string'
         ];
     }
     public function messages(): array
@@ -31,6 +31,8 @@ class UpdateGeneralSettingsRequest extends FormRequest
         return [
             'content.required' => 'הכנס פרטי הגדרות האתר ',
             'content.json' => 'המידע אינו בפורמט הנכון',
+            'type.required' => 'הכנס את סוג הגדרות האתר ',
+            'type.string' => 'סוג הגדרות האתר אינו בפורמט הנכון ',
         ];
     }
 }

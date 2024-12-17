@@ -12,5 +12,10 @@ class General extends Model
 
     protected $fillable = [
         'content',
+        'type'
+    ];
+    protected $hidden = ['updated_at', 'created_at', 'id'];
+    protected $casts = [
+        'content' => 'array',
     ];
 }

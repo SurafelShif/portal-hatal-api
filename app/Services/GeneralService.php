@@ -13,8 +13,7 @@ class GeneralService
         try {
             $settings = General::find(1);
             if ($settings) {
-                // return json_decode($settings->content, true);
-                return $settings->content;
+                return $settings;
             } else {
                 return [];
             }
@@ -23,12 +22,12 @@ class GeneralService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function update(array $content)
+    public function update(array $content, string $type)
     {
         try {
             $result = General::updateOrCreate(
                 ['id' => 1],
-                ['content' => json_encode($content)]
+                ['content' => $content, 'type' => $type]
             );
             return $result;
         } catch (\Exception $e) {

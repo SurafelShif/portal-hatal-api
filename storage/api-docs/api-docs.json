@@ -71,7 +71,7 @@
                 ],
                 "summary": "Update or create web settings",
                 "description": "Update or create web settings",
-                "operationId": "update or create web settings",
+                "operationId": "updateOrCreateWebSettings",
                 "requestBody": {
                     "description": "Web settings content",
                     "required": true,
@@ -79,28 +79,33 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "content"
+                                    "content",
+                                    "type"
                                 ],
                                 "properties": {
                                     "content": {
                                         "type": "array",
                                         "items": {
+                                            "required": [
+                                                "title",
+                                                "body"
+                                            ],
                                             "properties": {
-                                                "fcdsf": {
-                                                    "type": "integer",
-                                                    "example": 1235677
-                                                },
                                                 "title": {
                                                     "type": "string",
-                                                    "example": "bold 2xp lo yodea"
+                                                    "example": "My First TinyMCE Content"
                                                 },
-                                                "description": {
+                                                "body": {
                                                     "type": "string",
-                                                    "example": "Sample description"
+                                                    "example": "<p>This is some <strong>formatted</strong> text from TinyMCE.</p>"
                                                 }
                                             },
                                             "type": "object"
                                         }
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "doc"
                                     }
                                 },
                                 "type": "object"
@@ -110,10 +115,10 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Action successful"
+                        "description": "הפעולה התבצעה בהצלחה"
                     },
                     "500": {
-                        "description": "An error occurred"
+                        "description": "אירעה שגיאה"
                     }
                 }
             }

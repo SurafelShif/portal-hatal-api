@@ -42,7 +42,7 @@ class GeneralController extends Controller
     /**
      * @OA\Put(
      *      path="/api/general",
-     *      operationId="update or create web settings",
+     *      operationId="updateOrCreateWebSettings",
      *      tags={"General"},
      *      summary="Update or create web settings",
      *      description="Update or create web settings",
@@ -53,16 +53,29 @@ class GeneralController extends Controller
      *              mediaType="application/json",
      *              @OA\Schema(
      *                  type="object",
-     *                  required={"content"},
+     *                  required={"content", "type"},
      *                  @OA\Property(
      *                      property="content",
      *                      type="array",
      *                      @OA\Items(
      *                          type="object",
-     *                          @OA\Property(property="fcdsf", type="integer", example=1235677),
-     *                          @OA\Property(property="title", type="string", example="bold 2xp lo yodea"),
-     *                          @OA\Property(property="description", type="string", example="Sample description")
+     *                          required={"title", "body"},
+     *                          @OA\Property(
+     *                              property="title",
+     *                              type="string",
+     *                              example="My First TinyMCE Content"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="body",
+     *                              type="string",
+     *                              example="<p>This is some <strong>formatted</strong> text from TinyMCE.</p>"
+     *                          )
      *                      )
+     *                  ),
+     *                  @OA\Property(
+     *                      property="type",
+     *                      type="string",
+     *                      example="doc"
      *                  )
      *              )
      *          )
@@ -79,6 +92,8 @@ class GeneralController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+
+
     public function update(UpdateGeneralSettingsRequest $request)
     {
         $result = $this->generalService->update($request->content, $request->type);

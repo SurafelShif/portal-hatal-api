@@ -16,52 +16,52 @@ class GeneralSettingsSeeder extends Seeder
         $settingsData = [
             "content" => [
                 [
-                    "type" => "paragraph",
+                    "type" => "heading",
+                    "attrs" => ["level" => 1],
                     "content" => [
                         [
                             "type" => "text",
                             "text" => "ייעוד החטיבה הטכנולוגית",
-                            "marks" => [
-                                ["type" => "bold"],
-                                ["type" => "italic"]
-                            ]
-                        ]
-                    ]
+                            "marks" => [["type" => "bold"]],
+                        ],
+                    ],
                 ],
                 [
                     "type" => "paragraph",
                     "content" => [
                         [
                             "type" => "text",
-                            "text" => "להוות גוף טכנולוגי היוזם, מפתח ומאשר אמל״ח רב מימדי לכוחות היבשה בהתאם לצרכים המבצעיים ואחראי על מוכנות ואורך נשימה של משקי היבשה לשם יצירת"
-                        ]
-                    ]
+                            "text" => "להוות גוף טכנולוגי היוזם, מפתח ומאשר אמל״ח רב מימדי לכוחות היבשה בהתאם לצרכים המבצעיים ואחראי על מוכנות ואורך נשימה של משקי היבשה לשם יצירת",
+                        ],
+                    ],
+                ],
+                [
+                    "type" => "heading",
+                    "attrs" => ["level" => 2],
+                    "content" => [
+                        [
+                            "type" => "text",
+                            "text" => "עליונות טכנולוגית בשדה הקרב ",
+                            "marks" => [["type" => "textStyle", "attrs" => ["color" => "#71B1FF"]]],
+                        ],
+                    ],
                 ],
                 [
                     "type" => "paragraph",
                     "content" => [
                         [
                             "type" => "text",
-                            "text" => "עליונות טכנולוגית בשדה הקרב"
-                        ]
-                    ]
+                            "text" => "להוות גוף טכנולוגי ורגולטור למערכות מידע, DATA SCIENCE ובינה מלאכותית באט״ל ובזרוע היבשה.",
+                        ],
+                    ],
                 ],
-                [
-                    "type" => "paragraph",
-                    "content" => [
-                        [
-                            "type" => "text",
-                            "text" => "להוות גוף טכנולוגי ורגולטור למערכות מידע, DATA SCIENCE ובינה מלאכותית באט״ל ובזרוע היבשה."
-                        ]
-                    ]
-                ]
             ],
-            "type" => "doc"
+            "type" => "doc",
         ];
 
         General::create([
             'content' => $settingsData["content"],
-            'type' => $settingsData["type"]
+            'type' => $settingsData["type"],
         ]);
     }
 }

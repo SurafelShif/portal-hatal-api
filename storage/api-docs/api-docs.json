@@ -65,7 +65,7 @@
                     }
                 }
             },
-            "put": {
+            "post": {
                 "tags": [
                     "General"
                 ],
@@ -79,33 +79,59 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "content",
-                                    "type"
+                                    "settings",
+                                    "description"
                                 ],
                                 "properties": {
-                                    "content": {
+                                    "settings": {
+                                        "properties": {
+                                            "stuff": {
+                                                "properties": {
+                                                    "bold": {
+                                                        "type": "string",
+                                                        "example": "fdsoigjdfog"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "example": "sdfsd"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "description": {
                                         "type": "array",
                                         "items": {
-                                            "required": [
-                                                "title",
-                                                "body"
-                                            ],
                                             "properties": {
-                                                "title": {
+                                                "image": {
                                                     "type": "string",
-                                                    "example": "My First TinyMCE Content"
-                                                },
-                                                "body": {
-                                                    "type": "string",
-                                                    "example": "<p>This is some <strong>formatted</strong> text from TinyMCE.</p>"
+                                                    "example": "fdxgdfgfd"
                                                 }
                                             },
                                             "type": "object"
                                         }
                                     },
-                                    "type": {
-                                        "type": "string",
-                                        "example": "doc"
+                                    "icons": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "pos": {
+                                                    "type": "string",
+                                                    "example": "1"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "image"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
                                     }
                                 },
                                 "type": "object"
@@ -115,10 +141,10 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "הפעולה התבצעה בהצלחה"
+                        "description": "The operation was successful"
                     },
                     "500": {
-                        "description": "אירעה שגיאה"
+                        "description": "An error occurred"
                     }
                 }
             }

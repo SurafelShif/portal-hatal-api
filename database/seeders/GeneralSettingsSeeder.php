@@ -15,7 +15,7 @@ class GeneralSettingsSeeder extends Seeder
     {
         $settingsData = [
             "content" => [
-                [
+                "settings" => [
                     "type" => "heading",
                     "attrs" => ["level" => 1],
                     "content" => [
@@ -26,7 +26,7 @@ class GeneralSettingsSeeder extends Seeder
                         ],
                     ],
                 ],
-                [
+                "description" => [
                     "type" => "paragraph",
                     "content" => [
                         [
@@ -35,31 +35,12 @@ class GeneralSettingsSeeder extends Seeder
                         ],
                     ],
                 ],
-                [
-                    "type" => "heading",
-                    "attrs" => ["level" => 2],
-                    "content" => [
-                        [
-                            "type" => "text",
-                            "text" => "עליונות טכנולוגית בשדה הקרב ",
-                            "marks" => [["type" => "textStyle", "attrs" => ["color" => "#71B1FF"]]],
-                        ],
-                    ],
-                ],
-                [
-                    "type" => "paragraph",
-                    "content" => [
-                        [
-                            "type" => "text",
-                            "text" => "להוות גוף טכנולוגי ורגולטור למערכות מידע, DATA SCIENCE ובינה מלאכותית באט״ל ובזרוע היבשה.",
-                        ],
-                    ],
-                ],
+                "icons" => []
             ],
         ];
 
-        General::create([
-            'content' => $settingsData["content"],
-        ]);
+        // General::create([
+        //     'content' => $settingsData["content"],
+        // ]);
     }
 }

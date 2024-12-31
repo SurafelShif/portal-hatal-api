@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\HttpStatusEnum;
 use App\Models\General;
+use App\Models\Image;
 use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,15 @@ class GeneralService
         try {
             $settings = General::find(1);
             if ($settings) {
-                return $settings;
+                $icons = [];
+                $settingsContent = $settings->first()->content;
+
+                foreach ($settingsContent['icons'] as $icon) {
+                    $image = Image::find($icon['id']);
+                    $icons[] = ["id" => $image->id, "pos" => $icon['pos'], "image" => $image->image_path ? config('filesystems.storage_path') . $image->image_path : null];
+                }
+                $settingsContent['icons'] = $icons;
+                return $settingsContent;
             } else {
                 return [];
             }
@@ -26,19 +35,17 @@ class GeneralService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function update(array $icons, array $description, array $settings)
+    public function update(?array $icons, ?array $description, ?array $settings)
     {
         try {
             DB::beginTransaction();
             $generalSettings = General::find(1);
             $uploadedImages = [];
             if (is_null($generalSettings)) {
-                $imagesIds = [];
-
                 foreach ($icons as $icon) {
                     $image = $this->ImageService->uploadImage($icon['image']);
                     $uploadedImages[] = $image;
-                    $updatedIcons[] = ['id' => $image->id, 'pos' => $icon->pos];
+                    $updatedIcons[] = ['id' => $image->id, 'pos' => $icon['pos']];
                 }
                 $content = [
                     'settings' => $settings,

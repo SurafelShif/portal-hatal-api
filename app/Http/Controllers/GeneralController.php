@@ -41,7 +41,7 @@ class GeneralController extends Controller
         return $result;
     }
     /**
-     * @OA\Put(
+     * @OA\Post(
      *      path="/api/general",
      *      operationId="updateOrCreateWebSettings",
      *      tags={"General"},
@@ -54,40 +54,69 @@ class GeneralController extends Controller
      *              mediaType="application/json",
      *              @OA\Schema(
      *                  type="object",
-     *                  required={"content", "type"},
+     *                  required={"settings", "description"},
      *                  @OA\Property(
-     *                      property="content",
+     *                      property="settings",
+     *                      type="object",
+     *                      @OA\Property(
+     *                          property="stuff",
+     *                          type="object",
+     *                          @OA\Property(
+     *                              property="bold",
+     *                              type="string",
+     *                              example="fdsoigjdfog"
+     *                          )
+     *                      ),
+     *                      @OA\Property(
+     *                          property="type",
+     *                          type="string",
+     *                          example="sdfsd"
+     *                      )
+     *                  ),
+     *                  @OA\Property(
+     *                      property="description",
      *                      type="array",
      *                      @OA\Items(
      *                          type="object",
-     *                          required={"title", "body"},
      *                          @OA\Property(
-     *                              property="title",
+     *                              property="image",
      *                              type="string",
-     *                              example="My First TinyMCE Content"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="body",
-     *                              type="string",
-     *                              example="<p>This is some <strong>formatted</strong> text from TinyMCE.</p>"
+     *                              example="fdxgdfgfd"
      *                          )
      *                      )
      *                  ),
      *                  @OA\Property(
-     *                      property="type",
-     *                      type="string",
-     *                      example="doc"
+     *                      property="icons",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="object",
+     *                          @OA\Property(
+     *                              property="id",
+     *                              type="integer",
+     *                              example=1
+     *                          ),
+     *                          @OA\Property(
+     *                              property="pos",
+     *                              type="string",
+     *                              example="1"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="image",
+     *                              type="string",
+     *                              example="image"
+     *                          )
+     *                      )
      *                  )
      *              )
      *          )
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="הפעולה התבצעה בהצלחה",
+     *          description="The operation was successful"
      *      ),
      *      @OA\Response(
      *          response=500,
-     *          description="אירעה שגיאה",
+     *          description="An error occurred"
      *      )
      * )
      *
@@ -95,9 +124,10 @@ class GeneralController extends Controller
      */
 
 
+
     public function update(UpdateGeneralSettingsRequest $request)
     {
-        $result = $this->generalService->update($request->content['icons'], $request->content['description'], $request->content['settings']);
+        $result = $this->generalService->update($request->content['icons'] ?? null, $request->content['description'] ?? null, $request->content['settings'] ?? null);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),

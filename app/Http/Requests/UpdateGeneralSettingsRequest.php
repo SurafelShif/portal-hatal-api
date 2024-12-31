@@ -22,17 +22,19 @@ class UpdateGeneralSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => 'required|array',
-            'type' => 'required|string'
+            'content.icons' => 'required|array',
+            'content.description' => 'required|array',
+            'content.settings' => 'required|array',
         ];
     }
+
     public function messages(): array
     {
         return [
-            'content.required' => 'הכנס פרטי הגדרות האתר ',
-            'content.json' => 'המידע אינו בפורמט הנכון',
-            'type.required' => 'הכנס את סוג הגדרות האתר ',
-            'type.string' => 'סוג הגדרות האתר אינו בפורמט הנכון ',
+            'content.icons.required' => 'הכנס פרטי האייקונים',
+            'content.description.required' => 'הכנס פרטי התיאור',
+            'content.settings.required' => 'הכנס פרטי הגדרות האתר',
+            'content.array' => 'המידע אינו בפורמט הנכון',
         ];
     }
 }

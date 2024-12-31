@@ -52,6 +52,7 @@ class ImageService
             $oldImage->image_name = $randomFileName;
             $oldImage->image_type = $extension;
             $oldImage->save();
+            return $oldImage;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;

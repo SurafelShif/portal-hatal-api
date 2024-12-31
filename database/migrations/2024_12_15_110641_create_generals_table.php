@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('generals', function (Blueprint $table) {
             $table->id();
             $table->json('content');
-            $table->string('type');
             $table->timestamps();
         });
     }

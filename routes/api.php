@@ -35,5 +35,5 @@ Route::controller(RahtalController::class)
     });
 Route::controller(GeneralController::class)->prefix("general")->group(function () {
     Route::get("/", "index");
-    Route::put("/", "update")->middleware(['auth:api', 'role:admin']);
+    Route::post("/", "update")->middleware(['auth:api', 'role:admin']);
 });

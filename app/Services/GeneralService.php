@@ -4,10 +4,14 @@ namespace App\Services;
 
 use App\Enums\HttpStatusEnum;
 use App\Models\General;
+use Exception;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class GeneralService
 {
+    public function __construct(private ImageService $ImageService) {}
     public function getSettings()
     {
         try {
@@ -22,16 +26,66 @@ class GeneralService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function update(array $content, string $type)
+    public function update(array $icons, array $description, array $settings)
     {
         try {
-            $result = General::updateOrCreate(
-                ['id' => 1],
-                ['content' => $content, 'type' => $type]
-            );
-            return $result;
+            DB::beginTransaction();
+            $generalSettings = General::find(1);
+            $uploadedImages = [];
+            if (is_null($generalSettings)) {
+                $imagesIds = [];
+
+                foreach ($icons as $icon) {
+                    $image = $this->ImageService->uploadImage($icon['image']);
+                    $uploadedImages[] = $image;
+                    $updatedIcons[] = ['id' => $image->id, 'pos' => $icon->pos];
+                }
+                $content = [
+                    'settings' => $settings,
+                    'description' => $description,
+                    'icons' => $updatedIcons
+                ];
+                General::create(['content' => $content]);
+            } else {
+                $generalData = $generalSettings->first();
+                $existingContent = $generalData->content;
+                $existingIcons = $existingContent['icons'] ?? [];
+                if (!empty($icons)) {
+                    foreach ($icons as $icon) {
+                        $image = $this->ImageService->updateImage($icon['replace'], $icon['image']);
+                        $uploadedImages[] = $image->image_name;
+                        $updatedIcons[] = ['id' => $image->id, 'pos' => $icon['pos']];
+                    }
+                    foreach ($existingIcons as $existingIcon) {
+                        $isReplaced = false;
+                        foreach ($icons as $icon) {
+                            if (isset($icon['replace']) && $icon['replace'] == $existingIcon['id']) {
+                                $isReplaced = true;
+                                break;
+                            }
+                        }
+                        if (!$isReplaced) {
+                            $updatedIcons[] = $existingIcon;
+                        }
+                    }
+                    $existingContent['icons'] = $updatedIcons;
+                }
+                if (!empty($settings)) {
+                    $existingContent['settings'] = $settings;
+                }
+                if (!empty($description)) {
+                    $existingContent['description'] = $description;
+                }
+                $generalData->update(['content' => $existingContent]);
+            }
+            DB::commit();
+            return Response::HTTP_OK;
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error($e->getMessage());
+            foreach ($uploadedImages as $image) {
+                $this->ImageService->deleteImage($image->image_name);
+            }
             return HttpStatusEnum::ERROR;
         }
     }

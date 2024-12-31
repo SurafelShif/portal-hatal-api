@@ -56,12 +56,10 @@ class GeneralSettingsSeeder extends Seeder
                     ],
                 ],
             ],
-            "type" => "doc",
         ];
 
         General::create([
             'content' => $settingsData["content"],
-            'type' => $settingsData["type"],
         ]);
     }
 }

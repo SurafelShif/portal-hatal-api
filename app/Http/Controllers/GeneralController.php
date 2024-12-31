@@ -7,6 +7,7 @@ use App\Enums\ResponseMessages;
 use App\Http\Requests\UpdateGeneralSettingsRequest;
 use App\Models\General;
 use App\Services\GeneralService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class GeneralController extends Controller
@@ -96,7 +97,7 @@ class GeneralController extends Controller
 
     public function update(UpdateGeneralSettingsRequest $request)
     {
-        $result = $this->generalService->update($request->content, $request->type);
+        $result = $this->generalService->update($request->content['icons'], $request->content['description'], $request->content['settings']);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),

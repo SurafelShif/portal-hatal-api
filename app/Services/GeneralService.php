@@ -35,7 +35,7 @@ class GeneralService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function update(?array $icons, ?array $description, ?array $settings)
+    public function update(?array $icons, ?string $description, ?array $hero)
     {
         try {
             DB::beginTransaction();
@@ -48,7 +48,7 @@ class GeneralService
                     $updatedIcons[] = ['id' => $image->id, 'pos' => $icon['pos']];
                 }
                 $content = [
-                    'settings' => $settings,
+                    'hero' => $hero,
                     'description' => $description,
                     'icons' => $updatedIcons
                 ];
@@ -77,8 +77,8 @@ class GeneralService
                     }
                     $existingContent['icons'] = $updatedIcons;
                 }
-                if (!empty($settings)) {
-                    $existingContent['settings'] = $settings;
+                if (!empty($hero)) {
+                    $existingContent['hero'] = $hero;
                 }
                 if (!empty($description)) {
                     $existingContent['description'] = $description;

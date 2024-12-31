@@ -14,33 +14,47 @@ class GeneralSettingsSeeder extends Seeder
     public function run(): void
     {
         $settingsData = [
-            "content" => [
-                "settings" => [
-                    "type" => "heading",
-                    "attrs" => ["level" => 1],
-                    "content" => [
-                        [
-                            "type" => "text",
-                            "text" => "ייעוד החטיבה הטכנולוגית",
-                            "marks" => [["type" => "bold"]],
-                        ],
+            "hero" => [
+                "content" => [
+                    [
+                        "type" => "paragraph",
+                        "content" => [
+                            ["type" => "text", "text" => "ייעוד החטיבה הטכנולוגית"]
+                        ]
                     ],
-                ],
-                "description" => [
-                    "type" => "paragraph",
-                    "content" => [
-                        [
-                            "type" => "text",
-                            "text" => "להוות גוף טכנולוגי היוזם, מפתח ומאשר אמל״ח רב מימדי לכוחות היבשה בהתאם לצרכים המבצעיים ואחראי על מוכנות ואורך נשימה של משקי היבשה לשם יצירת",
-                        ],
+                    [
+                        "type" => "paragraph",
+                        "content" => [
+                            [
+                                "type" => "text",
+                                "text" => "להוות גוף טכנולוגי היוזם, מפתח ומאשר אמל״ח רב מימדי לכוחות היבשה בהתאם לצרכים המבצעיים ואחראי על מוכנות ואורך נשימה של משקי היבשה לשם יצירת"
+                            ]
+                        ]
                     ],
+                    [
+                        "type" => "paragraph",
+                        "content" => [
+                            ["type" => "text", "text" => "עליונות טכנולוגית בשדה הקרב "]
+                        ]
+                    ],
+                    [
+                        "type" => "paragraph",
+                        "content" => [
+                            [
+                                "type" => "text",
+                                "text" => "להוות גוף טכנולוגי ורגולטור למערכות מידע, DATA SCIENCE ובינה מלאכותית באט״ל ובזרוע היבשה."
+                            ]
+                        ]
+                    ]
                 ],
-                "icons" => []
+                "type" => "doc"
             ],
+            "description" => "עליונות טכנולוגית -  Hatal Inside",
+            "icons" => []
         ];
 
-        // General::create([
-        //     'content' => $settingsData["content"],
-        // ]);
+        General::create([
+            'content' => $settingsData,
+        ]);
     }
 }

@@ -22,16 +22,18 @@ class UpdateGeneralSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content.icons' => 'nullable|array',
-            'content.description' => 'nullable|array',
-            'content.settings' => 'nullable|array',
+            'icons' => 'nullable|array',
+            'description' => 'nullable|string',
+            'hero' => 'nullable|array',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'content.array' => 'המידע אינו בפורמט הנכון',
+            'icons.array' => 'האייקונים אינם',
+            'description.string' => 'התת כותרת אינו בפורמט הנכון',
+            'hero.array' => 'מידע האתר אינו בפורמט הנכון',
         ];
     }
 }

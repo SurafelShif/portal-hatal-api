@@ -56,7 +56,7 @@ class GeneralController extends Controller
      *                  type="object",
      *                  required={"settings", "description"},
      *                  @OA\Property(
-     *                      property="settings",
+     *                      property="hero",
      *                      type="object",
      *                      @OA\Property(
      *                          property="stuff",
@@ -75,15 +75,8 @@ class GeneralController extends Controller
      *                  ),
      *                  @OA\Property(
      *                      property="description",
-     *                      type="array",
-     *                      @OA\Items(
-     *                          type="object",
-     *                          @OA\Property(
-     *                              property="image",
-     *                              type="string",
-     *                              example="fdxgdfgfd"
-     *                          )
-     *                      )
+     *                      type="string",
+     *                      example="sdfsd"
      *                  ),
      *                  @OA\Property(
      *                      property="icons",
@@ -127,7 +120,7 @@ class GeneralController extends Controller
 
     public function update(UpdateGeneralSettingsRequest $request)
     {
-        $result = $this->generalService->update($request->content['icons'] ?? null, $request->content['description'] ?? null, $request->content['settings'] ?? null);
+        $result = $this->generalService->update($request->icons ?? null, $request->description ?? null, $request->hero ?? null);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),

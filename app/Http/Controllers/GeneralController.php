@@ -42,7 +42,7 @@ class GeneralController extends Controller
     /**
      * @OA\Put(
      *      path="/api/general",
-     *      operationId="update or create web settings",
+     *      operationId="updateOrCreateWebSettings",
      *      tags={"General"},
      *      summary="Update or create web settings",
      *      description="Update or create web settings",
@@ -53,7 +53,7 @@ class GeneralController extends Controller
      *              mediaType="application/json",
      *              @OA\Schema(
      *                  type="object",
-     *                  required={"content"},
+     *                  required={"content", "type"},
      *                  @OA\Property(
      *                      property="content",
      *                      type="array",
@@ -63,6 +63,11 @@ class GeneralController extends Controller
      *                          @OA\Property(property="title", type="string", example="bold 2xp lo yodea"),
      *                          @OA\Property(property="description", type="string", example="Sample description")
      *                      )
+     *                  ),
+     *                  @OA\Property(
+     *                      property="type",
+     *                      type="string",
+     *                      example="docs"
      *                  )
      *              )
      *          )
@@ -76,9 +81,8 @@ class GeneralController extends Controller
      *          description="אירעה שגיאה",
      *      )
      * )
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
+
     public function update(UpdateGeneralSettingsRequest $request)
     {
         $result = $this->generalService->update($request->content, $request->type);

@@ -12,6 +12,25 @@ class HeaderController extends Controller
 {
     //
     public function __construct(private HeaderService $headerService) {}
+    /**
+     * @OA\Get(
+     *      path="/api/header",
+     *      operationId="web header",
+     *      tags={"Header"},
+     *      summary="Retrieve Web header",
+     *      description="Retrieve Web header",
+     *      @OA\Response(
+     *          response=200,
+     *          description="הפעולה התבצעה בהצלחה",
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="אירעה שגיאה",
+     *      )
+     * )
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         $result = $this->headerService->getSettings();
@@ -20,6 +39,63 @@ class HeaderController extends Controller
         }
         return $result;
     }
+    /**
+     * @OA\Post(
+     *      path="/api/header",
+     *      operationId="updateOrCreateWebHeader",
+     *      tags={"Header"},
+     *      summary="Update or create web header",
+     *      description="Update or create web header",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Web header content",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="icons",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="object",
+     *                          @OA\Property(
+     *                              property="replace",
+     *                              type="integer",
+     *                              example=1
+     *                          ),
+     *                          @OA\Property(
+     *                              property="position",
+     *                              type="string",
+     *                              example="1"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="image",
+     *                              type="string",
+     *                              example="image"
+     *                          )
+     *                  )
+     *                      ),
+     *                          @OA\Property(
+     *                              property="description",
+     *                              type="string",
+     *                              example="sewy"
+     *                          )
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="The operation was successful"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="An error occurred"
+     *      )
+     * )
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+
     public function update(UpdateHeaderRequest $request)
     {
         $result = $this->headerService->update($request->icons ?? null, $request->description ?? null);

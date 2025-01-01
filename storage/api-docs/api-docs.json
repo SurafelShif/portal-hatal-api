@@ -65,7 +65,7 @@
                     }
                 }
             },
-            "post": {
+            "put": {
                 "tags": [
                     "General"
                 ],
@@ -79,41 +79,90 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "settings",
-                                    "description"
+                                    "content",
+                                    "type"
                                 ],
                                 "properties": {
-                                    "hero": {
-                                        "properties": {
-                                            "stuff": {
-                                                "properties": {
-                                                    "bold": {
-                                                        "type": "string",
-                                                        "example": "fdsoigjdfog"
-                                                    }
+                                    "content": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "fcdsf": {
+                                                    "type": "integer",
+                                                    "example": 1235677
                                                 },
-                                                "type": "object"
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "bold 2xp lo yodea"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Sample description"
+                                                }
                                             },
-                                            "type": {
-                                                "type": "string",
-                                                "example": "sdfsd"
-                                            }
-                                        },
-                                        "type": "object"
+                                            "type": "object"
+                                        }
                                     },
-                                    "description": {
+                                    "type": {
                                         "type": "string",
-                                        "example": "sdfsd"
-                                    },
+                                        "example": "docs"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "הפעולה התבצעה בהצלחה"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            }
+        },
+        "/api/header": {
+            "get": {
+                "tags": [
+                    "Header"
+                ],
+                "summary": "Retrieve Web header",
+                "description": "Retrieve Web header",
+                "operationId": "web header",
+                "responses": {
+                    "200": {
+                        "description": "הפעולה התבצעה בהצלחה"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Header"
+                ],
+                "summary": "Update or create web header",
+                "description": "Update or create web header",
+                "operationId": "updateOrCreateWebHeader",
+                "requestBody": {
+                    "description": "Web header content",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
                                     "icons": {
                                         "type": "array",
                                         "items": {
                                             "properties": {
-                                                "id": {
+                                                "replace": {
                                                     "type": "integer",
                                                     "example": 1
                                                 },
-                                                "pos": {
+                                                "position": {
                                                     "type": "string",
                                                     "example": "1"
                                                 },
@@ -124,6 +173,10 @@
                                             },
                                             "type": "object"
                                         }
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "sewy"
                                     }
                                 },
                                 "type": "object"
@@ -558,6 +611,10 @@
         {
             "name": "General",
             "description": "General"
+        },
+        {
+            "name": "Header",
+            "description": "Header"
         },
         {
             "name": "Rahtal",

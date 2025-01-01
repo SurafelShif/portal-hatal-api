@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\General;
+use App\Models\Image;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,6 +14,26 @@ class GeneralSettingsSeeder extends Seeder
      */
     public function run(): void
     {
+        $zroa = Image::create([
+            'image_name' => "zroa-hayabasha1.png",
+            'image_type' => "png",
+            'image_path' => "images/zroa-hayabasha1.png"
+        ]);
+        $atal = Image::create([
+            'image_name' => "Atal_logo1.png",
+            'image_type' => "png",
+            'image_path' => "images/Atal_logo1.png"
+        ]);
+        $hatal = Image::create([
+            'image_name' => "Hatal1.png",
+            'image_type' => "png",
+            'image_path' => "images/Hatal1.png"
+        ]);
+        $inside = Image::create([
+            'image_name' => "hatal-inside-white1.png",
+            'image_type' => "png",
+            'image_path' => "images/hatal-inside-white1.png"
+        ]);
         $settingsData = [
             "hero" => [
                 "content" =>  [
@@ -60,7 +81,7 @@ class GeneralSettingsSeeder extends Seeder
                 "type" => "doc"
             ],
             "description" => "עליונות טכנולוגית -  Hatal Inside",
-            "icons" => []
+            "icons" => [["pos" => 1, "id" => $zroa->id], ["pos" => 2, "id" => $atal->id], ["pos" => 3, "id" => $hatal->id], ["pos" => 4, "id" => $inside->id]]
         ];
 
         General::create([

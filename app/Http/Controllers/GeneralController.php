@@ -7,7 +7,6 @@ use App\Enums\ResponseMessages;
 use App\Http\Requests\UpdateGeneralSettingsRequest;
 use App\Models\General;
 use App\Services\GeneralService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class GeneralController extends Controller
@@ -41,9 +40,9 @@ class GeneralController extends Controller
         return $result;
     }
     /**
-     * @OA\Post(
+     * @OA\Put(
      *      path="/api/general",
-     *      operationId="updateOrCreateWebSettings",
+     *      operationId="update or create web settings",
      *      tags={"General"},
      *      summary="Update or create web settings",
      *      description="Update or create web settings",
@@ -54,50 +53,15 @@ class GeneralController extends Controller
      *              mediaType="application/json",
      *              @OA\Schema(
      *                  type="object",
-     *                  required={"settings", "description"},
+     *                  required={"content"},
      *                  @OA\Property(
-     *                      property="hero",
-     *                      type="object",
-     *                      @OA\Property(
-     *                          property="stuff",
-     *                          type="object",
-     *                          @OA\Property(
-     *                              property="bold",
-     *                              type="string",
-     *                              example="fdsoigjdfog"
-     *                          )
-     *                      ),
-     *                      @OA\Property(
-     *                          property="type",
-     *                          type="string",
-     *                          example="sdfsd"
-     *                      )
-     *                  ),
-     *                  @OA\Property(
-     *                      property="description",
-     *                      type="string",
-     *                      example="sdfsd"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="icons",
+     *                      property="content",
      *                      type="array",
      *                      @OA\Items(
      *                          type="object",
-     *                          @OA\Property(
-     *                              property="id",
-     *                              type="integer",
-     *                              example=1
-     *                          ),
-     *                          @OA\Property(
-     *                              property="pos",
-     *                              type="string",
-     *                              example="1"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="image",
-     *                              type="string",
-     *                              example="image"
-     *                          )
+     *                          @OA\Property(property="fcdsf", type="integer", example=1235677),
+     *                          @OA\Property(property="title", type="string", example="bold 2xp lo yodea"),
+     *                          @OA\Property(property="description", type="string", example="Sample description")
      *                      )
      *                  )
      *              )
@@ -105,25 +69,22 @@ class GeneralController extends Controller
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="The operation was successful"
+     *          description="הפעולה התבצעה בהצלחה",
      *      ),
      *      @OA\Response(
      *          response=500,
-     *          description="An error occurred"
+     *          description="אירעה שגיאה",
      *      )
      * )
      *
      * @return \Illuminate\Http\JsonResponse
      */
-
-
-
     public function update(UpdateGeneralSettingsRequest $request)
     {
-        $result = $this->generalService->update($request->icons ?? null, $request->description ?? null);
+        $result = $this->generalService->update($request->content, $request->type);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
-                HttpStatusEnum::ERROR => response()->json(["message" => ResponseMessages::ERROR_OCCURRED], Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
             };
         }
         return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], Response::HTTP_OK);

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateGeneralSettingsRequest extends FormRequest
@@ -23,43 +22,17 @@ class UpdateGeneralSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'icons' => 'nullable|array|required_without_all:description',
-            'description' => 'nullable|string|required_without_all:icons',
-
+            'content' => 'required|array',
+            'type' => 'required|string'
         ];
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    public function withValidator(Validator $validator)
-    {
-        $validator->after(function ($validator) {
-            foreach ($this->icons as $icon) {
-                if (is_file($icon['image'])) {
-                    $file = $icon['image'];
-                    $extension = strtolower($file->getClientOriginalExtension());
-                    if (!in_array($extension, ['jpeg', 'jpg', 'png', 'jfif'])) {
-                        $validator->errors()->add('image', 'התמונה חייבת להיות מסוג: jpeg, png, jpg, jfif.');
-                    }
-                    if (!array_key_exists('position', $icon)) {
-                        $validator->errors()->add('position', 'הכנס את מיקום התמונה');
-                    }
-                }
-                if (!array_key_exists('replace', $icon)) {
-                    $validator->errors()->add('position', 'הכנס את התמונה שתרצה להחליף');
-                }
-            }
-        });
-    }
-
     public function messages(): array
     {
         return [
-            'icons.required_without_all' => 'הכנס שדה אחד לעדכון',
-            'description.required_without_all' => 'הכנס שדה אחד לעדכון',
-            'icons.array' => 'האייקונים אינם',
-            'description.string' => 'התת כותרת אינו בפורמט הנכון',
+            'content.required' => 'הכנס פרטי הגדרות האתר ',
+            'content.json' => 'המידע אינו בפורמט הנכון',
+            'type.required' => 'הכנס את סוג הגדרות האתר ',
+            'type.string' => 'סוג הגדרות האתר אינו בפורמט הנכון ',
         ];
     }
 }

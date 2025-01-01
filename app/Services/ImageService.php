@@ -38,6 +38,9 @@ class ImageService
         try {
 
             $oldImage = Image::find($associatedimageId);
+            if (is_null($oldImage) && is_null($newImage)) {
+                return;
+            }
             if (is_null($oldImage)) {
                 return $this->uploadImage($newImage);
             }

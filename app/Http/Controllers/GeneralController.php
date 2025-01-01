@@ -120,10 +120,10 @@ class GeneralController extends Controller
 
     public function update(UpdateGeneralSettingsRequest $request)
     {
-        $result = $this->generalService->update($request->icons ?? null, $request->description ?? null, $request->hero ?? null);
+        $result = $this->generalService->update($request->icons ?? null, $request->description ?? null);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
-                HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::ERROR => response()->json(["message" => ResponseMessages::ERROR_OCCURRED], Response::HTTP_INTERNAL_SERVER_ERROR),
             };
         }
         return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], Response::HTTP_OK);

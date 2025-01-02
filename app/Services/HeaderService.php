@@ -37,47 +37,35 @@ class HeaderService
             return HttpStatusEnum::ERROR;
         }
     }
-    public function update(?array $icons, ?string $description)
+    public function update(array $icons, ?string $description)
     {
         try {
             DB::beginTransaction();
             $headerSettings = Header::find(1);
-            $uploadedImages = [];
-            if (is_null($headerSettings)) {
-                if (is_null($icons) && is_null($description)) {
-                    return HttpStatusEnum::BAD_REQUEST;
-                }
-                foreach ($icons as $icon) {
-                    $image = $this->ImageService->uploadImage($icon['image']);
-                    $uploadedImages[] = $image;
-                    $updatedIcons[] = ['id' => $image->id, 'position' => $icon['position']];
-                }
-                Header::create([
-                    'description' => $description,
-                    'icons' => json_encode($updatedIcons)
-                ]);
-            } else {
-                $updatedIcons = [];
-                $existingIcons = $headerSettings['icons'];
-                foreach ($icons as $icon) {
-                    $image = $this->ImageService->uploadImage($icon['image']);
-                    $uploadedImages[] = $image;
-                    $updatedIcons[] = ['id' => $image->id, 'position' => $icon['position']];
-                }
-                if (!is_null($description)) {
-                    $headerSettings->update(['description' => $description]);
-                }
-                $mergedIcons = array_merge($existingIcons, $updatedIcons);
-                $headerSettings->update(['icons' => $mergedIcons]);
+            $existingIcons = $headerSettings->icons;
+            if (!is_null($description)) {
+                $headerSettings->update(['description' => $description]);
             }
+            $isFound = false;
+            foreach ($icons as $icon) {
+                $isFound = false;
+                foreach ($existingIcons as $index => $existingIcon) {
+                    if ($existingIcon['id'] === $icon['id']) {
+                        $isFound = true;
+                        $existingIcons[$index]['position'] = $icon['position'];
+                    }
+                }
+                if (!$isFound) {
+                    return HttpStatusEnum::NOT_FOUND;
+                }
+            }
+            $headerSettings->icons = $existingIcons;
+            $headerSettings->save();
             DB::commit();
             return Response::HTTP_OK;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            foreach ($uploadedImages as $image) {
-                $this->ImageService->deleteImage($image->image_name);
-            }
             return HttpStatusEnum::ERROR;
         }
     }
@@ -110,6 +98,33 @@ class HeaderService
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+            return HttpStatusEnum::ERROR;
+        }
+    }
+    public function upload(array $icons)
+    {
+        try {
+            if (!count($icons)) {
+                return HttpStatusEnum::BAD_REQUEST;
+            }
+            $uploadedImages = [];
+            $headerSettings = Header::find(1);
+            $updatedIcons = [];
+            $existingIcons = $headerSettings['icons'];
+            foreach ($icons as $icon) {
+                $image = $this->ImageService->uploadImage($icon['image']);
+                $uploadedImages[] = $image;
+                $updatedIcons[] = ['id' => $image->id, 'position' => $icon['position']];
+            }
+
+            $mergedIcons = array_merge($existingIcons, $updatedIcons);
+            $headerSettings->update(["icons" => $mergedIcons]);
+            return Response::HTTP_CREATED;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            foreach ($uploadedImages as $image) {
+                $this->ImageService->deleteImage($image->image_name);
+            }
             return HttpStatusEnum::ERROR;
         }
     }

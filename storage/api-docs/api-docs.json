@@ -140,13 +140,62 @@
                     }
                 }
             },
+            "put": {
+                "tags": [
+                    "Header"
+                ],
+                "summary": "update icons",
+                "description": "update icons",
+                "operationId": "update icons",
+                "requestBody": {
+                    "description": "Web header content",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "icons": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "position": {
+                                                    "type": "string",
+                                                    "example": "1"
+                                                },
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "5"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "sewy"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The operation was successful"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Header"
                 ],
-                "summary": "Update or create web header",
-                "description": "Update or create web header",
-                "operationId": "updateOrCreateWebHeader",
+                "summary": "create icons",
+                "description": "create icons",
+                "operationId": "create icons",
                 "requestBody": {
                     "description": "Web header content",
                     "required": true,
@@ -169,10 +218,6 @@
                                             },
                                             "type": "object"
                                         }
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "sewy"
                                     }
                                 },
                                 "type": "object"

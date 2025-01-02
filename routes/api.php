@@ -40,6 +40,7 @@ Route::controller(GeneralController::class)->prefix("general")->group(function (
 });
 Route::controller(HeaderController::class)->prefix("header")->group(function () {
     Route::get("/", "index");
-    Route::post("/", "update")->middleware(['auth:api', 'role:admin']);
+    Route::put("/", "update")->middleware(['auth:api', 'role:admin']);
     Route::delete("/", "delete")->middleware(['auth:api', 'role:admin']);
+    Route::post("/", "post")->middleware(['auth:api', 'role:admin']);
 });

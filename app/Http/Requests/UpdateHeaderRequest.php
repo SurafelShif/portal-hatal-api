@@ -23,42 +23,23 @@ class UpdateHeaderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'icons' => 'nullable|array',
-            'description' => 'nullable|string',
-            'icons.*.image' => 'file|mimes:jpeg,jpg,png,jfif'
+            'icons' => 'nullable|array|required_without_all:description',
+            'description' => 'nullable|string|required_without_all:icons',
+            'icons.*.position' => 'required|integer',
+            'icons.*.id' => 'required|integer'
         ];
     }
 
-    /**
-     * Configure the validator instance.
-     */
-    // public function withValidator(Validator $validator)
-    // {
-    //     $validator->after(function ($validator) {
-    //         if (array_key_exists('icons', $this->all())) {
-    //             foreach ($this->icons as $icon) {
-    //                 if (is_file($icon['image'])) {
-    //                     $file = $icon['image'];
-    //                     $extension = strtolower($file->getClientOriginalExtension());
-    //                     if (!in_array($extension, ['jpeg', 'jpg', 'png', 'jfif'])) {
-    //                         $validator->errors()->add('image', 'התמונה חייבת להיות מסוג: jpeg, png, jpg, jfif.');
-    //                     }
-    //                     if (!array_key_exists('position', $icon)) {
-    //                         $validator->errors()->add('position', 'הכנס את מיקום התמונה');
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     });
-    // }
 
     public function messages(): array
     {
         return [
-            'icons.required_without_all' => 'הכנס שדה אחד לעדכון',
-            'description.required_without_all' => 'הכנס שדה אחד לעדכון',
-            'icons.array' => 'האייקונים אינם בפורמט הנכון',
-            'description.string' => 'התת כותרת אינו בפורמט הנכון',
+            'icons.required_without_all' => 'הכנס שדה אחד לעדכון', // At least one of the fields (icons or description) is required
+            'description.required_without_all' => 'הכנס שדה אחד לעדכון', // At least one of the fields (icons or description) is required
+            'icons.array' => 'האייקונים אינם בפורמט הנכון', // Icons must be an array
+            'icons.*.position.required' => 'יש להכניס מיקום לכל אייקון', // Position is required for each icon
+            'icons.*.id.required' => 'יש להכניס מזהה לכל אייקון', // ID is required for each icon
+            'description.string' => 'התת כותרת אינה בפורמט הנכון', // Description must be a string
         ];
     }
 }

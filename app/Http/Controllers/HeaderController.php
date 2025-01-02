@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
+use App\Http\Requests\CreateHeaderRequest;
 use App\Http\Requests\UpdateHeaderRequest;
 use App\Services\HeaderService;
 use Illuminate\Http\Request;
@@ -41,12 +42,12 @@ class HeaderController extends Controller
         return $result;
     }
     /**
-     * @OA\Post(
+     * @OA\Put(
      *      path="/api/header",
-     *      operationId="updateOrCreateWebHeader",
+     *      operationId="update icons",
      *      tags={"Header"},
-     *      summary="Update or create web header",
-     *      description="Update or create web header",
+     *      summary="update icons",
+     *      description="update icons",
      *      @OA\RequestBody(
      *          required=true,
      *          description="Web header content",
@@ -65,9 +66,9 @@ class HeaderController extends Controller
      *                              example="1"
      *                          ),
      *                          @OA\Property(
-     *                              property="image",
+     *                              property="id",
      *                              type="string",
-     *                              example="image"
+     *                              example="5"
      *                          )
      *                  )
      *                      ),
@@ -100,6 +101,7 @@ class HeaderController extends Controller
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(["message" => ResponseMessages::ERROR_OCCURRED], Response::HTTP_INTERNAL_SERVER_ERROR),
                 HttpStatusEnum::BAD_REQUEST => response()->json(["message" => ResponseMessages::INVALID_REQUEST], Response::HTTP_BAD_REQUEST),
+                HttpStatusEnum::NOT_FOUND => response()->json(["message" => ResponseMessages::IMAGE_NOT_FOUND], Response::HTTP_NOT_FOUND),
             };
         }
         return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], Response::HTTP_OK);
@@ -148,5 +150,63 @@ class HeaderController extends Controller
             };
         }
         return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], Response::HTTP_OK);
+    }
+    /**
+     * @OA\Post(
+     *      path="/api/header",
+     *      operationId="create icons",
+     *      tags={"Header"},
+     *      summary="create icons",
+     *      description="create icons",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Web header content",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="icons",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="object",
+     *                          @OA\Property(
+     *                              property="position",
+     *                              type="string",
+     *                              example="1"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="image",
+     *                              type="string",
+     *                              example="image"
+     *                          )
+     *                  )
+     *                      )
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="The operation was successful"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="An error occurred"
+     *      )
+     * )
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function post(CreateHeaderRequest $request)
+    {
+        $result = $this->headerService->upload($request->all());
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json(["message" => ResponseMessages::ERROR_OCCURRED], Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::BAD_REQUEST => response()->json(["message" => ResponseMessages::INVALID_REQUEST], Response::HTTP_BAD_REQUEST),
+                HttpStatusEnum::NOT_FOUND => response()->json(["message" => ResponseMessages::IMAGE_NOT_FOUND], Response::HTTP_NOT_FOUND),
+            };
+        }
+        return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], Response::HTTP_CREATED);
     }
 }

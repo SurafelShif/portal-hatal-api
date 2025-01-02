@@ -59,11 +59,6 @@ class HeaderController extends Controller
      *                      @OA\Items(
      *                          type="object",
      *                          @OA\Property(
-     *                              property="replace",
-     *                              type="integer",
-     *                              example=1
-     *                          ),
-     *                          @OA\Property(
      *                              property="position",
      *                              type="string",
      *                              example="1"
@@ -98,7 +93,7 @@ class HeaderController extends Controller
 
     public function update(UpdateHeaderRequest $request)
     {
-        $result = $this->headerService->update($request->icons ?? null, $request->description ?? null);
+        $result = $this->headerService->update($request->icons ?? [], $request->description ?? null);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(["message" => ResponseMessages::ERROR_OCCURRED], Response::HTTP_INTERNAL_SERVER_ERROR),

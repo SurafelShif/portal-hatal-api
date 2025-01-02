@@ -23,36 +23,34 @@ class UpdateHeaderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'icons' => 'nullable|array|required_without_all:description',
-            'description' => 'nullable|string|required_without_all:icons',
+            'icons' => 'nullable|array',
+            'description' => 'nullable|string',
+            'icons.*.image' => 'file|mimes:jpeg,jpg,png,jfif'
         ];
     }
 
     /**
      * Configure the validator instance.
      */
-    public function withValidator(Validator $validator)
-    {
-        $validator->after(function ($validator) {
-            if (array_key_exists('icons', $this->all())) {
-                foreach ($this->icons as $icon) {
-                    if (is_file($icon['image'])) {
-                        $file = $icon['image'];
-                        $extension = strtolower($file->getClientOriginalExtension());
-                        if (!in_array($extension, ['jpeg', 'jpg', 'png', 'jfif'])) {
-                            $validator->errors()->add('image', 'התמונה חייבת להיות מסוג: jpeg, png, jpg, jfif.');
-                        }
-                        if (!array_key_exists('position', $icon)) {
-                            $validator->errors()->add('position', 'הכנס את מיקום התמונה');
-                        }
-                    }
-                    if (!array_key_exists('replace', $icon)) {
-                        $validator->errors()->add('replace', 'הכנס את התמונה שתרצה להחליף');
-                    }
-                }
-            }
-        });
-    }
+    // public function withValidator(Validator $validator)
+    // {
+    //     $validator->after(function ($validator) {
+    //         if (array_key_exists('icons', $this->all())) {
+    //             foreach ($this->icons as $icon) {
+    //                 if (is_file($icon['image'])) {
+    //                     $file = $icon['image'];
+    //                     $extension = strtolower($file->getClientOriginalExtension());
+    //                     if (!in_array($extension, ['jpeg', 'jpg', 'png', 'jfif'])) {
+    //                         $validator->errors()->add('image', 'התמונה חייבת להיות מסוג: jpeg, png, jpg, jfif.');
+    //                     }
+    //                     if (!array_key_exists('position', $icon)) {
+    //                         $validator->errors()->add('position', 'הכנס את מיקום התמונה');
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
 
     public function messages(): array
     {

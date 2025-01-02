@@ -158,10 +158,6 @@
                                         "type": "array",
                                         "items": {
                                             "properties": {
-                                                "replace": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
                                                 "position": {
                                                     "type": "string",
                                                     "example": "1"

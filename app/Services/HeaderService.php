@@ -55,40 +55,23 @@ class HeaderService
             } else {
                 $generalData = $headerSettings->first();
                 $updatedIcons = [];
-                $existingContent = $generalData;
-                $existingIcons = $existingContent['icons'] ?? [];
-                if (!empty($icons)) {
-                    foreach ($icons as $icon) {
-                        $image = $this->ImageService->updateImage($icon['replace'], $icon['image']);
-                        if (is_null($icon['image'])) {
-                            Image::destroy($icon['replace']);
-                            $existingContent['icons'] = array_filter($existingContent['icons'], function ($existingIcon) use ($icon) {
-                                return !($existingIcon['id'] == $icon['replace']);
-                            });
-                            $existingContent['icons'] = array_values($existingContent['icons']);
-                        } else {
-                            $uploadedImages[] = $image;
-                            $updatedIcons[] = ['id' => $image->id, 'position' => $icon['position']];
-                        }
+                $existingIcons = $generalData['icons'] ?? [];
+                foreach ($existingIcons as $icon) {
+                    $image = Image::find($icon['id']);
+                    if (!is_null($image)) {
+                        $this->ImageService->deleteImage($image->image_name);
+                        Image::destroy($image->id);
                     }
-                    foreach ($existingIcons as $existingIcon) {
-                        $isReplaced = false;
-                        foreach ($icons as $icon) {
-                            if (isset($icon['replace']) && $icon['replace'] == $existingIcon['id']) {
-                                $isReplaced = true;
-                                break;
-                            }
-                        }
-                        if (!$isReplaced) {
-                            $updatedIcons[] = $existingIcon;
-                        }
-                    }
-                    $existingContent['icons'] = $updatedIcons;
+                }
+                foreach ($icons as $icon) {
+                    $image = $this->ImageService->uploadImage($icon['image']);
+                    $uploadedImages[] = $image;
+                    $updatedIcons[] = ['id' => $image->id, 'position' => $icon['position']];
                 }
                 if (!empty($description)) {
-                    $existingContent['description'] = $description;
+                    $generalData->update(['description' => $description]);
                 }
-                $generalData->update(['content' => $existingContent]);
+                $generalData->update(['icons' => $updatedIcons]);
             }
             DB::commit();
             return Response::HTTP_OK;

@@ -19,12 +19,14 @@ class HeaderService
             if ($settings) {
                 $icons = [];
                 $settingsContent = $settings->first();
-                // $headerIcons = json_decode($settingsContent->icons, true);
                 $headerIcons = $settingsContent->icons;
                 foreach ($headerIcons as $icon) {
                     $image = Image::find($icon['id']);
                     $icons[] = ["id" => $image->id, "position" => $icon['position'], "image" => $image->image_path ? config('filesystems.storage_path') . $image->image_path : null];
                 }
+                usort($icons, function ($a, $b) {
+                    return $a['position'] <=> $b['position'];
+                });
                 $settingsContent['icons'] = $icons;
                 return ["icons" => $icons, "description" => $settingsContent->description];
             } else {

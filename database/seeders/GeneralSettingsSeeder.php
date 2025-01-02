@@ -16,7 +16,7 @@ class GeneralSettingsSeeder extends Seeder
     {
 
         $settingsData = [
-            "content" =>  [
+            "content" => [
                 [
                     "type" => "heading",
                     "attrs" => ["level" => 1],
@@ -58,8 +58,9 @@ class GeneralSettingsSeeder extends Seeder
                     ],
                 ],
             ],
-            "type" => "doc"
+            "type" => "doc",
         ];
+
 
         General::create([
             'content' => $settingsData['content'],

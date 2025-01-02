@@ -15,10 +15,10 @@ class HeaderSeeder extends Seeder
     public function run(): void
     {
         $images = [
-            ["image_name" => "zroa-hayabasha1.png", "image_type" => "png", "image_path" => "images/zroa-hayabasha1.png"],
-            ["image_name" => "Atal_logo1.png", "image_type" => "png", "image_path" => "images/Atal_logo1.png"],
-            ["image_name" => "Hatal1.png", "image_type" => "png", "image_path" => "images/Hatal1.png"],
             ["image_name" => "hatal-inside-white1.png", "image_type" => "png", "image_path" => "images/hatal-inside-white1.png"],
+            ["image_name" => "Hatal1.png", "image_type" => "png", "image_path" => "images/Hatal1.png"],
+            ["image_name" => "Atal_logo1.png", "image_type" => "png", "image_path" => "images/Atal_logo1.png"],
+            ["image_name" => "zroa-hayabasha1.png", "image_type" => "png", "image_path" => "images/zroa-hayabasha1.png"],
         ];
 
         $icons = [];

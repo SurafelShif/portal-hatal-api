@@ -59,8 +59,9 @@ class HeaderService
                 $updatedIcons = [];
                 $existingIcons = $generalData['icons'] ?? [];
                 foreach ($existingIcons as $icon) {
-                    $image = Image::find($icon['id']);
+                    $image = Image::where('id', $icon['id']);
                     if (!is_null($image)) {
+                        $image = $image->first();
                         $this->ImageService->deleteImage($image->image_name);
                         Image::destroy($image->id);
                     }

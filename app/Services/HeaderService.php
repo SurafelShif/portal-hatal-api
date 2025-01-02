@@ -43,8 +43,10 @@ class HeaderService
             DB::beginTransaction();
             $headerSettings = Header::find(1);
             $uploadedImages = [];
-
             if (is_null($headerSettings)) {
+                if (is_null($icons) && is_null($description)) {
+                    return HttpStatusEnum::BAD_REQUEST;
+                }
                 foreach ($icons as $icon) {
                     $image = $this->ImageService->uploadImage($icon['image']);
                     $uploadedImages[] = $image;
@@ -55,26 +57,18 @@ class HeaderService
                     'icons' => json_encode($updatedIcons)
                 ]);
             } else {
-                $generalData = $headerSettings->first();
                 $updatedIcons = [];
-                $existingIcons = $generalData['icons'] ?? [];
-                foreach ($existingIcons as $icon) {
-                    $image = Image::where('id', $icon['id']);
-                    if (!is_null($image)) {
-                        $image = $image->first();
-                        $this->ImageService->deleteImage($image->image_name);
-                        Image::destroy($image->id);
-                    }
-                }
+                $existingIcons = $headerSettings['icons'];
                 foreach ($icons as $icon) {
                     $image = $this->ImageService->uploadImage($icon['image']);
                     $uploadedImages[] = $image;
                     $updatedIcons[] = ['id' => $image->id, 'position' => $icon['position']];
                 }
-                if (!empty($description)) {
-                    $generalData->update(['description' => $description]);
+                if (!is_null($description)) {
+                    $headerSettings->update(['description' => $description]);
                 }
-                $generalData->update(['icons' => $updatedIcons]);
+                $mergedIcons = array_merge($existingIcons, $updatedIcons);
+                $headerSettings->update(['icons' => $mergedIcons]);
             }
             DB::commit();
             return Response::HTTP_OK;
@@ -84,6 +78,38 @@ class HeaderService
             foreach ($uploadedImages as $image) {
                 $this->ImageService->deleteImage($image->image_name);
             }
+            return HttpStatusEnum::ERROR;
+        }
+    }
+    public function deleteIcons(array $ids)
+    {
+        try {
+            if (!count($ids)) {
+                return HttpStatusEnum::BAD_REQUEST;
+            }
+            DB::beginTransaction();
+            $headerSettings = Header::find(1)->first();
+            $icons = $headerSettings->icons ?? [];
+            foreach ($ids as $id) {
+                $image = Image::find($id);
+                foreach ($icons as $key => $icon) {
+                    if ($icon['id'] === $id) {
+                        unset($icons[$key]);
+                    }
+                }
+                if (!is_null($image)) {
+                    $this->ImageService->deleteImage($image->image_name);
+                    Image::destroy($image->id);
+                } else {
+                    return HttpStatusEnum::NOT_FOUND;
+                }
+            }
+            $headerSettings->update(["icons" => $icons]);
+            DB::commit();
+            return Response::HTTP_OK;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
         }
     }

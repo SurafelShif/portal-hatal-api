@@ -188,6 +188,40 @@
                         "description": "An error occurred"
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Header"
+                ],
+                "summary": "Delete icons",
+                "description": "Delete icons by their IDs",
+                "operationId": "delete icons",
+                "requestBody": {
+                    "description": "Array of icon IDs to delete",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "example": 2
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "הפעולה התבצעה בהצלחה"
+                    },
+                    "400": {
+                        "description": "בקשה לא תקינה"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
             }
         },
         "/api/rahtal": {

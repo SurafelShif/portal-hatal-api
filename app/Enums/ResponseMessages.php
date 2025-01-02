@@ -21,4 +21,5 @@ enum ResponseMessages: string
     const SUCCESS_NO_ACTION_NEEDED = 'לא ניתן לבצע את הפעולה';
     const FORBIDDEN = 'אין לך הרשאות כדי לבצע פעולה זו';
     const RAHTAL_NOT_FOUND = 'הרחט"ל לא נמצא';
+    const IMAGE_NOT_FOUND = 'התמונה לא נמצאה';
 }

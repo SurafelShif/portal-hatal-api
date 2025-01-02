@@ -6,6 +6,7 @@ use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
 use App\Http\Requests\UpdateHeaderRequest;
 use App\Services\HeaderService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class HeaderController extends Controller
@@ -93,10 +94,57 @@ class HeaderController extends Controller
 
     public function update(UpdateHeaderRequest $request)
     {
-        $result = $this->headerService->update($request->icons ?? [], $request->description ?? null);
+        $isEmptyString = array_key_exists('description', $request->all()) && empty($request->description);
+        $result = $this->headerService->update($request->icons ?? [], $isEmptyString ? "" : $request->description);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(["message" => ResponseMessages::ERROR_OCCURRED], Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::BAD_REQUEST => response()->json(["message" => ResponseMessages::INVALID_REQUEST], Response::HTTP_BAD_REQUEST),
+            };
+        }
+        return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], Response::HTTP_OK);
+    }
+    /**
+     * @OA\Delete(
+     *     path="/api/header",
+     *     operationId="delete icons",
+     *     tags={"Header"},
+     *     summary="Delete icons",
+     *     description="Delete icons by their IDs",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Array of icon IDs to delete",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="integer",
+     *                 example=2
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="הפעולה התבצעה בהצלחה",
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="בקשה לא תקינה",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="אירעה שגיאה",
+     *     )
+     * )
+     */
+
+    public function delete(Request $request)
+    {
+        $result = $this->headerService->deleteIcons($request->all());
+        if ($result instanceof HttpStatusEnum) {
+            return match ($result) {
+                HttpStatusEnum::ERROR => response()->json(["message" => ResponseMessages::ERROR_OCCURRED], Response::HTTP_INTERNAL_SERVER_ERROR),
+                HttpStatusEnum::BAD_REQUEST => response()->json(["message" => ResponseMessages::INVALID_REQUEST], Response::HTTP_BAD_REQUEST),
+                HttpStatusEnum::NOT_FOUND => response()->json(["message" => ResponseMessages::IMAGE_NOT_FOUND], Response::HTTP_NOT_FOUND),
             };
         }
         return response()->json(["message" => ResponseMessages::SUCCESS_ACTION], Response::HTTP_OK);

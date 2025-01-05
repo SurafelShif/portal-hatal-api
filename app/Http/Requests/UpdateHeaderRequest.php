@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateHeaderRequest extends FormRequest
@@ -23,23 +23,36 @@ class UpdateHeaderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'icons' => 'nullable|array|required_without_all:description',
-            'description' => 'nullable|string|required_without_all:icons',
+            'icons' => 'nullable|array',
+            'description' => 'nullable|string',
             'icons.*.position' => 'required|integer',
-            'icons.*.id' => 'required|integer'
+            'icons.*.id' => 'required|integer',
         ];
     }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $hasIcons = $this->filled('icons') && is_array($this->input('icons'));
+            $hasDescription = array_key_exists('description', $this->all());
+
+            if (!$hasIcons && !$hasDescription) {
+                $validator->errors()->add('general', 'הכנס שדה אחד לעדכון');
+            }
+        });
+    }
+
 
 
     public function messages(): array
     {
         return [
-            'icons.required_without_all' => 'הכנס שדה אחד לעדכון', // At least one of the fields (icons or description) is required
-            'description.required_without_all' => 'הכנס שדה אחד לעדכון', // At least one of the fields (icons or description) is required
-            'icons.array' => 'האייקונים אינם בפורמט הנכון', // Icons must be an array
-            'icons.*.position.required' => 'יש להכניס מיקום לכל אייקון', // Position is required for each icon
-            'icons.*.id.required' => 'יש להכניס מזהה לכל אייקון', // ID is required for each icon
-            'description.string' => 'התת כותרת אינה בפורמט הנכון', // Description must be a string
+            'icons.required_without' => 'הכנס שדה אחד לעדכון',
+            'description.required_without' => 'הכנס שדה אחד לעדכון',
+            'icons.array' => 'האייקונים אינם בפורמט הנכון',
+            'icons.*.position.required' => 'יש להכניס מיקום לכל אייקון',
+            'icons.*.id.required' => 'יש להכניס מזהה לכל אייקון',
+            'description.string' => 'התת כותרת אינה בפורמט הנכון',
         ];
     }
 }

@@ -22,11 +22,34 @@ class CreateHeaderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.image' => 'required|mimes:jpeg,jpg,png,jfif',
+            '*.image' => 'required|max:2048',
             '*.position' => 'required|integer',
         ];
     }
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (count($this->all()) === 0) {
+                return $validator->errors()->add('', 'הכנס לפחות אתר אחד להעלאה');
+            }
 
+            foreach ($this->all() as $key => $item) {
+                if ($this->hasFile("{$key}.image")) {
+                    $file = $this->file("{$key}.image");
+                    $extension = strtolower($file->getClientOriginalExtension());
+                    if (!in_array($extension, ['jpeg', 'jpg', 'png', 'jfif'])) {
+                        $validator->errors()->add("{$key}.image", 'התמונה חייבת להיות מסוג: jpeg, png, jpg, jfif.');
+                    }
+                }
+            }
+        });
+    }
 
     public function messages(): array
     {
@@ -34,8 +57,8 @@ class CreateHeaderRequest extends FormRequest
             '*.image.required' => 'התמונה הינה חובה',
             '*.position.required' => 'מיקום התמונה הינה חובה',
             '*.image.file' => 'התמונה חייבת להיות קובץ',
+            '*.image.max' => 'גודל הקובץ המקסימלי הוא 2MB',
             '*.position.integer' => 'מיקום התמונה אינה בפורמט הנכון',
-            '*.image.mimes' => 'התמונה חייבת להיות מסוג: jpeg, png, jpg, jfif.',
         ];
     }
 }

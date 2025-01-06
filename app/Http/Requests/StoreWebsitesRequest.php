@@ -26,7 +26,7 @@ class StoreWebsitesRequest extends FormRequest
             '*.position' => 'required|integer|min:0',
             '*.description' => 'required',
             '*.link' => 'required|unique:websites,link',
-            '*.image' => 'required|file|max:10248',
+            '*.image' => 'required|file|max:2048',
         ];
     }
     /**

@@ -27,7 +27,7 @@ class UpdateWebsitesRequest extends FormRequest
             '*.position' => 'nullable|integer|min:0',
             '*.description' => 'nullable',
             '*.link' => 'nullable|unique:websites,link',
-            '*.image' => 'nullable|file|max:2048',
+            '*.image' => 'nullable|file|max:10248',
         ];
     }
 
@@ -69,7 +69,7 @@ class UpdateWebsitesRequest extends FormRequest
             '*.link.unique' => 'קישור זה כבר קיים במערכת',
             '*.name.unique' => 'שם זה כבר קיים במערכת',
             '*.image.file' => 'נא להעלות קובץ תמונה בפורמט נכון',
-            '*.image.max' => 'גודל הקובץ המקסימלי הוא 2',
+            '*.image.max' => 'גודל התמונה לא יכול לעלות על 10MB.',
         ];
     }
 }

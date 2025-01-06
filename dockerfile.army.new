@@ -116,8 +116,6 @@ RUN useradd -d /var/www/html -ms /bin/bash username && \
     chown -R username:username /var/www/html && \
     chmod -R 777 /var/www/html && \
     export HOME=/var/www/html
-#tailwind css in build
-RUN npx tailwindcss -c ./tailwind.config.js -i ./resources/css/app.css -o ./public/build/assets/output.css
 # Grant permissions for Laravel's storage and bootstrap/cache directories
 RUN chown -R www-data:www-data storage bootstrap/cache
 # Additionally, set the permissions for the directories

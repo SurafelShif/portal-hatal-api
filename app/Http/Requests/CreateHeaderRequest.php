@@ -22,7 +22,7 @@ class CreateHeaderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            '*.image' => 'required|max:2048',
+            '*.image' => 'required|max:10248',
             '*.position' => 'required|integer',
         ];
     }
@@ -57,7 +57,7 @@ class CreateHeaderRequest extends FormRequest
             '*.image.required' => 'התמונה הינה חובה',
             '*.position.required' => 'מיקום התמונה הינה חובה',
             '*.image.file' => 'התמונה חייבת להיות קובץ',
-            '*.image.max' => 'גודל הקובץ המקסימלי הוא 2MB',
+            '*.image.max' => 'גודל הקובץ המקסימלי הוא 10MB',
             '*.position.integer' => 'מיקום התמונה אינה בפורמט הנכון',
         ];
     }

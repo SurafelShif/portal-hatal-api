@@ -26,7 +26,7 @@ class StoreWebsitesRequest extends FormRequest
             '*.position' => 'required|integer|min:0',
             '*.description' => 'required',
             '*.link' => 'required|unique:websites,link',
-            '*.image' => 'required|file|max:2048',
+            '*.image' => 'required|file|max:10248',
         ];
     }
     /**
@@ -69,7 +69,7 @@ class StoreWebsitesRequest extends FormRequest
             '*.description.required' => 'תיאור האתר דרוש.',
             '*.image.required' => 'דרוש קובץ תמונה.',
             '*.image.file' => 'התמונה חייבת להיות קובץ.',
-            '*.image.max' => 'גודל התמונה לא יכול לעלות על 2MB.',
+            '*.image.max' => 'גודל התמונה לא יכול לעלות על 10MB.',
         ];
     }
 }

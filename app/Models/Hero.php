@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 use Spatie\Permission\Traits\HasRoles;
 
-class Rahtal extends Model
+class Hero extends Model
 {
     use
         HasFactory,
         HasRoles;
 
-    protected $table = 'rahtal';
+    protected $table = 'hero';
     protected $guard_name = 'api';
 
     public function image()

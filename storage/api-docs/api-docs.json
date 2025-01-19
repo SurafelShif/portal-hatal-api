@@ -269,14 +269,14 @@
                 }
             }
         },
-        "/api/rahtal": {
+        "/api/hero": {
             "get": {
                 "tags": [
-                    "Rahtal"
+                    "Hero"
                 ],
-                "summary": "Get Rahtal",
-                "description": "Returns the Rahtal details",
-                "operationId": "rahtal",
+                "summary": "Get Hero",
+                "description": "Returns the Hero details",
+                "operationId": "hero",
                 "responses": {
                     "200": {
                         "description": "הפעולה התבצעה בהצלחה"
@@ -290,19 +290,19 @@
                 }
             }
         },
-        "/api/rahtal/{uuid}": {
+        "/api/hero/{uuid}": {
             "post": {
                 "tags": [
-                    "Rahtal"
+                    "Hero"
                 ],
-                "summary": "Update the rahtal",
-                "description": "Update a rahtal",
-                "operationId": "update rahtal",
+                "summary": "Update the hero",
+                "description": "Update a hero",
+                "operationId": "update hero",
                 "parameters": [
                     {
                         "name": "uuid",
                         "in": "path",
-                        "description": "UUID of the rahtal",
+                        "description": "UUID of the hero",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -692,8 +692,8 @@
             "description": "Header"
         },
         {
-            "name": "Rahtal",
-            "description": "Rahtal"
+            "name": "Hero",
+            "description": "Hero"
         },
         {
             "name": "Users",

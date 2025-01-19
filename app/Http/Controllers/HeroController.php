@@ -4,22 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
-use App\Http\Requests\UpdateRahtalRequest;
-use App\Services\RahtalService;
+use App\Http\Requests\UpdateHeroRequest;
+use App\Services\HeroService;
 use Illuminate\Http\Response;
 
-class RahtalController extends Controller
+class HeroController extends Controller
 {
 
-    public function __construct(private RahtalService $RahtalService) {}
+    public function __construct(private HeroService $HeroService) {}
     //
     /**
      * @OA\Get(
-     *      path="/api/rahtal",
-     *      operationId="rahtal",
-     *      tags={"Rahtal"},
-     *      summary="Get Rahtal",
-     *      description="Returns the Rahtal details",
+     *      path="/api/hero",
+     *      operationId="hero",
+     *      tags={"Hero"},
+     *      summary="Get Hero",
+     *      description="Returns the Hero details",
      *      @OA\Response(
      *          response=200,
      *          description="הפעולה התבצעה בהצלחה",
@@ -36,7 +36,7 @@ class RahtalController extends Controller
      */
     public function index()
     {
-        $result = $this->RahtalService->getCurrentRahtal();
+        $result = $this->HeroService->getCurrentHero();
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
@@ -49,15 +49,15 @@ class RahtalController extends Controller
     }
     /**
      * @OA\Post(
-     *      path="/api/rahtal/{uuid}",
-     *      operationId="update rahtal",
-     *      tags={"Rahtal"},
-     *      summary="Update the rahtal",
-     *      description="Update a rahtal",
+     *      path="/api/hero/{uuid}",
+     *      operationId="update hero",
+     *      tags={"Hero"},
+     *      summary="Update the hero",
+     *      description="Update a hero",
      *      @OA\Parameter(
      *         name="uuid",
      *         in="path",
-     *         description="UUID of the rahtal",
+     *         description="UUID of the hero",
      *         required=true,
      *         @OA\Schema(
      *             type="string",
@@ -103,13 +103,13 @@ class RahtalController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateRahtalRequest $request, $uuid)
+    public function update(UpdateHeroRequest $request, $uuid)
     {
 
-        $result = $this->RahtalService->updateRahtal($request, $uuid);
+        $result = $this->HeroService->updateHero($request, $uuid);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
-                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::RAHTAL_NOT_FOUND, Response::HTTP_NOT_FOUND),
+                HttpStatusEnum::NOT_FOUND => response()->json(ResponseMessages::HERO_NOT_FOUND, Response::HTTP_NOT_FOUND),
                 HttpStatusEnum::BAD_REQUEST => response()->json(ResponseMessages::INVALID_REQUEST, Response::HTTP_BAD_REQUEST),
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
             };

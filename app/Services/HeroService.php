@@ -3,14 +3,14 @@
 namespace App\Services;
 
 use App\Enums\HttpStatusEnum;
-use App\Http\Resources\RahtalResource;
-use App\Models\Rahtal;
+use App\Http\Resources\HeroResource;
+use App\Models\Hero;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class RahtalService
+class HeroService
 {
     protected $ImageService;
 
@@ -18,33 +18,34 @@ class RahtalService
     {
         $this->ImageService = $ImageService;
     }
-    public function getCurrentRahtal()
+    public function getCurrentHero()
     {
         try {
-            $rahtal = Rahtal::find(1);
-            return new RahtalResource($rahtal);
+
+            $hero = Hero::find(1);
+            return new HeroResource($hero);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
         }
     }
-    public function updateRahtal(Request $request, $uuid)
+    public function updateHero(Request $request, $uuid)
     {
         try {
-            $rahtal = Rahtal::where("uuid", $uuid)->first();
+            $hero = Hero::where("uuid", $uuid)->first();
 
-            if (!$rahtal) {
+            if (!$hero) {
                 return HttpStatusEnum::NOT_FOUND;
             }
             DB::beginTransaction();
             if ($request->has('image')) {
-                $associatedImageId = $rahtal->image_id;
+                $associatedImageId = $hero->image_id;
                 $this->ImageService->updateImage($associatedImageId, $request->image);
             }
             if ($request->has('full_name')) {
-                $rahtal->full_name = $request->full_name;
+                $hero->full_name = $request->full_name;
             }
-            $rahtal->save();
+            $hero->save();
             DB::commit();
             return Response::HTTP_OK;
         } catch (\Exception $e) {

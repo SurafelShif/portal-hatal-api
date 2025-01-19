@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\Role;
 use App\Models\Image;
-use App\Models\Rahtal;
+use App\Models\Hero;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -63,7 +63,7 @@ class UsersSeeder extends Seeder
             'image_path' => null
         ]);
 
-        $rahtal = Rahtal::create([
+        Hero::create([
             'full_name' => 'שלמה העברי',
             'image_id' => $image->id,
         ]);

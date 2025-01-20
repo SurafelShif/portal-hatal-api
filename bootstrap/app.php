@@ -20,7 +20,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->prepend([
             VerifyCookie::class
         ]);
-
+        $middleware->trimStrings(except: [
+            fn(Request $request) => $request->path() === "api/general",
+        ]);
+        $middleware->convertEmptyStringsToNull(except: [
+            fn(Request $request) => $request->path() === "api/general",
+        ]);
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,

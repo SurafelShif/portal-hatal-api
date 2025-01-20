@@ -36,7 +36,7 @@ Route::controller(HeroController::class)
     });
 Route::controller(GeneralController::class)->prefix("general")->group(function () {
     Route::get("/", "index");
-    Route::put("/", "update")->middleware(['auth:api', 'role:admin']);
+    Route::put("/", "update")->middleware(['auth:api', 'role:admin'])->name("blablah");
 });
 Route::controller(HeaderController::class)->prefix("header")->group(function () {
     Route::get("/", "index");

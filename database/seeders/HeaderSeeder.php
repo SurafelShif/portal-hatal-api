@@ -26,6 +26,6 @@ class HeaderSeeder extends Seeder
             $createdImage = Image::create($image);
             $icons[] = ["position" => (string)($index + 1), "id" => $createdImage->id];
         }
-        Header::create(["icons" => $icons, "description" => "חטל יחידות או משהו"]);
+        Header::create(["icons" => $icons, "description" => "עליונות טכנולוגית "]);
     }
 }

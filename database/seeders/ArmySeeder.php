@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\Role;
+use App\Models\Header;
 use App\Models\Image;
 use App\Models\Hero;
 use App\Models\User;
@@ -48,5 +49,6 @@ class ArmySeeder extends Seeder
             'full_name' => "",
             'image_id' => $image->id,
         ]);
+        Header::create(["icons" => [], "description" => ""]);
     }
 }

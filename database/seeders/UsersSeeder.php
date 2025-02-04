@@ -6,7 +6,6 @@ use App\Enums\Role;
 use App\Models\Image;
 use App\Models\Hero;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UsersSeeder extends Seeder

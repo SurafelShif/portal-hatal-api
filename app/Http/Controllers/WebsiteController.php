@@ -8,7 +8,7 @@ use App\Http\Requests\StoreWebsitesRequest;
 use App\Http\Requests\UpdateWebsitesRequest;
 use App\Http\Requests\UuidsArrayRequest;
 use App\Services\WebsiteService;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class WebsiteController extends Controller
 {
@@ -33,9 +33,9 @@ class WebsiteController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index($portal_id)
     {
-        $result = $this->WebsiteService->getWebsites();
+        $result = $this->WebsiteService->getWebsites($portal_id);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),
@@ -127,7 +127,7 @@ class WebsiteController extends Controller
      *              @OA\Items(
      *                  type="string",
      *                  format="uuid",
-     *                  example="b143c4ab-91a7-481a-ab1a-cf4a00d2fc11" 
+     *                  example="b143c4ab-91a7-481a-ab1a-cf4a00d2fc11"
      *              ),
      *          )
      *      ),

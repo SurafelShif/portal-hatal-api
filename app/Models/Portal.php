@@ -6,17 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
-class Website extends Model
+class Portal extends Model
 {
     use HasFactory;
-    public function image()
-    {
-        return $this->hasOne(Image::class, 'id', 'image_id');
-    }
-    public function portal()
-    {
-        return $this->belongsTo(Portal::class);
-    }
+
     protected static function boot()
     {
         parent::boot();
@@ -27,21 +20,17 @@ class Website extends Model
             }
         });
     }
-
-
     protected $fillable = [
         'name',
-        'description',
-        'link',
-        'image_id',
-        'position',
-        'portal_id'
+        'display_name'
     ];
     protected $hidden = [
-        'image_id',
         'created_at',
         'updated_at',
-        'is_deleted',
-        'id'
     ];
+
+    public function websites()
+    {
+        $this->hasMany(Website::class);
+    }
 }

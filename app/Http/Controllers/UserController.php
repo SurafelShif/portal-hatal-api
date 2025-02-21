@@ -7,7 +7,7 @@ use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
 use App\Http\Requests\UuidsArrayRequest;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\StoreAdminRequest;
 
 class UserController extends Controller

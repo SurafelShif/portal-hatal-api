@@ -7,7 +7,7 @@ use App\Http\Resources\WebsiteResource;
 use App\Models\Website;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -17,12 +17,12 @@ class WebsiteService
 
     public function __construct(private ImageService $ImageService) {}
 
-    public function getWebsites()
+    public function getWebsites($portal_id)
     {
         try {
-            $websites = Website::where("is_deleted", false)->with('image')->orderBy('position', 'asc')->get();
+            $websites = Website::where("is_deleted", false)->where('portal_id', $portal_id)->with('image')->orderBy('position', 'asc')->get();
             return WebsiteResource::collection($websites);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;
         }

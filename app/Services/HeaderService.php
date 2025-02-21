@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Enums\HttpStatusEnum;
 use App\Models\Header;
 use App\Models\Image;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 

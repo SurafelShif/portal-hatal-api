@@ -16,7 +16,7 @@ Route::controller(WebsiteController::class)
     ->group(function () {
         Route::post("/", "store")->middleware(['role:admin', 'auth:api']);
         Route::post("/update", "update")->middleware(['role:admin', 'auth:api']);
-        Route::get("/", "index");
+        Route::get("/{portal_id}", "index");
         Route::delete("/", "delete")->middleware(['role:admin', 'auth:api']);
     });
 Route::controller(UserController::class)
@@ -44,3 +44,7 @@ Route::controller(HeaderController::class)->prefix("header")->group(function () 
     Route::delete("/", "delete")->middleware(['auth:api', 'role:admin']);
     Route::post("/", "post")->middleware(['auth:api', 'role:admin']);
 });
+
+// Route::controller(PortalController::class)->prefix("portal")->group(function(){
+
+// });

@@ -7,7 +7,7 @@ use App\Enums\ResponseMessages;
 use App\Http\Requests\UpdateGeneralSettingsRequest;
 use App\Models\General;
 use App\Services\GeneralService;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class GeneralController extends Controller
 {

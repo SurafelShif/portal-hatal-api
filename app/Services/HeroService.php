@@ -6,7 +6,7 @@ use App\Enums\HttpStatusEnum;
 use App\Http\Resources\HeroResource;
 use App\Models\Hero;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 

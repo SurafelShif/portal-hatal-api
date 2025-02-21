@@ -6,7 +6,7 @@ use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
 use App\Models\Image;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;

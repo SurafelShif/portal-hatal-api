@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->text('link');
             $table->boolean('is_deleted')->default(false);
+            $table->unsignedBigInteger('portal_id');
+            $table->foreign('portal_id')->references('id')->on('portals')->onDelete('cascade');
             $table->timestamps();
         });
     }

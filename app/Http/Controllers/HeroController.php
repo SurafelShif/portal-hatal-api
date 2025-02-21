@@ -6,7 +6,7 @@ use App\Enums\HttpStatusEnum;
 use App\Enums\ResponseMessages;
 use App\Http\Requests\UpdateHeroRequest;
 use App\Services\HeroService;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class HeroController extends Controller
 {

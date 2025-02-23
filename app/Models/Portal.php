@@ -30,6 +30,6 @@ class Portal extends Model
 
     public function websites()
     {
-        $this->hasMany(Website::class);
+        return $this->hasMany(Website::class);
     }
 }

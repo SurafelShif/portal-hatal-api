@@ -11,7 +11,8 @@ class PortalService
     public function getPortals()
     {
         try {
-            return Portal::all();
+            $portals = Portal::withCount("websites")->get();
+            return $portals;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;

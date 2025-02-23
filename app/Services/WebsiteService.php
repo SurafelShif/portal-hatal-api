@@ -103,7 +103,7 @@ class WebsiteService
                     DB::rollBack();
                     return HttpStatusEnum::BAD_REQUEST;
                 }
-
+                //TODO add website connected to logged user
                 if (isset($updateInfo['name']) && !empty($updateInfo['name'])) {
                     $website->name = $updateInfo['name'];
                 }

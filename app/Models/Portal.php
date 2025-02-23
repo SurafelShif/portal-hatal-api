@@ -22,7 +22,6 @@ class Portal extends Model
     }
     protected $fillable = [
         'name',
-        'display_name'
     ];
     protected $hidden = [
         'created_at',

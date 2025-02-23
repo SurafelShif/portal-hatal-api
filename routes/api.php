@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\HeroController;
+use App\Http\Controllers\PortalController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
@@ -14,7 +15,7 @@ Route::get("user", [UserController::class, 'user'])->middleware(['auth:api']);
 Route::controller(WebsiteController::class)
     ->prefix("websites")
     ->group(function () {
-        Route::post("/", "store")->middleware(['role:admin', 'auth:api']);
+        Route::post("/{portal_id}", "store")->middleware(['role:admin', 'auth:api']);
         Route::post("/update", "update")->middleware(['role:admin', 'auth:api']);
         Route::get("/{portal_id}", "index");
         Route::delete("/", "delete")->middleware(['role:admin', 'auth:api']);
@@ -45,6 +46,6 @@ Route::controller(HeaderController::class)->prefix("header")->group(function () 
     Route::post("/", "post")->middleware(['auth:api', 'role:admin']);
 });
 
-// Route::controller(PortalController::class)->prefix("portal")->group(function(){
-
-// });
+Route::controller(PortalController::class)->prefix("portals")->group(function () {
+    Route::get("/", "index");
+});

@@ -15,7 +15,7 @@ class Website extends Model
     }
     public function portal()
     {
-        return $this->belongsTo(Portal::class);
+        return $this->belongsTo(Portal::class, 'portal_id', 'id');
     }
     protected static function boot()
     {

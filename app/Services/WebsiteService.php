@@ -20,7 +20,8 @@ class WebsiteService
     public function getWebsites($portal_id)
     {
         try {
-            $websites = Website::where("is_deleted", false)->where('portal_id', $portal_id)->with('image')->orderBy('position', 'asc')->get();
+            $websites = Website::with(["portal", "image"])->where("is_deleted", false)->where("portal_id", $portal_id)->orderBy('position', 'asc')->get();
+            dd($websites);
             return WebsiteResource::collection($websites);
         } catch (Exception $e) {
             Log::error($e->getMessage());

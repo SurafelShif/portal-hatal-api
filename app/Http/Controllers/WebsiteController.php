@@ -33,9 +33,9 @@ class WebsiteController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index($portal_id)
+    public function index($portal_uuid)
     {
-        $result = $this->WebsiteService->getWebsites($portal_id);
+        $result = $this->WebsiteService->getWebsites($portal_uuid);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),

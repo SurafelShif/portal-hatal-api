@@ -496,7 +496,7 @@
                 }
             }
         },
-        "/api/websites": {
+        "/api/websites/{portal_id}": {
             "get": {
                 "tags": [
                     "Websites"
@@ -504,6 +504,18 @@
                 "summary": "Retrieve all websites",
                 "description": "Retrieve all websites",
                 "operationId": "index websites",
+                "parameters": [
+                    {
+                        "name": "portal_id",
+                        "in": "path",
+                        "description": "ID of the portal",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "הפעולה התבצעה בהצלחה"
@@ -512,7 +524,9 @@
                         "description": "אירעה שגיאה"
                     }
                 }
-            },
+            }
+        },
+        "/api/websites": {
             "post": {
                 "tags": [
                     "Websites"

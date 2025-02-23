@@ -21,7 +21,6 @@ class WebsiteService
     {
         try {
             $websites = Website::with(["portal", "image"])->where("is_deleted", false)->where("portal_id", $portal_id)->orderBy('position', 'asc')->get();
-            dd($websites);
             return WebsiteResource::collection($websites);
         } catch (Exception $e) {
             Log::error($e->getMessage());

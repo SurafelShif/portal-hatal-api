@@ -16,11 +16,18 @@ class WebsiteController extends Controller
 
     /**
      * @OA\Get(
-     *      path="/api/websites",
+     *      path="/api/websites/{portal_id}",
      *      operationId="index websites",
      *      tags={"Websites"},
      *      summary="Retrieve all websites",
      *      description="Retrieve all websites",
+     *       @OA\Parameter(
+     *          name="portal_id",
+     *          in="path",
+     *          required=true,
+     *          description="ID of the portal",
+     *          @OA\Schema(type="string", format="string")
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="הפעולה התבצעה בהצלחה",
@@ -33,9 +40,9 @@ class WebsiteController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index($portal_uuid)
+    public function index($portal_id)
     {
-        $result = $this->WebsiteService->getWebsites($portal_uuid);
+        $result = $this->WebsiteService->getWebsites($portal_id);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),

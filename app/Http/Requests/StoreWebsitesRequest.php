@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Portal;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreWebsitesRequest extends FormRequest
@@ -54,6 +55,9 @@ class StoreWebsitesRequest extends FormRequest
                         $validator->errors()->add("{$key}.image", 'התמונה חייבת להיות מסוג: jpeg, png, jpg, jfif.');
                     }
                 }
+            }
+            if (!Portal::where('id', $this->portal_id)->exists()) {
+                return $validator->errors()->add('portal_id', 'הפורטל לא קיים');
             }
         });
     }

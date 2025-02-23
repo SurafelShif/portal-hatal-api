@@ -15,7 +15,8 @@ Route::get("user", [UserController::class, 'user'])->middleware(['auth:api']);
 Route::controller(WebsiteController::class)
     ->prefix("websites")
     ->group(function () {
-        Route::post("/{portal_id}", "store")->middleware(['role:admin', 'auth:api']);
+        // Route::post("/{portal_id}", "store")->middleware(['role:admin', 'auth:api']);
+        Route::post("/{portal_id}", "store");
         Route::post("/update", "update")->middleware(['role:admin', 'auth:api']);
         Route::get("/{portal_id}", "index");
         Route::delete("/", "delete")->middleware(['role:admin', 'auth:api']);

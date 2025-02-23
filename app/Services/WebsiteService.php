@@ -28,7 +28,7 @@ class WebsiteService
         }
     }
 
-    public function createWebsite($request)
+    public function createWebsite($request, $portal_id)
     {
         $uploadedImages = [];
         try {
@@ -44,6 +44,7 @@ class WebsiteService
                     'link' => $website['link'],
                     'position' => $website['position'],
                     'image_id' => $image->id,
+                    'portal_id' => $portal_id
                 ]);
             }
             DB::commit();

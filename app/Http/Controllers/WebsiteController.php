@@ -58,11 +58,18 @@ class WebsiteController extends Controller
 
     /**
      * @OA\Post(
-     *      path="/api/websites",
+     *      path="/api/websites/{portal_id}",
      *      operationId="storeWebsite",
      *      tags={"Websites"},
      *      summary="Upload websites",
      *      description="Upload websites",
+     *        @OA\Parameter(
+     *          name="portal_id",
+     *          in="path",
+     *          required=true,
+     *          description="ID of the portal",
+     *          @OA\Schema(type="string", format="string")
+     *      ),
      *      @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
@@ -104,9 +111,9 @@ class WebsiteController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(StoreWebsitesRequest $request)
+    public function store(StoreWebsitesRequest $request, $portal_id)
     {
-        $result = $this->WebsiteService->createWebsite($request);
+        $result = $this->WebsiteService->createWebsite($request, $portal_id);
         if ($result instanceof HttpStatusEnum) {
             return match ($result) {
                 HttpStatusEnum::ERROR => response()->json(ResponseMessages::ERROR_OCCURRED, Response::HTTP_INTERNAL_SERVER_ERROR),

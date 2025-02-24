@@ -49,4 +49,5 @@ Route::controller(HeaderController::class)->prefix("header")->group(function () 
 
 Route::controller(PortalController::class)->prefix("portals")->group(function () {
     Route::get("/", "index");
+    Route::post("/", "create");
 });

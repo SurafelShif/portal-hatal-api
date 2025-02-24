@@ -13,6 +13,6 @@ class PortalsSeeder extends Seeder
      */
     public function run(): void
     {
-        Portal::create(["name" => "חטל"]);
+        Portal::create(["display_name" => "חטל", "path" => "hatal"]);
     }
 }

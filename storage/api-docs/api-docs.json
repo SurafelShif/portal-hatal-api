@@ -347,6 +347,64 @@
                 }
             }
         },
+        "/api/portals": {
+            "get": {
+                "tags": [
+                    "Portals"
+                ],
+                "summary": "Retrieve all portals",
+                "description": "Retrieve all portals",
+                "operationId": "index portals",
+                "responses": {
+                    "200": {
+                        "description": "הפעולה התבצעה בהצלחה"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Portals"
+                ],
+                "summary": "Add a portal",
+                "description": "Creates a new portal record",
+                "operationId": "createportal",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "display_name",
+                                    "path"
+                                ],
+                                "properties": {
+                                    "display_name": {
+                                        "type": "string",
+                                        "example": "חטל"
+                                    },
+                                    "path": {
+                                        "type": "string",
+                                        "example": "hatal"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "הפעולה התבצעה בהצלחה"
+                    },
+                    "500": {
+                        "description": "אירעה שגיאה"
+                    }
+                }
+            }
+        },
         "/api/user": {
             "get": {
                 "tags": [
@@ -720,6 +778,10 @@
         {
             "name": "Hero",
             "description": "Hero"
+        },
+        {
+            "name": "Portals",
+            "description": "Portals"
         },
         {
             "name": "Users",

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('portals', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            // $table->string("display_name");
-            $table->string("name");
+            $table->string("display_name");
+            $table->string("path")->unique();
 
             $table->timestamps();
         });

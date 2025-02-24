@@ -18,4 +18,13 @@ class PortalService
             return HttpStatusEnum::ERROR;
         }
     }
+    public function createPortal(array $data)
+    {
+        try {
+            return Portal::create($data);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return HttpStatusEnum::ERROR;
+        }
+    }
 }

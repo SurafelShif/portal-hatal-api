@@ -34,5 +34,14 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'adfs' => [
+        'url' =>  env("ADFS_URL"),
+        'user' => env("ADFS_USER"),
+        'password' => env("ADFS_PASSWORD"),
+    ],
+    'vatican' => [
+        'url' => env("VATICAN_URL"),
+        'token' => env("VATICAN_TOKEN"),
+    ]
 
 ];

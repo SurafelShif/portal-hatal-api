@@ -138,8 +138,8 @@ class UserService
     {
         try {
             $client = new Client();
-            $vaticanUrl = env("VATICAN_URL");
-            $vaticanToken = env("VATICAN_TOKEN");
+            $vaticanUrl = config('services.vatican.url');
+            $vaticanToken = config('services.vatican.token');
 
             $queryParams = [
                 'columns' => implode(',', [
@@ -149,13 +149,29 @@ class UserService
                 ]),
             ];
 
+            $response = $client->post(
+                $vaticanUrl . "/api/systems/login",
+                [
+                    'verify' => false,
+                    'headers' => [
+                        'Accept' => 'application/json',
+                    ],
+                    'json' => [
+                        'token' => $vaticanToken,
+                    ]
+                ]
+            );
+            $loginToVatican = $response->getBody()->getContents();
+            $loginToVatican = json_decode($loginToVatican, true);
+            $vaticanAccessToken = $loginToVatican['access_token'];
+
             $response = $client->get(
                 $vaticanUrl . "/api/users/" . $personalNumber,
                 [
                     'verify' => false,
                     'query' => $queryParams,
                     'headers' => [
-                        'Authorization' => 'Bearer ' . $vaticanToken,
+                        'Authorization' => 'Bearer ' . $vaticanAccessToken,
                     ],
                 ]
             );

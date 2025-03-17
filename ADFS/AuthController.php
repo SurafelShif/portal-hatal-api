@@ -25,9 +25,9 @@ class AuthController extends Controller
     {
         try {
             $client = new Client();
-            $adfsUrl = env("ADFS_URL");
-            $adfsUser = env("ADFS_USER");
-            $adfsPassword = env("ADFS_PASSWORD");
+            $adfsUrl = config('services.adfs.url');
+            $adfsUser = config('services.adfs.user');
+            $adfsPassword = config('services.adfs.password');
 
             $userFromADFS = $client->get(
                 $adfsUrl . "/api/token/" . $request->token,

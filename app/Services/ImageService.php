@@ -21,7 +21,7 @@ class ImageService
         try {
             $extension = $image->getClientOriginalExtension();
             $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
-            $imagePath = $image->storeAs('images', $randomFileName, config('filesystems.storage_service'));
+            $imagePath = $image->storeAs(config('filesystems.image_path'), $randomFileName, config('filesystems.storage_service'));
             return Image::create([
                 'image_name' => $randomFileName,
                 'image_path' => $imagePath,
@@ -47,7 +47,7 @@ class ImageService
             if ($newImage !== null) {
                 $extension = $newImage->getClientOriginalExtension();
                 $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
-                $imagePath = $newImage->storeAs('images', $randomFileName, config('filesystems.storage_service'));
+                $imagePath = $newImage->storeAs(config('filesystems.image_path'), $randomFileName, config('filesystems.storage_service'));
             } else {
                 $imagePath = null;
                 $randomFileName = null;
@@ -67,8 +67,8 @@ class ImageService
     public function deleteImage($image_name)
     {
         try {
-            if (Storage::disk(config('filesystems.storage_service'))->exists('images/' . $image_name)) {
-                Storage::disk(config('filesystems.storage_service'))->delete('images/' . $image_name);
+            if (Storage::disk(config('filesystems.storage_service'))->exists(config('filesystems.image_path') . $image_name)) {
+                Storage::disk(config('filesystems.storage_service'))->delete(config('filesystems.image_path') . $image_name);
             } else {
                 Log::info("image was not found");
             }

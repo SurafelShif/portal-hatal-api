@@ -78,5 +78,6 @@ return [
     ],
     'storage_service' => env('STORAGE_SERVICE'),
     'storage_path' => env('STORAGE_PATH'),
+    'image_path' => env('IMAGE_PATH', "public"),
 
 ];

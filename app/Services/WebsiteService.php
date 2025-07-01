@@ -52,7 +52,7 @@ class WebsiteService
         } catch (\Exception $e) {
             DB::rollBack();
             foreach ($uploadedImages as $image) {
-                $this->ImageService->deleteImage($image->image_name);
+                $this->ImageService->deleteImage($image?->image_name);
             }
             Log::error($e->getMessage());
             return HttpStatusEnum::ERROR;

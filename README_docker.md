@@ -36,7 +36,7 @@ docker save -o <project_name>-api-<todays_date>-<version>.tar <project_name>-api
 For Example:
 
 ```bash
-docker save -o portal-hatal-api-26.05.2024-1.tar portalhatal-api-26.05.2024-1
+docker save -o portal-hatal-api-26.05.2024-1.tar portal-hatal-api-26.05.2024-1
 ```
 
 ### Additional Notes

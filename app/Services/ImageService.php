@@ -3,10 +3,7 @@
 namespace App\Services;
 
 use App\Enums\HttpStatusEnum;
-use App\Enums\ResponseMessages;
 use App\Models\Image;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -15,13 +12,13 @@ use Illuminate\Support\Str;
 
 class ImageService
 {
-
+    private const STORAGE_DIR = "public";
     public function uploadImage(UploadedFile $image)
     {
         try {
             $extension = $image->getClientOriginalExtension();
             $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
-            $imagePath = $image->storeAs('images', $randomFileName, config('filesystems.storage_service'));
+            $imagePath = $image->storeAs(self::STORAGE_DIR, $randomFileName, config('filesystems.storage_service'));
             return Image::create([
                 'image_name' => $randomFileName,
                 'image_path' => $imagePath,
@@ -47,7 +44,7 @@ class ImageService
             if ($newImage !== null) {
                 $extension = $newImage->getClientOriginalExtension();
                 $randomFileName = uniqid() . '_' . Str::random(10) . '.' . $extension;
-                $imagePath = $newImage->storeAs('images', $randomFileName, config('filesystems.storage_service'));
+                $imagePath = $newImage->storeAs(self::STORAGE_DIR, $randomFileName, config('filesystems.storage_service'));
             } else {
                 $imagePath = null;
                 $randomFileName = null;
@@ -67,10 +64,10 @@ class ImageService
     public function deleteImage($image_name)
     {
         try {
-            if (Storage::disk(config('filesystems.storage_service'))->exists('images/' . $image_name)) {
-                Storage::disk(config('filesystems.storage_service'))->delete('images/' . $image_name);
+            if (Storage::disk(config('filesystems.storage_service'))->exists(self::STORAGE_DIR . '/' . $image_name)) {
+                Storage::disk(config('filesystems.storage_service'))->delete(self::STORAGE_DIR . '/' . $image_name);
             } else {
-                Log::info("image was not found");
+                Log::info("image was not found ${$image_name}");
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());

@@ -74,7 +74,7 @@ class WebsiteService
             DB::beginTransaction();
 
             foreach ($websites as $website) {
-                $website->delete();
+                $website->destroy($website->id);
             }
             $allWebsites = Website::orderBy('position')->get();
             foreach ($allWebsites as $index => $website) {

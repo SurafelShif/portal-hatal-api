@@ -22,6 +22,11 @@ class Website extends Model
                 $model->uuid = (string) Uuid::uuid4();
             }
         });
+        static::deleting(function ($model) {
+            if ($model->image) {
+                $model->image->delete();
+            }
+        });
     }
 
 
